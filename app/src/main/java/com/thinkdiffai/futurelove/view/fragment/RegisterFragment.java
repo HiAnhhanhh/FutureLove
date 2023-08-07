@@ -1,4 +1,4 @@
-package com.thinkdiffai.futurelove;
+package com.thinkdiffai.futurelove.view.fragment;
 
 import android.app.Dialog;
 import android.os.Bundle;
@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 
+import com.thinkdiffai.futurelove.R;
 import com.thinkdiffai.futurelove.databinding.DialogRegistrationSuccessBinding;
 import com.thinkdiffai.futurelove.databinding.FragmentRegisterBinding;
 

@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/login_bg"
-    tools:context=".RegisterFragment">
+    tools:context=".view.fragment.RegisterFragment">
 
     <!--  String: App Name  -->
     <androidx.appcompat.widget.LinearLayoutCompat

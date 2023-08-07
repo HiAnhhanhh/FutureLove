@@ -7,12 +7,12 @@
 
     <fragment
         android:id="@+id/splashFragment"
-        android:name="com.thinkdiffai.futurelove.SplashFragment"
+        android:name="com.thinkdiffai.futurelove.view.fragment.SplashFragment"
         android:label="fragment_splash"
         tools:layout="@layout/fragment_splash" />
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.thinkdiffai.futurelove.LoginFragment"
+        android:name="com.thinkdiffai.futurelove.view.fragment.LoginFragment"
         android:label="fragment_login"
         tools:layout="@layout/fragment_login">
         <action
@@ -24,7 +24,7 @@
     </fragment>
     <fragment
         android:id="@+id/registerFragment"
-        android:name="com.thinkdiffai.futurelove.RegisterFragment"
+        android:name="com.thinkdiffai.futurelove.view.fragment.RegisterFragment"
         android:label="fragment_logout"
         tools:layout="@layout/fragment_register">
         <action

@@ -1,4 +1,4 @@
-package com.thinkdiffai.futurelove;
+package com.thinkdiffai.futurelove.view.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
+import com.thinkdiffai.futurelove.R;
 import com.thinkdiffai.futurelove.databinding.FragmentLoginBinding;
 import com.thinkdiffai.futurelove.view.activity.MainActivity;
 

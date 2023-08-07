@@ -28,7 +28,6 @@ public class MainActivity extends AppCompatActivity {
 
     public int soThuTuSuKien = 0;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
