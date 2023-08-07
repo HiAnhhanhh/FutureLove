@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_screen_pairing"
+    android:orientation="vertical"
+    tools:context=".MainActivity2">
+
+
+    <RelativeLayout
+        android:id="@+id/relativeLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/define_dimen_50"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="0dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="@dimen/define_dimen_20"
+            android:text="Future Love"
+            android:textColor="@color/white"
+            android:textSize="@dimen/define_dimen_20"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="@dimen/define_dimen_30"
+            android:src="@drawable/icon_love_home" />
+
+    </RelativeLayout>
+
+
+    <ImageButton
+        android:id="@+id/btn_select_person_male"
+        android:layout_width="@dimen/define_dimen_240"
+        android:layout_height="@dimen/define_dimen_240"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="112dp"
+        android:background="@null"
+        android:scaleType="centerCrop"
+        android:src="@drawable/image_bg_male"
+        android:visibility="visible"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/relativeLayout" />
+
+    <ImageButton
+        android:id="@+id/btn_select_person_female"
+        android:layout_width="@dimen/define_dimen_240"
+        android:layout_height="@dimen/define_dimen_240"
+        android:layout_marginStart="104dp"
+        android:layout_marginTop="48dp"
+        android:background="@null"
+        android:scaleType="centerCrop"
+        android:src="@drawable/image_bg_female"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/btn_select_person_male"
+        app:layout_constraintTop_toTopOf="@+id/btn_select_person_male" />
+
+    <ImageView
+        android:id="@+id/img2"
+        android:layout_width="@dimen/define_dimen_30"
+        android:layout_height="@dimen/define_dimen_40"
+        android:layout_gravity="center"
+        android:layout_marginEnd="128dp"
+        android:layout_marginBottom="40dp"
+        android:src="@drawable/img_heart"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <ImageView
+        android:id="@+id/img1"
+        android:layout_width="@dimen/define_dimen_30"
+        android:layout_height="@dimen/define_dimen_40"
+        android:layout_gravity="center"
+        android:layout_marginBottom="40dp"
+
+        android:src="@drawable/img_heart"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/img2"
+        app:layout_constraintHorizontal_bias="0.522"
+        app:layout_constraintStart_toStartOf="parent" />
+
+
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/btn_image_male"
+        android:layout_width="143dp"
+        android:layout_height="143dp"
+        android:layout_marginStart="12dp"
+        app:cardCornerRadius="1000dp"
+        app:layout_constraintBottom_toBottomOf="@+id/btn_select_person_male"
+        app:layout_constraintStart_toStartOf="@+id/btn_select_person_male"
+        app:layout_constraintTop_toTopOf="@+id/btn_select_person_male"
+        app:layout_constraintVertical_bias="0.72">
+
+        <ImageView
+            android:id="@+id/img_male"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:layout_gravity="center"
+            tools:srcCompat="@tools:sample/avatars" />
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/btn_image_female"
+        android:layout_width="144dp"
+        android:layout_height="144dp"
+        app:cardCornerRadius="1000dp"
+        app:layout_constraintBottom_toBottomOf="@+id/btn_select_person_female"
+        app:layout_constraintEnd_toEndOf="@+id/btn_select_person_female"
+        app:layout_constraintHorizontal_bias="0.87"
+        app:layout_constraintStart_toStartOf="@+id/btn_select_person_female"
+        app:layout_constraintTop_toTopOf="@+id/btn_select_person_female"
+        app:layout_constraintVertical_bias="0.298"
+        app:cardPreventCornerOverlap="false"
+        >
+        <ImageView
+            android:id="@+id/img_female"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            tools:srcCompat="@tools:sample/avatars" />
+    </androidx.cardview.widget.CardView>
+
+    <ImageView
+
+        android:id="@+id/btn_submit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/transparent"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="@+id/btn_select_person_female"
+        app:layout_constraintEnd_toEndOf="@+id/btn_select_person_female"
+        app:layout_constraintStart_toStartOf="@+id/btn_select_person_male"
+        app:layout_constraintTop_toTopOf="@+id/btn_select_person_male"
+        app:srcCompat="@drawable/btn_heart_start"
+        android:elevation="@dimen/define_dimen_10"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

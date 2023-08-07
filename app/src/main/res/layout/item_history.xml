@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.daimajia.swipe.SwipeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/layout_item"
+    android:layout_marginTop="@dimen/define_dimen_10"
+    app:clickToClose="true"
+    android:orientation="vertical"
+    >
+    <LinearLayout
+
+        android:layout_width="@dimen/define_dimen_60"
+        android:layout_height="match_parent"
+        android:background="@color/transparent"
+        android:gravity="center"
+        android:tag="Bottom3"
+        android:weightSum="1"
+        android:orientation="horizontal"
+        android:id="@+id/layout_action">
+        <ImageView
+            android:id="@+id/btn_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/baseline_delete_forever_24"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_fore_ground"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        >
+<!--        <ImageView-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:src="@drawable/bg_comment"-->
+<!--            android:scaleType="fitXY"/>-->
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cartView_avatar1"
+                android:layout_width="@dimen/define_dimen_40"
+                android:layout_height="@dimen/define_dimen_40"
+                android:layout_gravity="bottom"
+                app:cardCornerRadius="@dimen/define_dimen_100">
+
+                <ImageView
+                    android:id="@+id/image_avatar1"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/baseline_account_circle_24" />
+            </androidx.cardview.widget.CardView>
+            <androidx.cardview.widget.CardView
+                android:layout_width="@dimen/define_dimen_40"
+                android:layout_height="@dimen/define_dimen_40"
+                android:layout_gravity="bottom"
+                app:cardCornerRadius="@dimen/define_dimen_100"
+                android:layout_toEndOf="@+id/cartView_avatar1"
+                android:layout_marginStart="@dimen/define_dimen_4">
+                <ImageView
+                    android:id="@+id/image_avatar2"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/baseline_account_circle_24"/>
+            </androidx.cardview.widget.CardView>
+            <ImageView
+                android:layout_width="@dimen/define_dimen_20"
+                android:layout_height="@dimen/define_dimen_20"
+                android:layout_centerInParent="true"
+                android:elevation="@dimen/define_dimen_10"
+                android:src="@drawable/iicon_heart_pink_white"
+                android:layout_marginTop="@dimen/define_dimen_10"/>
+
+        </RelativeLayout>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="@dimen/define_dimen_6"
+            android:orientation="vertical"
+            android:layout_gravity="center_vertical">
+            <TextView
+                android:id="@+id/tv_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Content"
+                android:textSize="@dimen/define_dimen_16"
+                android:textColor="@color/purple_500"
+                />
+        </LinearLayout>
+
+
+        <TextView
+            android:id="@+id/tv_time"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="@dimen/define_dimen_10"
+            android:gravity="center_vertical"
+            android:text="time"
+            android:textColor="@color/purple_500"
+            android:textSize="@dimen/define_dimen_12"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+</com.daimajia.swipe.SwipeLayout>

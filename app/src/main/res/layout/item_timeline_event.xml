@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_item_rcv_home"
+    android:id="@+id/layout_item"
+    android:layout_marginBottom="@dimen/define_dimen_12"
+    android:layout_marginEnd="@dimen/define_dimen_6"
+    android:layout_marginStart="@dimen/define_dimen_6"
+    >
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:cardCornerRadius="@dimen/define_dimen_20">
+
+        <ImageView
+            android:id="@+id/img_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:src="@drawable/bg_item_rcv_home"
+            />
+
+    </androidx.cardview.widget.CardView>
+
+
+    <TextView
+        android:id="@+id/tv_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="  "
+        android:layout_above="@+id/btn_add_evnt"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="@dimen/define_dimen_16"
+        android:layout_marginBottom="@dimen/define_dimen_12"
+        android:textStyle="bold"
+        android:textSize="@dimen/define_dimen_22"
+        android:textColor="@color/pink"
+        android:elevation="@dimen/define_dimen_10"
+        />
+    <TextView
+        android:id="@+id/tv_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="yyyy/MM/dd"
+        android:elevation="@dimen/define_dimen_10"
+        android:layout_above="@+id/tv_content"
+        android:layout_marginBottom="@dimen/define_dimen_16"
+        android:layout_marginStart="@dimen/define_dimen_16"
+        android:textStyle="bold"
+        android:textSize="@dimen/define_dimen_22"
+        android:textColor="@color/pink"
+        />
+
+    <ImageView
+        android:id="@+id/btn_add_evnt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/btn_add_event"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/define_dimen_10"
+        android:layout_marginStart="@dimen/define_dimen_16"
+        android:elevation="10dp"/>
+</RelativeLayout>

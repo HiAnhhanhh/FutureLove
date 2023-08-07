@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/define_dimen_40">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/choose_photo"
+        android:textSize="@dimen/define_dimen_22"
+        android:textStyle="bold"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="@dimen/define_dimen_20"/>
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginTop="@dimen/define_dimen_80"
+        >
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginEnd="@dimen/define_dimen_20">
+            <ImageButton
+                android:id="@+id/btn_select_image"
+                android:layout_width="@dimen/define_dimen_120"
+                android:layout_height="@dimen/define_dimen_120"
+                android:src="@drawable/icon_btn_select_image"
+
+                android:background="@null"
+                android:scaleType="centerCrop"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/photos"
+                android:textSize="@dimen/define_dimen_18"
+                android:textStyle="bold"
+                android:layout_gravity="center_horizontal"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginStart="@dimen/define_dimen_20">
+            <ImageButton
+                android:id="@+id/btn_open_camera"
+
+                android:layout_width="@dimen/define_dimen_120"
+                android:layout_height="@dimen/define_dimen_120"
+                android:src="@drawable/icon_btn_open_camera"
+
+                android:background="@null"
+                android:scaleType="centerCrop"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/photos"
+                android:textSize="@dimen/define_dimen_18"
+                android:textStyle="bold"
+                android:layout_gravity="center_horizontal"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

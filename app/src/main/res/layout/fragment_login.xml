@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/login_bg"
+    tools:context=".LoginFragment">
+
+    <!--  String: App Name  -->
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/ll_app_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="168dp"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="40dp"
+            android:layout_height="32dp"
+            android:src="@drawable/left_heart_group" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="12dp"
+            android:fontFamily="@font/roboto_slab"
+            android:lineHeight="32sp"
+            android:text="@string/app_name"
+            android:textColor="@color/white"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="40dp"
+            android:layout_height="32dp"
+            android:src="@drawable/right_heart_group" />
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <!--  String: App Desc  -->
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_title_desc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:fontFamily="@font/roboto_slab"
+        android:text="@string/app_name_desc"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ll_app_name" />
+
+    <!--  Input for User name  -->
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/edt_user_name"
+        android:layout_width="328dp"
+        android:layout_height="44dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/edit_text_frame"
+        android:fontFamily="@font/roboto_slab"
+        android:hint="@string/user_name"
+        android:padding="10dp"
+        android:textColor="@color/white"
+        android:textColorHint="@color/white"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_title_desc" />
+
+    <!--  Input for Password  -->
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/edt_password"
+        android:layout_width="328dp"
+        android:layout_height="44dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/edit_text_frame"
+        android:fontFamily="@font/roboto_slab"
+        android:hint="@string/password"
+        android:inputType="textPassword"
+        android:padding="10dp"
+        android:textColor="@color/white"
+        android:textColorHint="@color/white"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edt_user_name" />
+
+    <!--  Icon: Show password  -->
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/ic_show_password"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginStart="-40dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/eye_password_icon"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="@id/edt_password"
+        app:layout_constraintStart_toEndOf="@+id/edt_password"
+        app:layout_constraintTop_toTopOf="@+id/edt_password" />
+
+<!--    &lt;!&ndash;  Icon: Hide password  &ndash;&gt;-->
+<!--    <androidx.appcompat.widget.AppCompatImageView-->
+<!--        android:id="@+id/ic_hide_password"-->
+<!--        android:layout_width="24dp"-->
+<!--        android:layout_height="24dp"-->
+<!--        android:layout_marginStart="-40dp"-->
+<!--        android:scaleType="fitXY"-->
+<!--        android:src="@drawable/hide_password_icon"-->
+<!--        android:visibility="invisible"-->
+<!--        app:layout_constraintBottom_toBottomOf="@id/edt_password"-->
+<!--        app:layout_constraintStart_toEndOf="@+id/edt_password"-->
+<!--        app:layout_constraintTop_toTopOf="@+id/edt_password" />-->
+
+    <!--  Button Login  -->
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_login"
+        android:layout_width="328dp"
+        android:layout_height="44dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/btn_login_shape"
+        android:fontFamily="@font/roboto_slab"
+        android:paddingHorizontal="8dp"
+        android:paddingVertical="4dp"
+        android:text="Login"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="16dp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edt_password" />
+
+    <!--  Do you want to reset password?  -->
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_ask_reset_password"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:background="@null"
+        android:fontFamily="@font/roboto_slab"
+        android:text="@string/ask_reset_password"
+        android:textAlignment="center"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_login" />
+
+    <!--  Don’t have an account?  -->
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/ll_ask_to_register"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="100dp"
+        android:gravity="bottom"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_ask_reset_password">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:fontFamily="@font/roboto_slab"
+            android:text="@string/ask_having_account"
+            android:textAlignment="center"
+            android:textColor="#747474"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_nav_register"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:background="@null"
+            android:fontFamily="@font/roboto_slab"
+            android:text="@string/register"
+            android:textAlignment="center"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

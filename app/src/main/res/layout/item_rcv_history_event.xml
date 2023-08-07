@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/define_dimen_200"
+    android:id="@+id/layout_item"
+    android:layout_marginBottom="@dimen/define_dimen_12"
+    >
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:cardCornerRadius="@dimen/define_dimen_20">
+
+        <ImageView
+            android:id="@+id/img_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:src="@drawable/frame_event_info"
+            />
+
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/layout_img_person1"
+        android:layout_width="@dimen/define_dimen_60"
+        android:layout_height="@dimen/define_dimen_60"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="@dimen/define_dimen_6"
+        android:layout_marginTop="@dimen/define_dimen_6"
+        app:cardCornerRadius="@dimen/define_dimen_100">
+        <ImageView
+            android:id="@+id/img_person1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:src="@drawable/img_person" />
+    </androidx.cardview.widget.CardView>
+
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/layout_img_person2"
+        android:layout_width="@dimen/define_dimen_60"
+        android:layout_height="@dimen/define_dimen_60"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="@dimen/define_dimen_10"
+        android:layout_marginTop="@dimen/define_dimen_6"
+        android:layout_toEndOf="@+id/layout_img_person1"
+        app:cardCornerRadius="@dimen/define_dimen_100">
+
+        <ImageView
+            android:id="@+id/img_person2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:src="@drawable/img_person" />
+    </androidx.cardview.widget.CardView>
+
+    <ImageView
+        android:layout_width="@dimen/define_dimen_40"
+        android:layout_height="@dimen/define_dimen_40"
+        android:layout_marginStart="-16dp"
+        android:layout_toEndOf="@+id/layout_img_person1"
+        android:elevation="@dimen/define_dimen_10"
+        android:src="@drawable/iicon_heart_pink_white"
+        android:layout_marginTop="@dimen/define_dimen_24"/>
+
+
+
+    <TextView
+        android:id="@+id/tv_content"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:text="Text"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="@dimen/define_dimen_16"
+        android:layout_marginBottom="@dimen/define_dimen_16"
+        android:textStyle="bold"
+        android:textSize="@dimen/define_dimen_22"
+        android:textColor="@color/pink"
+        android:elevation="@dimen/define_dimen_10"
+        />
+    <TextView
+        android:id="@+id/tv_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="yyyy/MM/dd"
+        android:elevation="@dimen/define_dimen_10"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="@dimen/define_dimen_16"
+        android:layout_marginBottom="@dimen/define_dimen_16"
+        android:textStyle="bold"
+        android:textSize="@dimen/define_dimen_22"
+        android:textColor="@color/pink"
+        />
+</RelativeLayout>

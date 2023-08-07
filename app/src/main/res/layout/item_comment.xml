@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/layout_comment"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/define_dimen_20"
+    android:orientation="vertical"
+    >
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/color_bg_comment_detail"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="8dp">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cartView_avatar1"
+            android:layout_width="@dimen/define_dimen_40"
+            android:layout_height="@dimen/define_dimen_40"
+            app:cardCornerRadius="@dimen/define_dimen_100">
+
+            <ImageView
+                android:id="@+id/image_avatar1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/baseline_account_circle_24" />
+        </androidx.cardview.widget.CardView>
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/define_dimen_6"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <!--            <TextView-->
+            <!--                android:id="@+id/tv_ip_device"-->
+            <!--                android:layout_width="wrap_content"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:textColor="@color/black"-->
+            <!--                android:textStyle="bold"-->
+            <!--                android:fontFamily="@font/roboto_slab"-->
+            <!--                android:text="IP address"-->
+            <!--                android:textSize="16sp" />-->
+
+            <TextView
+                android:id="@+id/tv_device_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_slab"
+                android:text="Device name"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_slab"
+                android:text="Content"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <TextView
+            android:id="@+id/tv_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto_slab"
+            android:gravity="center_vertical"
+            android:text="time"
+            android:textColor="@color/textColorPrimary"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="56dp"
+        android:layout_marginTop="4dp"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="@dimen/define_dimen_4">
+
+        <ImageView
+            android:id="@+id/image_comment"
+            android:layout_width="@dimen/define_dimen_120"
+            android:layout_height="@dimen/define_dimen_120"
+            android:src="@drawable/couple"
+            android:visibility="visible" />
+    </androidx.cardview.widget.CardView>
+
+</androidx.appcompat.widget.LinearLayoutCompat>

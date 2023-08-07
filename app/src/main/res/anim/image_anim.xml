@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<set xmlns:android="http://schemas.android.com/apk/res/android"
+    android:interpolator="@android:anim/accelerate_decelerate_interpolator">
+
+    <!-- Translate the top half of the ImageView up and down -->
+    <translate
+        android:fromYDelta="-80%p"
+        android:toYDelta="10%p"
+        android:duration="1500"
+        android:interpolator="@android:anim/linear_interpolator"
+        android:zAdjustment="top" >
+    </translate>
+
+    <!-- Translate the bottom half of the ImageView down and up -->
+    <translate
+        android:fromYDelta="30%p"
+        android:toYDelta="-10%p"
+        android:duration="1500"
+        android:interpolator="@android:anim/linear_interpolator"
+        android:startOffset="500"
+        android:zAdjustment="bottom" >
+    </translate>
+
+    <!-- Fade in the top half of the ImageView -->
+    <alpha
+        android:fromAlpha="0"
+        android:toAlpha="1"
+        android:duration="1500"
+        android:startOffset="0" >
+    </alpha>
+
+    <!-- Fade in the bottom half of the ImageView -->
+    <alpha
+        android:fromAlpha="0"
+        android:toAlpha="1"
+        android:duration="1500"
+        android:startOffset="500" >
+    </alpha>
+
+</set>
+
+
+
