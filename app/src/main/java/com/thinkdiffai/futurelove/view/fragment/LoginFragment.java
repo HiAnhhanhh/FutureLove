@@ -103,14 +103,15 @@ public class LoginFragment extends Fragment {
         startActivity(i);
     }
 
-    private void navToRegisterFragment() {
-        NavController nav = NavHostFragment.findNavController(this);
-        nav.navigate(R.id.action_loginFragment_to_registerFragment);
-    }
-
     @Override
     public void onDestroy() {
         super.onDestroy();
         binding = null;
+    }
+
+    // Child Classes
+    private void navToRegisterFragment() {
+        NavController nav = NavHostFragment.findNavController(this);
+        nav.navigate(R.id.action_loginFragment_to_registerFragment);
     }
 }

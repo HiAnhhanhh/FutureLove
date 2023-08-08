@@ -74,7 +74,7 @@ public class HistoryFragment extends Fragment {
             @Override
             public void onClickItem(int id) {
                 mainActivity.eventSummaryCurrentId = id;
-                mainActivity.setCurrentPage(3);
+//                mainActivity.setCurrentPage(3);
             }
 
             @Override

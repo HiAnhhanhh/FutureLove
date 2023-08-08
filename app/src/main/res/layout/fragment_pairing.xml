@@ -408,8 +408,65 @@
                 android:layout_gravity="center"
                 tools:srcCompat="@tools:sample/avatars" />
         </androidx.cardview.widget.CardView>
-
-
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/img_bottom_nav_pairing"
+        android:layout_width="match_parent"
+        android:layout_height="92dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/pairing_selected"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <!--  Fake Button  -->
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_home"
+        android:layout_width="wrap_content"
+        android:layout_height="60dp"
+        android:layout_marginTop="24dp"
+        android:background="@null"
+        app:layout_constraintBottom_toBottomOf="@+id/img_bottom_nav_pairing"
+        app:layout_constraintEnd_toStartOf="@+id/btn_comment"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="@+id/img_bottom_nav_pairing"
+        app:layout_constraintTop_toTopOf="@+id/img_bottom_nav_pairing" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_comment"
+        android:layout_width="wrap_content"
+        android:layout_height="60dp"
+        android:layout_marginTop="20dp"
+        android:background="@null"
+        app:layout_constraintBottom_toBottomOf="@+id/img_bottom_nav_pairing"
+        app:layout_constraintEnd_toStartOf="@+id/btn_pairing"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/btn_home"
+        app:layout_constraintTop_toTopOf="@+id/img_bottom_nav_pairing" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_pairing"
+        android:layout_width="wrap_content"
+        android:layout_height="60dp"
+        android:layout_marginTop="20dp"
+        android:background="@null"
+        app:layout_constraintBottom_toBottomOf="@+id/img_bottom_nav_pairing"
+        app:layout_constraintEnd_toStartOf="@+id/btn_timeline"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/btn_comment"
+        app:layout_constraintTop_toTopOf="@+id/img_bottom_nav_pairing" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_timeline"
+        android:layout_width="wrap_content"
+        android:layout_height="60dp"
+        android:layout_marginTop="20dp"
+        android:background="@null"
+        app:layout_constraintBottom_toBottomOf="@+id/img_bottom_nav_pairing"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/btn_pairing"
+        app:layout_constraintTop_toTopOf="@+id/img_bottom_nav_pairing" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

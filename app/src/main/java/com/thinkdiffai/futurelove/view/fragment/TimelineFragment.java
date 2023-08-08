@@ -31,11 +31,13 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.thinkdiffai.futurelove.DbStorage.EventHistoryDb;
+import com.thinkdiffai.futurelove.R;
 import com.thinkdiffai.futurelove.databinding.FragmentTimelineBinding;
 import com.thinkdiffai.futurelove.model.DetailEvent;
 import com.thinkdiffai.futurelove.model.DetailEventList;
@@ -116,6 +118,36 @@ public class TimelineFragment extends Fragment {
             Log.e("ExceptionRuntime", e.toString());
         }
         return fragmentTimelineBinding.getRoot();
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        navigateToOtherFragments();
+    }
+
+    private void navigateToOtherFragments() {
+        // Click btn Home
+        fragmentTimelineBinding.btnHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                NavHostFragment.findNavController(TimelineFragment.this).navigate(R.id.action_timelineFragment_to_homeFragment);
+            }
+        });
+        // Click btn Pairing
+        fragmentTimelineBinding.btnPairing.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                NavHostFragment.findNavController(TimelineFragment.this).navigate(R.id.action_timelineFragment_to_pairingFragment);
+            }
+        });
+        // Click btn Comment
+        fragmentTimelineBinding.btnComment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                NavHostFragment.findNavController(TimelineFragment.this).navigate(R.id.action_timelineFragment_to_commentFragment);
+            }
+        });
     }
 
     private void initListener() {
@@ -233,11 +265,11 @@ public class TimelineFragment extends Fragment {
         });
     }
 
-    private void saveEventToStorage() {
-        int number = new Random().nextInt(3) + 2;
-
-        EventHistoryDb.getInstance(getActivity()).eventHistoryDao().insert(eventListDto.get(number));
-    }
+//    private void saveEventToStorage() {
+//        int number = new Random().nextInt(3) + 2;
+//
+//        EventHistoryDb.getInstance(getActivity()).eventHistoryDao().insert(eventListDto.get(number));
+//    }
 
     private void openStorage() {
         if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
@@ -381,7 +413,7 @@ public class TimelineFragment extends Fragment {
         commentsForAdapter = new ArrayList<>();
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(), GridLayoutManager.VERTICAL, false);
         fragmentTimelineBinding.rcvComment.setLayoutManager(linearLayoutManager);
-        commentAdapter = new CommentAdapter(commentsForAdapter, this::iOnClickItemComment);
+        commentAdapter = new CommentAdapter(requireContext(), commentsForAdapter, this::iOnClickItemComment);
         fragmentTimelineBinding.rcvComment.setAdapter(commentAdapter);
 
     }

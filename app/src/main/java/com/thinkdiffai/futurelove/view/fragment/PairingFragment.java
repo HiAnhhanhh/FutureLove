@@ -32,6 +32,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
@@ -134,6 +135,36 @@ public class PairingFragment extends Fragment {
         }
 
         return fragmentPairingBinding.getRoot();
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        navigateToOtherFragments();
+    }
+
+    private void navigateToOtherFragments() {
+        // Click btn Home
+        fragmentPairingBinding.btnHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                NavHostFragment.findNavController(PairingFragment.this).navigate(R.id.action_pairingFragment_to_homeFragment);
+            }
+        });
+        // Click btn Comment
+        fragmentPairingBinding.btnComment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                NavHostFragment.findNavController(PairingFragment.this).navigate(R.id.action_pairingFragment_to_commentFragment);
+            }
+        });
+        // Click btn Timeline
+        fragmentPairingBinding.btnTimeline.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                NavHostFragment.findNavController(PairingFragment.this).navigate(R.id.action_pairingFragment_to_timelineFragment);
+            }
+        });
     }
 
     private void initListener() {
@@ -642,11 +673,11 @@ public class PairingFragment extends Fragment {
     }
 
 
-    private void goToEventDetail(int id) {
-        mainActivity.eventSummaryCurrentId = id;
-        mainActivity.setCurrentPage(3);
-
-    }
+//    private void goToEventDetail(int id) {
+//        mainActivity.eventSummaryCurrentId = id;
+//        mainActivity.setCurrentPage(3);
+//
+//    }
 
     private void hideHub() {
         Handler handler = new Handler();

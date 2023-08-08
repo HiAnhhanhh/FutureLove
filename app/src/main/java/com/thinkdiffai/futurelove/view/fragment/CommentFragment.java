@@ -12,9 +12,11 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.thinkdiffai.futurelove.R;
 import com.thinkdiffai.futurelove.databinding.FragmentCommentBinding;
 import com.thinkdiffai.futurelove.model.comment.CommentList;
 import com.thinkdiffai.futurelove.model.comment.Comment;
@@ -69,9 +71,49 @@ public class CommentFragment extends Fragment {
             Log.e("ExceptionRuntime", e.toString());
         }
         return fragmentCommentBinding.getRoot();
-
     }
 
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        navigateToOtherFragments();
+    }
+
+    private void navigateToOtherFragments() {
+        // Click btn Home
+        fragmentCommentBinding.btnHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goToHomeFragment();
+            }
+        });
+        // Click btn Pairing
+        fragmentCommentBinding.btnPairing.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goToPairingFragment();
+            }
+        });
+        // Click btn Timeline
+        fragmentCommentBinding.btnTimeline.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goToTimeLineFragment();
+            }
+        });
+    }
+
+    private void goToHomeFragment() {
+        NavHostFragment.findNavController(CommentFragment.this).navigate(R.id.action_commentFragment_to_homeFragment);
+    }
+
+    private void goToPairingFragment() {
+        NavHostFragment.findNavController(CommentFragment.this).navigate(R.id.action_commentFragment_to_pairingFragment);
+    }
+
+    private void goToTimeLineFragment() {
+        NavHostFragment.findNavController(CommentFragment.this).navigate(R.id.action_commentFragment_to_timelineFragment);
+    }
 
     private void initListenerCommentNew() {
 
@@ -139,8 +181,36 @@ public class CommentFragment extends Fragment {
 //    }
 
     private void loadNextPage() {
-        getCommentNew();
+//        getCommentNew();
+        if (currentPage == 1) {
+            commentsForAdapter.clear();
+        }
+        ApiService apiService = RetrofitClient.getInstance(Server.DOMAIN2).getRetrofit().create(ApiService.class);
+        Call<CommentList> call = apiService.getListCommentNew(currentPage);
+        call.enqueue(new Callback<CommentList>() {
+            @SuppressLint("NotifyDataSetChanged")
+            @Override
+            public void onResponse(@NonNull Call<CommentList> call, @NonNull Response<CommentList> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    CommentList _commentList = response.body();
+                    commentsForAdapter = _commentList.getComment();
+                    numberOfElements = _commentList.getSophantu();
+                    pageNumber = _commentList.getSotrang();
 
+                    if (!commentsForAdapter.isEmpty()) {
+                        commentAdapter.setData(commentsForAdapter);
+                        commentAdapter.notifyDataSetChanged();
+                    }
+                }
+                isLoading = false;
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<CommentList> call, @NonNull Throwable t) {
+                isLoading = false;
+                Log.e("MainActivityLog", t.getMessage());
+            }
+        });
     }
 
     private void getCommentNew() {
@@ -190,13 +260,13 @@ public class CommentFragment extends Fragment {
         commentsForAdapter = new ArrayList<>();
         linearLayoutManager = new LinearLayoutManager(getActivity(), GridLayoutManager.VERTICAL, false);
         fragmentCommentBinding.rcvComment.setLayoutManager(linearLayoutManager);
-        commentAdapter = new CommentAdapter(commentsForAdapter, this::iOnClickItem);
+        commentAdapter = new CommentAdapter(requireContext(), commentsForAdapter, this::iOnClickItem);
         fragmentCommentBinding.rcvComment.setAdapter(commentAdapter);
     }
 
     private void iOnClickItem(int idToanBoSuKien, int soThuTuSuKienCon) {
         mainActivity.eventSummaryCurrentId = idToanBoSuKien;
         mainActivity.soThuTuSuKien = soThuTuSuKienCon;
-        mainActivity.setCurrentPage(4);
+        goToTimeLineFragment();
     }
 }

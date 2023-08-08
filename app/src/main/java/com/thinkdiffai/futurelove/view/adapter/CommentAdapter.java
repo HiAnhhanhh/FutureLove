@@ -1,13 +1,16 @@
 package com.thinkdiffai.futurelove.view.adapter;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -19,6 +22,8 @@ import com.thinkdiffai.futurelove.R;
 import com.thinkdiffai.futurelove.databinding.ItemCommentBinding;
 import com.thinkdiffai.futurelove.util.Util;
 import com.thinkdiffai.futurelove.model.comment.Comment;
+import com.thinkdiffai.futurelove.util.Util;
+import com.thinkdiffai.futurelove.view.fragment.dialog.DeleteDialogFragment;
 
 import java.util.List;
 
@@ -28,6 +33,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
     private List<Comment> comments;
 
     public final IOnClickItemListener iOnClickItem;
+    private Context context;
 
     public interface IOnClickItemListener {
         void onClickItem(int idToanBoSuKien, int soThuTuSuKienCon);
@@ -41,7 +47,9 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
         this.urlImgMale = urlImgMale;
         this.urlImgFemale = urlImgFemale;
     }
-    public CommentAdapter(List<Comment> comments, IOnClickItemListener iOnClickItem) {
+
+    public CommentAdapter(Context context, List<Comment> comments, IOnClickItemListener iOnClickItem) {
+        this.context = context;
         this.comments = comments;
 
         this.iOnClickItem = iOnClickItem;
@@ -150,6 +158,27 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
                 iOnClickItem.onClickItem(comment.getIdToanBoSuKien(), comment.getSoThuTuSuKien());
             }
         });
+
+        holder.itemCommentBinding.layoutComment.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                showDeleteDialog(holder.getAbsoluteAdapterPosition());
+                return true;
+            }
+        });
+    }
+
+    private void showDeleteDialog(int position) {
+        DeleteDialogFragment deleteDialogFragment = new DeleteDialogFragment();
+        deleteDialogFragment.setListener(new DeleteDialogFragment.DeleteDialogListener() {
+            @Override
+            public void onConfirmDelete() {
+                comments.remove(position);
+                notifyItemRemoved(position);
+                Toast.makeText(context, "Delete Successfully", Toast.LENGTH_SHORT).show();
+            }
+        });
+        deleteDialogFragment.show(((AppCompatActivity) context).getSupportFragmentManager(), "delete_dialog");
     }
 
     @Override

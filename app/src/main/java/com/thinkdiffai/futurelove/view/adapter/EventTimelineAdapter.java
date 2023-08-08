@@ -1,13 +1,19 @@
 package com.thinkdiffai.futurelove.view.adapter;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatImageView;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.thinkdiffai.futurelove.databinding.FragmentShowFullImageBinding;
 import com.thinkdiffai.futurelove.databinding.ItemTimelineEventBinding;
 import com.thinkdiffai.futurelove.model.DetailEvent;
 import com.thinkdiffai.futurelove.model.DetailEventList;
@@ -69,6 +75,25 @@ public class EventTimelineAdapter extends RecyclerView.Adapter<EventTimelineAdap
                 iOnClickAddEvent.onClickAddEvent(event.getId());
             }
         });
+
+        holder.itemTimelineEventBinding.imgContent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Open a custom dialog to display the image
+                showFullImageDialog(((AppCompatActivity) context).getSupportFragmentManager(), event.getLinkDaSwap());
+            }
+        });
+    }
+
+    private void showFullImageDialog(FragmentManager supportFragmentManager, String linkDaSwap) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        FragmentShowFullImageBinding fragmentShowFullImageBinding = FragmentShowFullImageBinding.inflate(LayoutInflater.from(context));
+        // Load Image
+        Glide.with(context).load(linkDaSwap).into(fragmentShowFullImageBinding.imgFullView);
+        // Set image on dialog
+        builder.setView(fragmentShowFullImageBinding.getRoot());
+        AlertDialog showFullImageDialog = builder.create();
+        showFullImageDialog.show();
     }
 
     @Override
