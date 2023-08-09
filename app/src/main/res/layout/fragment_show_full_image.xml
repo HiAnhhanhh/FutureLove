@@ -7,9 +7,11 @@
 
     <com.jsibbold.zoomage.ZoomageView
         android:id="@+id/img_full_view"
-        android:layout_width="match_parent"
-        android:layout_height="500dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:src="@drawable/couple"
+        android:scaleType="fitCenter"
+        android:adjustViewBounds="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -17,5 +19,18 @@
         app:zoomage_doubleTapToZoom="true"
         app:zoomage_restrictBounds="true"
         app:zoomage_zoomable="true" />
+
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/btn_download_img"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_download"
+        android:padding="4dp"
+        app:layout_constraintBottom_toTopOf="@+id/img_full_view"
+        android:background="@drawable/bg_white_round"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_margin="16dp"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

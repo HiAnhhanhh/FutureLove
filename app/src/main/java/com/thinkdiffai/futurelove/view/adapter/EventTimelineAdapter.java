@@ -1,7 +1,10 @@
 package com.thinkdiffai.futurelove.view.adapter;
 
 import android.app.AlertDialog;
+import android.app.DownloadManager;
 import android.content.Context;
+import android.net.Uri;
+import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +22,7 @@ import com.thinkdiffai.futurelove.model.DetailEvent;
 import com.thinkdiffai.futurelove.model.DetailEventList;
 import com.thinkdiffai.futurelove.model.EventHomeDto;
 import com.squareup.picasso.Picasso;
+import com.thinkdiffai.futurelove.view.fragment.dialog.MyOwnDialogFragment;
 
 import java.util.List;
 
@@ -94,6 +98,35 @@ public class EventTimelineAdapter extends RecyclerView.Adapter<EventTimelineAdap
         builder.setView(fragmentShowFullImageBinding.getRoot());
         AlertDialog showFullImageDialog = builder.create();
         showFullImageDialog.show();
+
+        fragmentShowFullImageBinding.btnDownloadImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MyOwnDialogFragment downLoadDialog = new MyOwnDialogFragment();
+                downLoadDialog.setDialogTitle("Download Image");
+                downLoadDialog.setDialogMessage("Do you want to download this image?");
+                downLoadDialog.setListener(new MyOwnDialogFragment.MyOwnDialogListener() {
+                    @Override
+                    public void onConfirm() {
+                        downloadImage(linkDaSwap);
+                    }
+                });
+                downLoadDialog.show(((AppCompatActivity) context).getSupportFragmentManager(), "delete_dialog");
+            }
+        });
+    }
+
+    private void downloadImage(String linkDaSwap) {
+        // Create a Download Manager request
+        DownloadManager.Request request = new DownloadManager.Request(Uri.parse(linkDaSwap));
+        request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI | DownloadManager.Request.NETWORK_MOBILE)
+                .setTitle("Image Download")
+                .setDescription("Downloading image ...")
+                .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
+                .setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, "image.jpg");
+        // Get the Download Manager service and enqueue the request
+        DownloadManager downloadManager = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
+        downloadManager.enqueue(request);
     }
 
     @Override
