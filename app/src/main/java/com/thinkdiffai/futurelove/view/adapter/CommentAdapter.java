@@ -22,8 +22,7 @@ import com.thinkdiffai.futurelove.R;
 import com.thinkdiffai.futurelove.databinding.ItemCommentBinding;
 import com.thinkdiffai.futurelove.util.Util;
 import com.thinkdiffai.futurelove.model.comment.Comment;
-import com.thinkdiffai.futurelove.util.Util;
-import com.thinkdiffai.futurelove.view.fragment.dialog.DeleteDialogFragment;
+import com.thinkdiffai.futurelove.view.fragment.dialog.MyOwnDialogFragment;
 
 import java.util.List;
 
@@ -42,6 +41,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
     public void setData(List<Comment> comments) {
         this.comments = comments;
     }
+
     public void setData(List<Comment> comments, String urlImgMale, String urlImgFemale) {
         this.comments = comments;
         this.urlImgMale = urlImgMale;
@@ -77,17 +77,17 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
         Comment comment = comments.get(position);
         if (comment == null)
             return;
-        if (comment.getLinkNamGoc() != null&&!comment.getLinkNamGoc().isEmpty() && comment.getLinkNuGoc() != null&&!comment.getLinkNuGoc().isEmpty()) {
+        if (comment.getLinkNamGoc() != null && !comment.getLinkNamGoc().isEmpty() && comment.getLinkNuGoc() != null && !comment.getLinkNuGoc().isEmpty()) {
             Glide.with(holder.itemView.getContext()).load(comment.getLinkNamGoc()).error(R.drawable.baseline_account_circle_24).into(holder.itemCommentBinding.imageAvatar1);
 //            Glide.with(holder.itemView.getContext()).load(comment.getLinkNuGoc()).error(R.drawable.baseline_account_circle_24).into(holder.itemCommentBinding.imageAvatar2);
-        }else if (urlImgFemale!=null&&!urlImgFemale.isEmpty()&&urlImgMale!=null&&!urlImgMale.isEmpty()){
+        } else if (urlImgFemale != null && !urlImgFemale.isEmpty() && urlImgMale != null && !urlImgMale.isEmpty()) {
             Glide.with(holder.itemView.getContext()).load(urlImgMale).error(R.drawable.baseline_account_circle_24).into(holder.itemCommentBinding.imageAvatar1);
 //            Glide.with(holder.itemView.getContext()).load(urlImgFemale).error(R.drawable.baseline_account_circle_24).into(holder.itemCommentBinding.imageAvatar2);
         }
         if (comment.getDeviceCmt().trim().equals("")) {
             holder.itemCommentBinding.tvDeviceName.setVisibility(View.GONE);
         } else {
-            holder.itemCommentBinding.tvDeviceName.setText("dv: "+comment.getDeviceCmt());
+            holder.itemCommentBinding.tvDeviceName.setText("dv: " + comment.getDeviceCmt());
             holder.itemCommentBinding.tvDeviceName.setVisibility(View.VISIBLE);
 
         }
@@ -128,6 +128,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
                             holder.itemCommentBinding.imageComment.setVisibility(View.GONE);
                             return true;
                         }
+
                         @Override
                         public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
                             holder.itemCommentBinding.imageComment.setVisibility(View.VISIBLE);
@@ -169,10 +170,12 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
     }
 
     private void showDeleteDialog(int position) {
-        DeleteDialogFragment deleteDialogFragment = new DeleteDialogFragment();
-        deleteDialogFragment.setListener(new DeleteDialogFragment.DeleteDialogListener() {
+        MyOwnDialogFragment deleteDialogFragment = new MyOwnDialogFragment();
+        deleteDialogFragment.setDialogTitle("Delete Comment");
+        deleteDialogFragment.setDialogMessage("Do you want to delete this comment?");
+        deleteDialogFragment.setListener(new MyOwnDialogFragment.MyOwnDialogListener() {
             @Override
-            public void onConfirmDelete() {
+            public void onConfirm() {
                 comments.remove(position);
                 notifyItemRemoved(position);
                 Toast.makeText(context, "Delete Successfully", Toast.LENGTH_SHORT).show();
@@ -194,7 +197,6 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
             this.itemCommentBinding = itemCommentBinding;
         }
     }
-
 
 
 }
