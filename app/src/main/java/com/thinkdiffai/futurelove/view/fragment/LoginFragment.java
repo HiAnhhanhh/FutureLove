@@ -5,7 +5,6 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
@@ -19,7 +18,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.thinkdiffai.futurelove.R;
 import com.thinkdiffai.futurelove.databinding.FragmentLoginBinding;
@@ -40,10 +38,8 @@ import retrofit2.Response;
 
 public class LoginFragment extends Fragment {
     private FragmentLoginBinding binding;
-
     private SignInSignUpActivity signInSignUpActivity;
     private KProgressHUD kProgressHUD;
-    private boolean isValidAccount = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -60,7 +56,7 @@ public class LoginFragment extends Fragment {
 
         // Set up TextWatcher to see that edit texts are valid or not and will show alerts or nothing
         setUpTextWatcher();
-        
+
         // When click Login btn
         loginExecute();
 
@@ -91,11 +87,11 @@ public class LoginFragment extends Fragment {
 
             }
         });
-        
+
         binding.edtPassword.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                
+
             }
 
             @Override
@@ -159,6 +155,8 @@ public class LoginFragment extends Fragment {
                 if (isCompletedInformation(email, password)) {
                     // Call API and Login
                     checkAccountRegistered(email, password);
+                } else {
+                    showFailedLoginDialog();
                 }
             }
         });
@@ -169,20 +167,11 @@ public class LoginFragment extends Fragment {
         callLoginApi(new QueryValueCallback() {
             @Override
             public void onQueryValueReceived(String queryValue) {
-                if (!Objects.equals(queryValue, "{ketqua=Email or username is not registered.}")) {
+                if (!queryValue.contains("{ketqua=")){
                     navToMainActivity();
                     Log.d("PHONG", "queryValue = " + queryValue);
-                } else {
-                    MyOwnDialogFragment myOwnDialogFragment = new MyOwnDialogFragment();
-                    myOwnDialogFragment.setDialogTitle("Login Failed");
-                    myOwnDialogFragment.setDialogMessage("Would you like to register right now?");
-                    myOwnDialogFragment.setListener(new MyOwnDialogFragment.MyOwnDialogListener() {
-                        @Override
-                        public void onConfirm() {
-                            NavHostFragment.findNavController(LoginFragment.this).navigate(R.id.action_loginFragment_to_registerFragment);
-                        }
-                    });
-                    myOwnDialogFragment.show((signInSignUpActivity).getSupportFragmentManager(), "login_dialog");
+                } else{
+                    showFailedLoginDialog();
 
                 }
             }
@@ -192,6 +181,19 @@ public class LoginFragment extends Fragment {
 
             }
         }, email, password);
+    }
+
+    private void showFailedLoginDialog() {
+        MyOwnDialogFragment myOwnDialogFragment = new MyOwnDialogFragment();
+        myOwnDialogFragment.setDialogTitle("Login Failed");
+        myOwnDialogFragment.setDialogMessage("Would you like to register right now?");
+        myOwnDialogFragment.setListener(new MyOwnDialogFragment.MyOwnDialogListener() {
+            @Override
+            public void onConfirm() {
+                NavHostFragment.findNavController(LoginFragment.this).navigate(R.id.action_loginFragment_to_registerFragment);
+            }
+        });
+        myOwnDialogFragment.show((signInSignUpActivity).getSupportFragmentManager(), "login_dialog");
     }
 
     private void callLoginApi(QueryValueCallback callback, String email, String password) {
@@ -216,7 +218,6 @@ public class LoginFragment extends Fragment {
 
             @Override
             public void onFailure(Call<Object> call, Throwable t) {
-                isValidAccount = false;
                 if (kProgressHUD.isShowing()) {
                     kProgressHUD.dismiss();
                 }

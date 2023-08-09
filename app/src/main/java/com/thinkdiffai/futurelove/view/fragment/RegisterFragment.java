@@ -2,6 +2,8 @@ package com.thinkdiffai.futurelove.view.fragment;
 
 import android.app.Dialog;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.text.method.PasswordTransformationMethod;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,12 +36,34 @@ public class RegisterFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        // Set up TextWatcher to see that edit texts are valid or not and will show alerts or nothing
+        setUpTextWatcher();
         // When click on Register Button
         clickOnRegisterBtn();
         // When click on Login Button
         clickOnLoginBtn();
         // When users want to see password clearly or not
         showPasswordClearly();
+    }
+
+    private void setUpTextWatcher() {
+        binding.edtUserName.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+//                usernameAlertVisibility();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
     }
 
     private void showPasswordClearly() {
@@ -71,6 +95,10 @@ public class RegisterFragment extends Fragment {
         binding.btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                // Step 1: Check valid forms
+
+
                 showRegistrationSuccessDialog();
             }
         });
