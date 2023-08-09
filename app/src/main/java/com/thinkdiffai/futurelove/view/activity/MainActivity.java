@@ -24,13 +24,10 @@ import io.github.rupinderjeet.kprogresshud.KProgressHUD;
 
 public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding activityMainBinding;
-    private MainViewPagerAdapter mainViewPagerAdapter;
     private KProgressHUD kProgressHUD;
     public int eventSummaryCurrentId = -1;
-
     // checking login flag
     private boolean userLoggedIn = false;
-
     public int soThuTuSuKien = 0;
 
     @Override

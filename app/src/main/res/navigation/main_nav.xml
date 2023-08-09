@@ -29,6 +29,9 @@
             app:destination="@id/userDetailFragment"
             app:enterAnim="@anim/fade_in"
             app:exitAnim="@anim/fade_out" />
+        <action
+            android:id="@+id/action_homeFragment_to_eventsFragment"
+            app:destination="@id/eventsFragment" />
     </fragment>
     <fragment
         android:id="@+id/commentFragment"
@@ -92,7 +95,7 @@
     </fragment>
     <fragment
         android:id="@+id/userDetailFragment"
-        android:name="com.thinkdiffai.futurelove.view.fragment.UserDetailFragment"
+        android:name="com.thinkdiffai.futurelove.UserDetailFragment"
         android:label="fragment_user_detail"
         tools:layout="@layout/fragment_user_detail">
         <action
@@ -100,5 +103,26 @@
             app:destination="@id/homeFragment"
             app:enterAnim="@anim/fade_in"
             app:exitAnim="@anim/fade_out" />
+    </fragment>
+    <fragment
+        android:id="@+id/eventsFragment"
+        android:name="com.thinkdiffai.futurelove.EventsFragment"
+        android:label="fragment_events"
+        tools:layout="@layout/fragment_events" >
+        <action
+            android:id="@+id/action_eventsFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+        <action
+            android:id="@+id/action_eventsFragment_to_fragmentEventsDetail"
+            app:destination="@id/fragmentEventsDetail" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragmentEventsDetail"
+        android:name="com.thinkdiffai.futurelove.FragmentEventsDetail"
+        android:label="fragment_events_detail"
+        tools:layout="@layout/fragment_events_detail" >
+        <action
+            android:id="@+id/action_fragmentEventsDetail_to_eventsFragment"
+            app:destination="@id/eventsFragment" />
     </fragment>
 </navigation>
