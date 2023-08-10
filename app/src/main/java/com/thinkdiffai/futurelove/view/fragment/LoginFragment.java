@@ -1,6 +1,8 @@
 package com.thinkdiffai.futurelove.view.fragment;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -40,6 +42,8 @@ public class LoginFragment extends Fragment {
     private FragmentLoginBinding binding;
     private SignInSignUpActivity signInSignUpActivity;
     private KProgressHUD kProgressHUD;
+
+    private SharedPreferences sharedPreferences;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -170,23 +174,41 @@ public class LoginFragment extends Fragment {
                 if (!queryValue.contains("{ketqua=")){
                     navToMainActivity();
                     Log.d("PHONG", "queryValue = " + queryValue);
-                } else{
-                    showFailedLoginDialog();
 
+                    // Store LOGIN STATE not to login again
+                    sharedPreferences = Objects.requireNonNull(getActivity()).getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putBoolean("LOGIN_STATE", true);
+                    editor.apply();
+                } else{
+                    showErrorLoginDialog();
                 }
             }
-
             @Override
             public void onApiCallFailed(Throwable t) {
-
             }
         }, email, password);
     }
 
     private void showFailedLoginDialog() {
         MyOwnDialogFragment myOwnDialogFragment = new MyOwnDialogFragment();
-        myOwnDialogFragment.setDialogTitle("Login Failed");
-        myOwnDialogFragment.setDialogMessage("Would you like to register right now?");
+        myOwnDialogFragment.setDialogTitle("Incomplete Form");
+        myOwnDialogFragment.setDialogMessage("Click \"YES\" for Register now!");
+        myOwnDialogFragment.setImageSrc(R.drawable.ic_alert);
+        myOwnDialogFragment.setListener(new MyOwnDialogFragment.MyOwnDialogListener() {
+            @Override
+            public void onConfirm() {
+                NavHostFragment.findNavController(LoginFragment.this).navigate(R.id.action_loginFragment_to_registerFragment);
+            }
+        });
+        myOwnDialogFragment.show((signInSignUpActivity).getSupportFragmentManager(), "login_dialog");
+    }
+
+    private void showErrorLoginDialog() {
+        MyOwnDialogFragment myOwnDialogFragment = new MyOwnDialogFragment();
+        myOwnDialogFragment.setDialogTitle("Invalid Account");
+        myOwnDialogFragment.setDialogMessage("Click \"YES\" for Register now!");
+        myOwnDialogFragment.setImageSrc(R.drawable.ic_alert);
         myOwnDialogFragment.setListener(new MyOwnDialogFragment.MyOwnDialogListener() {
             @Override
             public void onConfirm() {
@@ -230,14 +252,6 @@ public class LoginFragment extends Fragment {
         if (isValidEmail(email) && isValidPassword(password)) {
             return true;
         }
-//        else if (!isValidEmail(email) && !isValidPassword(password) ) {
-//            binding.tvUserNameAlert.setVisibility(View.VISIBLE);
-//            binding.tvPasswordAlert.setVisibility(View.VISIBLE);
-//        } else if (!isValidEmail(email)) {
-//            binding.tvUserNameAlert.setVisibility(View.VISIBLE);
-//        } else if (!isValidPassword(password)) {
-//            binding.tvPasswordAlert.setVisibility(View.VISIBLE);
-//        }
         return false;
     }
 

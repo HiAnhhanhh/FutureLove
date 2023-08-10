@@ -10,6 +10,7 @@
         android:name="com.thinkdiffai.futurelove.view.fragment.SplashFragment"
         android:label="fragment_splash"
         tools:layout="@layout/fragment_splash" />
+
     <fragment
         android:id="@+id/loginFragment"
         android:name="com.thinkdiffai.futurelove.view.fragment.LoginFragment"
@@ -22,6 +23,7 @@
             app:exitAnim="@anim/slide_out_left"
             />
     </fragment>
+
     <fragment
         android:id="@+id/registerFragment"
         android:name="com.thinkdiffai.futurelove.view.fragment.RegisterFragment"

@@ -23,4 +23,5 @@ public interface Server {
     String URI_LINK_WEB_DETAIL = "http://datanomic.online/sukien/";
 
     String URI_LOG_IN = "login";
+    String URI_SIGN_UP = "register";
 }

@@ -127,6 +127,17 @@ public interface ApiService {
             @Field("password") String password
     );
 
+    @FormUrlEncoded
+    @POST(Server.URI_SIGN_UP)
+    Call<Object> signUp(
+            @Field("email") String email,
+            @Field("password") String password,
+            @Field("user_name") String userName,
+            @Field("link_avatar") String linkAvatar,
+            @Field("ip_register") String registerIp,
+            @Field("device_register") String registerDevice
+    );
+
 
 }
 
