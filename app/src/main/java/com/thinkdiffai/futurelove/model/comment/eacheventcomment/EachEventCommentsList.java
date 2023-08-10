@@ -9,7 +9,6 @@ public class EachEventCommentsList {
     @SerializedName("comment")
     private List<Comment> eachEventCommentList;
 
-
     public List<Comment> getEachEventCommentList() {
         return eachEventCommentList;
     }

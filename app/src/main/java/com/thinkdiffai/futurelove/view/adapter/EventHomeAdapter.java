@@ -1,6 +1,7 @@
 package com.thinkdiffai.futurelove.view.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -74,11 +75,10 @@ public class EventHomeAdapter extends RecyclerView.Adapter<EventHomeAdapter.Even
         holder.itemBinding.tvContent.setText(detailEvents.get(0).getTenSuKien());
         holder.itemBinding.tvDate.setText(date);
         //Toast.makeText(context,  events.get(number).getTom_Luoc_Text(), Toast.LENGTH_SHORT).show();
-
         holder.itemBinding.layoutItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Log.d("PHONG", "ID toan bo su kien: " + detailEvents.get(0).getIdToanBoSuKien());
                 iOnClickItem.onClickItem(detailEvents.get(0).getIdToanBoSuKien());
                 Comon.link_nam_chua_swap = detailEvents.get(0).getLinkNamChuaSwap();
                 Comon.link_nam_goc = detailEvents.get(0).getLinkNamGoc();

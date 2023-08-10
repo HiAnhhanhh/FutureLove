@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bg_user1"
-    tools:context=".view.fragment.UserDetailFragment"
-    >
+    tools:context=".view.fragment.UserDetailFragment">
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:background="@drawable/bg_user"
+        android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -22,7 +22,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="44dp"
             android:layout_marginEnd="16dp"
             android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
@@ -30,8 +30,8 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <androidx.appcompat.widget.LinearLayoutCompat
-                android:layout_width="320dp"
-                android:layout_height="48dp"
+                android:layout_width="288dp"
+                android:layout_height="40dp"
                 android:background="@drawable/frame_search"
                 android:orientation="horizontal">
 
@@ -62,9 +62,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
-                android:layout_marginLeft="8dp"
                 android:fontFamily="@font/roboto_slab"
-                android:gravity="center|left"
+                android:gravity="center"
                 android:text="Cancle"
                 android:textColor="@color/white"
                 android:textSize="15sp" />
@@ -72,19 +71,20 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.appcompat.widget.LinearLayoutCompat
-        android:layout_width="match_parent"
-        android:background="@drawable/bg_user"
         android:id="@+id/ll_user"
-        android:layout_height="@dimen/define_dimen_160"
+        android:layout_width="match_parent"
+        android:layout_height="152dp"
+        android:background="@drawable/bg_user"
+        android:gravity="center"
+        android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:orientation="horizontal"
-        android:padding="@dimen/define_dimen_18"
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
+
         <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="wrap_content"
-            android:orientation="vertical"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/layout_img_user"
@@ -92,8 +92,8 @@
                 android:layout_height="@dimen/define_dimen_100"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
-                android:layout_marginTop="@dimen/define_dimen_6"
                 app:cardCornerRadius="@dimen/define_dimen_100">
+
                 <ImageView
                     android:id="@+id/img_person_user"
                     android:layout_width="match_parent"
@@ -101,170 +101,167 @@
                     android:scaleType="centerCrop"
                     android:src="@drawable/layout_img_user" />
             </androidx.cardview.widget.CardView>
+
             <androidx.appcompat.widget.AppCompatTextView
                 android:layout_width="@dimen/define_dimen_100"
                 android:layout_height="@dimen/define_dimen_20"
-                android:text="Username"
-                android:gravity="center"
-                android:textSize="16sp"
-                android:textColor="@color/white"
                 android:fontFamily="@font/roboto_slab"
-                />
+                android:gravity="center"
+                android:text="Username"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
         </androidx.appcompat.widget.LinearLayoutCompat>
+
         <androidx.appcompat.widget.LinearLayoutCompat
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            >
+            android:layout_marginStart="20dp"
+            android:orientation="vertical">
+
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:id="@+id/ll_show_views_user"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:weightSum="3"
                 android:gravity="center_vertical"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:weightSum="3">
+
                 <androidx.appcompat.widget.LinearLayoutCompat
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_marginLeft="@dimen/define_dimen_10"
-                    >
+                    android:orientation="vertical">
+
                     <androidx.appcompat.widget.AppCompatTextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
                         android:id="@+id/tt_events_user"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/roboto_slab"
+                        android:gravity="center"
                         android:text="20"
-                        android:gravity="center"
-                        android:textSize="18sp"
-                        android:fontFamily="@font/roboto_slab"
                         android:textColor="@color/white"
-                        />
+                        android:textSize="16sp" />
+
                     <androidx.appcompat.widget.AppCompatTextView
                         android:layout_width="wrap_content"
-                        android:layout_marginTop="@dimen/define_dimen_10"
                         android:layout_height="match_parent"
+                        android:layout_marginTop="@dimen/define_dimen_10"
+                        android:fontFamily="@font/roboto_slab"
+                        android:gravity="center"
                         android:text="Events"
-                        android:gravity="center"
-                        android:textSize="18sp"
                         android:textColor="@color/white"
-                        android:fontFamily="@font/roboto_slab"
-                        />
+                        android:textSize="12sp" />
                 </androidx.appcompat.widget.LinearLayoutCompat>
+
                 <androidx.appcompat.widget.LinearLayoutCompat
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_marginLeft="@dimen/define_dimen_20"
-                    >
+                    android:layout_marginHorizontal="36dp"
+                    android:orientation="vertical">
+
                     <androidx.appcompat.widget.AppCompatTextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
                         android:id="@+id/tt_events_view"
-                        android:text="5.2K"
-                        android:gravity="center"
-                        android:textSize="18sp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
                         android:fontFamily="@font/roboto_slab"
+                        android:gravity="center"
+                        android:text="5.2K"
                         android:textColor="@color/white"
-                        />
+                        android:textSize="16sp" />
+
                     <androidx.appcompat.widget.AppCompatTextView
                         android:layout_width="wrap_content"
-                        android:layout_marginTop="@dimen/define_dimen_10"
                         android:layout_height="match_parent"
-                        android:text="View"
-                        android:gravity="center"
-                        android:textSize="18sp"
-                        android:textColor="@color/white"
+                        android:layout_marginTop="@dimen/define_dimen_10"
                         android:fontFamily="@font/roboto_slab"
-                        />
+                        android:gravity="center"
+                        android:text="View"
+                        android:textColor="@color/white"
+                        android:textSize="12sp" />
                 </androidx.appcompat.widget.LinearLayoutCompat>
+
                 <androidx.appcompat.widget.LinearLayoutCompat
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_marginLeft="@dimen/define_dimen_20"
-                    >
+                    android:orientation="vertical">
+
                     <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tt_events_comments"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:id="@+id/tt_events_comments"
-                        android:text="850"
-                        android:gravity="center"
-                        android:textSize="18sp"
                         android:fontFamily="@font/roboto_slab"
+                        android:gravity="center"
+                        android:text="850"
                         android:textColor="@color/white"
-                        />
+                        android:textSize="16sp" />
+
                     <androidx.appcompat.widget.AppCompatTextView
                         android:layout_width="wrap_content"
-                        android:layout_marginTop="@dimen/define_dimen_10"
                         android:layout_height="match_parent"
-                        android:text="Comments"
-                        android:gravity="center"
-                        android:textSize="18sp"
-                        android:textColor="@color/white"
+                        android:layout_marginTop="@dimen/define_dimen_10"
                         android:fontFamily="@font/roboto_slab"
-                        />
+                        android:gravity="center"
+                        android:text="Comments"
+                        android:textColor="@color/white"
+                        android:textSize="12sp" />
                 </androidx.appcompat.widget.LinearLayoutCompat>
             </androidx.appcompat.widget.LinearLayoutCompat>
+
             <androidx.appcompat.widget.AppCompatButton
-                android:layout_width="wrap_content"
-                android:layout_gravity="center"
-                android:layout_height="wrap_content"
-                android:background="@drawable/color_bg_comment_detail"
-                android:text="View events"
                 android:id="@+id/btn_viewevents"
-                android:layout_marginTop="@dimen/define_dimen_20"
+                android:layout_width="110dp"
+                android:layout_height="32dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="24dp"
+                android:background="@drawable/color_bg_comment_detail"
                 android:fontFamily="@font/roboto_slab_wght"
-                android:textStyle="bold"
-                android:textSize="@dimen/define_dimen_16"
-                android:padding="3dp"
-                >
-            </androidx.appcompat.widget.AppCompatButton>
+                android:text="View events"
+                android:textAllCaps="false"
+                android:textSize="16sp"
+                android:textStyle="bold" />
         </androidx.appcompat.widget.LinearLayoutCompat>
     </androidx.appcompat.widget.LinearLayoutCompat>
+
     <androidx.appcompat.widget.LinearLayoutCompat
         android:id="@+id/thongbao_user"
-        android:background="@drawable/bg_thongbao"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/define_dimen_70"
+        android:layout_height="80dp"
+        android:background="@drawable/bg_thongbao"
+        android:orientation="vertical"
+        android:gravity="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ll_user"
-        android:orientation="vertical"
-        >
+        app:layout_constraintTop_toBottomOf="@+id/ll_user">
+
         <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
-            android:padding="@dimen/define_dimen_5"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:orientation="horizontal"
-            >
+            android:orientation="horizontal">
             <androidx.constraintlayout.utils.widget.ImageFilterView
                 android:layout_width="@dimen/define_dimen_20"
                 android:layout_height="@dimen/define_dimen_20"
-                android:background="@drawable/isolation_mode"
-                />
+                android:background="@drawable/isolation_mode" />
             <androidx.appcompat.widget.AppCompatTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="You haven't finished the procedure yet"
+                android:layout_marginStart="4dp"
                 android:fontFamily="@font/roboto_slab_wght"
-                android:layout_marginLeft="3dp"
-                />
+                android:text="You haven't finished the procedure yet" />
         </androidx.appcompat.widget.LinearLayoutCompat>
+
         <androidx.appcompat.widget.AppCompatButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/color_bg_comment_detail"
-            android:layout_marginBottom="@dimen/define_dimen_5"
-            android:layout_marginTop="@dimen/define_dimen_5"
-            android:text="Complete your profile"
-            android:fontFamily="@font/roboto_slab_wght"
-            android:textSize="@dimen/define_dimen_12"
-            android:padding="5dp"
-            android:layout_gravity="center"
             android:id="@+id/btn_complete_profile"
-            />
+            android:layout_width="wrap_content"
+            android:layout_height="28dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/define_dimen_5"
+            android:layout_marginBottom="@dimen/define_dimen_5"
+            android:background="@drawable/color_bg_comment_detail"
+            android:fontFamily="@font/roboto_slab_wght"
+            android:padding="5dp"
+            android:text="Complete your profile"
+            android:textAllCaps="false"
+            android:textSize="12sp" />
     </androidx.appcompat.widget.LinearLayoutCompat>
 
     <androidx.appcompat.widget.AppCompatTextView
@@ -275,7 +272,7 @@
         android:padding="@dimen/define_dimen_10"
         android:text="Recent comment"
         android:textColor="@color/white"
-        android:textSize="@dimen/define_dimen_22"
+        android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/thongbao_user" />
@@ -283,12 +280,12 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rcy_recentcomment_user"
         android:layout_width="match_parent"
-        android:padding="@dimen/define_dimen_10"
-        android:background="@drawable/bg_recent_comment_user"
         android:layout_height="0dp"
         android:layout_marginLeft="@dimen/define_dimen_20"
         android:layout_marginRight="@dimen/define_dimen_20"
-        android:layout_marginBottom="@dimen/define_dimen_10"
+        android:layout_marginBottom="@dimen/define_dimen_20"
+        android:background="@drawable/bg_recent_comment_user"
+        android:padding="@dimen/define_dimen_10"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

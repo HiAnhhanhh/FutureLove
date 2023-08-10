@@ -75,10 +75,10 @@ public class HomeFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         navigateToOtherFragments();
-        serOnClickUserDetail();
+        setOnClickUserDetail();
     }
 
-    private void serOnClickUserDetail() {
+    private void setOnClickUserDetail() {
         fragmentHomeBinding.btnUserAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -88,7 +88,7 @@ public class HomeFragment extends Fragment {
     }
 
     private void navigateToUserDetailFragment() {
-        NavHostFragment.findNavController(HomeFragment.this).navigate(R.id.action_homeFragment_to_eventsFragment);
+        NavHostFragment.findNavController(HomeFragment.this).navigate(R.id.action_homeFragment_to_userDetailFragment);
     }
 
     private void navigateToOtherFragments() {

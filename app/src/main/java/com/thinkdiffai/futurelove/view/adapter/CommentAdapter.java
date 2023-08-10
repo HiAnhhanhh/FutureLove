@@ -3,6 +3,7 @@ package com.thinkdiffai.futurelove.view.adapter;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,19 +19,25 @@ import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
+import com.thinkdiffai.futurelove.DbStorage.Constant;
 import com.thinkdiffai.futurelove.R;
+import com.thinkdiffai.futurelove.controller.CityCalledByIpApi;
 import com.thinkdiffai.futurelove.databinding.ItemCommentBinding;
+import com.thinkdiffai.futurelove.service.api.Server;
 import com.thinkdiffai.futurelove.util.Util;
 import com.thinkdiffai.futurelove.model.comment.Comment;
 import com.thinkdiffai.futurelove.view.fragment.dialog.MyOwnDialogFragment;
 
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentViewHolder> {
     private String urlImgMale;
     private String urlImgFemale;
     private List<Comment> comments;
 
+    private String city = "Address";
     public final IOnClickItemListener iOnClickItem;
     private Context context;
 
@@ -48,10 +55,16 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
         this.urlImgFemale = urlImgFemale;
     }
 
+    public CommentAdapter(Context context, List<Comment> comments, IOnClickItemListener iOnClickItem, String city) {
+        this.context = context;
+        this.comments = comments;
+        this.city = city;
+        this.iOnClickItem = iOnClickItem;
+    }
+
     public CommentAdapter(Context context, List<Comment> comments, IOnClickItemListener iOnClickItem) {
         this.context = context;
         this.comments = comments;
-
         this.iOnClickItem = iOnClickItem;
     }
 
@@ -75,6 +88,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
     @Override
     public void onBindViewHolder(@NonNull CommentViewHolder holder, int position) {
         Comment comment = comments.get(position);
+
         if (comment == null)
             return;
         if (comment.getLinkNamGoc() != null && !comment.getLinkNamGoc().isEmpty() && comment.getLinkNuGoc() != null && !comment.getLinkNuGoc().isEmpty()) {
@@ -89,13 +103,22 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
         } else {
             holder.itemCommentBinding.tvDeviceName.setText("dv: " + comment.getDeviceCmt());
             holder.itemCommentBinding.tvDeviceName.setVisibility(View.VISIBLE);
-
         }
-        if (comment.getDiaChiIp().trim().equals("")) {
-            holder.itemCommentBinding.tvDeviceName.setVisibility(View.GONE);
-        } else {
+
+        // When Ip Address called
+        String returnedIpAddress = comment.getDiaChiIp().trim();
+        Log.d("IP", "IP: " + returnedIpAddress);
+
+        if (!returnedIpAddress.equals("") && isIpAddressForm(returnedIpAddress)) {
             holder.itemCommentBinding.tvDeviceName.setText("ip: " + comment.getDiaChiIp());
             holder.itemCommentBinding.tvDeviceName.setVisibility(View.VISIBLE);
+            // Set city name from API
+            city = CityCalledByIpApi.getInstance().getCityFromIpAddress(Server.GET_CITY_NAME_FROM_IP, returnedIpAddress);
+            holder.itemCommentBinding.tvAddress.setText(city);
+            holder.itemCommentBinding.tvAddress.setVisibility(View.VISIBLE);
+        } else {
+            holder.itemCommentBinding.tvDeviceName.setVisibility(View.GONE);
+            holder.itemCommentBinding.tvAddress.setVisibility(View.GONE);
         }
         holder.itemCommentBinding.tvContent.setText(comment.getNoiDungCmt());
         if (comment.getThoiGianRelease() == null) {
@@ -104,22 +127,9 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
             holder.itemCommentBinding.tvTime.setVisibility(View.VISIBLE);
             holder.itemCommentBinding.tvTime.setText(Util.calTimeStampComment(comment.getThoiGianRelease()));
         }
-
-
         holder.itemCommentBinding.imageComment.setImageDrawable(null);
         holder.itemCommentBinding.imageComment.setVisibility(View.GONE);
         if (comment.getImageattach() != null && !comment.getImageattach().trim().equals("") && !comment.getImageattach().isEmpty()) {
-
-            //        holder.itemCommentBinding.imageComment.setImageDrawable(null);
-//        if (comment.getImageattach() != null && !comment.getImageattach().trim().equals("") && !comment.getImageattach().isEmpty()) {
-//            Glide.with(holder.itemView.getContext()).load(comment.getImageattach()).into(holder.itemCommentBinding.imageComment);
-//            if (holder.itemCommentBinding.imageComment.getDrawable() != null) {
-//                holder.itemCommentBinding.imageComment.setVisibility(View.VISIBLE);
-//            } else {
-//                holder.itemCommentBinding.imageComment.setVisibility(View.GONE);
-//            }
-//        }
-
             Glide.with(holder.itemView.getContext())
                     .load(comment.getImageattach())
                     .listener(new RequestListener<Drawable>() {
@@ -136,21 +146,6 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
                         }
                     })
                     .into(holder.itemCommentBinding.imageComment);
-
-//                Picasso.get().load(comment.getImageattach()).into(holder.itemCommentBinding.imageComment, new Callback() {
-//                    @Override
-//                    public void onSuccess() {
-//                        holder.itemCommentBinding.imageComment.setVisibility(View.VISIBLE);
-//
-//                    }
-//
-//                    @Override
-//                    public void onError(Exception e) {
-//                        holder.itemCommentBinding.imageComment.setVisibility(View.GONE);
-////
-//                    }
-//                });
-
         }
 
         holder.itemCommentBinding.layoutComment.setOnClickListener(new View.OnClickListener() {
@@ -167,6 +162,17 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
                 return true;
             }
         });
+    }
+
+    private boolean isIpAddressForm(String returnedIpAddress) {
+        Pattern ipv4Pattern = Pattern.compile(Constant.ipv4Regex);
+        Pattern ipv6Pattern = Pattern.compile(Constant.ipv6Regex);
+        Matcher ipv4Matcher = ipv4Pattern.matcher(returnedIpAddress);
+        Matcher ipv6Matcher = ipv6Pattern.matcher(returnedIpAddress);
+        if (ipv4Matcher.matches() || ipv6Matcher.matches()) {
+            return true;
+        }
+        return false;
     }
 
     private void showDeleteDialog(int position) {

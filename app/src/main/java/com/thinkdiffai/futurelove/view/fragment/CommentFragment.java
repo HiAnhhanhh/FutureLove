@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.thinkdiffai.futurelove.R;
+import com.thinkdiffai.futurelove.controller.CityCalledByIpApi;
 import com.thinkdiffai.futurelove.databinding.FragmentCommentBinding;
 import com.thinkdiffai.futurelove.model.comment.CommentList;
 import com.thinkdiffai.futurelove.model.comment.Comment;
@@ -42,7 +43,10 @@ public class CommentFragment extends Fragment {
     private MainActivity mainActivity;
     private KProgressHUD kProgressHUD;
 
+    // Returned list
     private List<Comment> commentsForAdapter;
+    // Returned city
+    private String city;
     private CommentAdapter commentAdapter;
 
     private int numberOfElements;
@@ -151,42 +155,7 @@ public class CommentFragment extends Fragment {
             }
 
         });
-//        fragmentCommentBinding.rcvComment.addOnScrollListener(new RecyclerView.OnScrollListener() {
-//
-//            @Override
-//            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-//
-//                if (dy < 0&&linearLayoutManager.findFirstVisibleItemPosition() == 0 && dy < 0 && linearLayoutManager.findFirstCompletelyVisibleItemPosition() == 0) {
-//                    currentPage =1;
-//                    getCommentNew();
-//                }
-//                super.onScrolled(recyclerView, dx, dy);
-//            }
-//        });
     }
-
-
-//    private void loadNextNewComment(){
-//        new PaginationScrollListener(linearLayoutManager) {
-//            @Override
-//            public void loadMoreItem() {
-//                isLoading = true;
-//                currentPage++;
-//                loadNextPage();
-//            }
-//
-//            @Override
-//            public boolean isLoading() {
-//                return isLoading;
-//            }
-//
-//            @Override
-//            public boolean isLagePage() {
-//
-//                return isLastPage;
-//            }
-//        };
-//    }
 
     private void loadNextPage() {
 //        getCommentNew();

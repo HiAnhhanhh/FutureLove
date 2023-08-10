@@ -1,26 +1,15 @@
 package com.thinkdiffai.futurelove.view.activity;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
-import androidx.navigation.NavController;
-import androidx.navigation.fragment.NavHostFragment;
-import androidx.viewpager2.widget.ViewPager2;
-
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.MenuItem;
-import android.view.View;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import com.thinkdiffai.futurelove.R;
 import com.thinkdiffai.futurelove.databinding.ActivityMainBinding;
-import com.thinkdiffai.futurelove.view.adapter.MainViewPagerAdapter;
-import com.google.android.material.navigation.NavigationBarView;
-
-import java.util.Objects;
 
 import io.github.rupinderjeet.kprogresshud.KProgressHUD;
 

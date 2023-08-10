@@ -76,6 +76,9 @@ public interface ApiService {
     @GET(Server.URI_GET_NETWORK_STATUS)
     Call<NetworkModel> getIpApiResponse();
 
+    @GET("{ip}/city")
+    Call<String> getCityNameFromIpAddress(@Path("ip") String ip);
+
     @GET(Server.URI_LIST_EVENT_HOME + "{page}")
     Call<List<List<EventHomeDto>>> getListAllEventHome(@Path("page") long id);
 

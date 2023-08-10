@@ -1,10 +1,9 @@
 package com.thinkdiffai.futurelove.view.activity;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
 
-import com.thinkdiffai.futurelove.R;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.thinkdiffai.futurelove.databinding.ActivitySignInSignUpBinding;
 
 import io.github.rupinderjeet.kprogresshud.KProgressHUD;
