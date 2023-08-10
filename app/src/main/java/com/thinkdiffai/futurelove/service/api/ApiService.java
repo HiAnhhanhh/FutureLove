@@ -110,9 +110,6 @@ public interface ApiService {
                                      @Field("ten_su_kien") String tensukien,
                                      @Field("tom_Luoc_Text") String tom_Luoc_Text);
 
-    @POST(Server.URI_POST_COMMENT)
-    Call<Object> postComment(@HeaderMap Map<String, String> headers);
-
     @FormUrlEncoded
     @POST(Server.URI_POST_COMMENT)
     Call<Object> postDataComment(@Field("id_user") int idUser,
@@ -122,6 +119,24 @@ public interface ApiService {
                                  @Field("so_thu_tu_su_kien") int soThuTuSuKien,
                                  @Field("ipComment") String ip,
                                  @Field("imageattach") String imagEattach);
+
+    @FormUrlEncoded
+    @POST(Server.URI_LOG_IN)
+    Call<Object> login(
+            @Field("email_or_username") String email,
+            @Field("password") String password
+    );
+
+    @FormUrlEncoded
+    @POST(Server.URI_SIGN_UP)
+    Call<Object> signUp(
+            @Field("email") String email,
+            @Field("password") String password,
+            @Field("user_name") String userName,
+            @Field("link_avatar") String linkAvatar,
+            @Field("ip_register") String registerIp,
+            @Field("device_register") String registerDevice
+    );
 
 
 }

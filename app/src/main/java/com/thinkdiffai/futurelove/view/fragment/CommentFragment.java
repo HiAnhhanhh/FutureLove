@@ -51,6 +51,10 @@ public class CommentFragment extends Fragment {
     private int currentPage = 1;
     private LinearLayoutManager linearLayoutManager;
     private boolean isLoading;
+
+    // It will be initialed in initUi() and reload rcv
+    private boolean isLoadingMore;
+
     private boolean isLastPage;
 
     @Nullable
@@ -121,6 +125,8 @@ public class CommentFragment extends Fragment {
             @Override
             public void loadMoreItem() {
                 isLoading = true;
+                // It help the kud not loading many times
+                isLoadingMore = false;
                 currentPage++;
                 loadNextPage();
             }
@@ -138,6 +144,8 @@ public class CommentFragment extends Fragment {
 
             @Override
             public void ReloadItem() {
+                // It help the kud not loading many times
+                isLoadingMore = false;
                 currentPage = 1;
                 getCommentNew();
             }
@@ -214,7 +222,7 @@ public class CommentFragment extends Fragment {
     }
 
     private void getCommentNew() {
-        if (!kProgressHUD.isShowing()) {
+        if (!kProgressHUD.isShowing() && isLoadingMore) {
             kProgressHUD.show();
         }
         if (currentPage == 1) {
@@ -257,6 +265,9 @@ public class CommentFragment extends Fragment {
 
 
     private void initUi() {
+        // Set isLoadingMore = true in order to set kud loading in the first api calling time
+        isLoadingMore = true;
+
         commentsForAdapter = new ArrayList<>();
         linearLayoutManager = new LinearLayoutManager(getActivity(), GridLayoutManager.VERTICAL, false);
         fragmentCommentBinding.rcvComment.setLayoutManager(linearLayoutManager);

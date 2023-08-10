@@ -8,7 +8,9 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,14 +25,15 @@ import java.util.Objects;
 import io.github.rupinderjeet.kprogresshud.KProgressHUD;
 
 public class MainActivity extends AppCompatActivity {
+
+    private SharedPreferences sharedPreferences;
     private ActivityMainBinding activityMainBinding;
-    private MainViewPagerAdapter mainViewPagerAdapter;
     private KProgressHUD kProgressHUD;
     public int eventSummaryCurrentId = -1;
-
     // checking login flag
     private boolean userLoggedIn = false;
 
+    private boolean loginState;
     public int soThuTuSuKien = 0;
 
     @Override
@@ -38,16 +41,21 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.transparent));
         activityMainBinding = ActivityMainBinding.inflate(getLayoutInflater());
-        setContentView(activityMainBinding.getRoot());
 
-        // Get Check that a user log-in successfully or not
-        userLoggedIn = getIntent().getBooleanExtra("LOGIN_SUCCESS", false);
-        if (!userLoggedIn) {
-            Intent intent = new Intent(this, SignInSignUpActivity.class);
-            startActivity(intent);
-            finish();
-            return;
+        // Check LOGIN_STATE
+        sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
+        loginState = sharedPreferences.getBoolean("LOGIN_STATE", false);
+        if (!loginState) {
+            // Get Check that a user log-in successfully or not
+            userLoggedIn = getIntent().getBooleanExtra("LOGIN_SUCCESS", false);
+            if (!userLoggedIn) {
+                Intent intent = new Intent(this, SignInSignUpActivity.class);
+                startActivity(intent);
+                finish();
+                return;
+            }
         }
+        setContentView(activityMainBinding.getRoot());
     }
 
     public KProgressHUD createHud() {

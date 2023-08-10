@@ -45,6 +45,7 @@ public class HomeFragment extends Fragment {
     private LinearLayoutManager linearLayoutManager;
 
     private boolean isLoading;
+    private boolean isLoadingMore;
     private boolean isLastPage;
     private int currentPage = 1;
 
@@ -87,7 +88,7 @@ public class HomeFragment extends Fragment {
     }
 
     private void navigateToUserDetailFragment() {
-        NavHostFragment.findNavController(HomeFragment.this).navigate(R.id.action_homeFragment_to_userDetailFragment);
+        NavHostFragment.findNavController(HomeFragment.this).navigate(R.id.action_homeFragment_to_eventsFragment);
     }
 
     private void navigateToOtherFragments() {
@@ -130,6 +131,8 @@ public class HomeFragment extends Fragment {
         fragmentHomeBinding.rcvHome.addOnScrollListener(new PaginationScrollListener(linearLayoutManager) {
             @Override
             public void loadMoreItem() {
+                // It help the kud not loading many times
+                isLoadingMore = false;
                 isLoading = true;
                 currentPage++;
                 loadNextPage();
@@ -146,6 +149,8 @@ public class HomeFragment extends Fragment {
 
             @Override
             public void ReloadItem() {
+                // It help the kud not loading many times
+                isLoadingMore = false;
                 currentPage = 1;
                 getData(currentPage);
             }
@@ -157,6 +162,9 @@ public class HomeFragment extends Fragment {
     }
 
     private void initUi() {
+        // Set isLoadingMore = true in order to set kud loading in the first api calling time
+        isLoadingMore = true;
+
         //Reset all events
         mainActivity.soThuTuSuKien = 0;
         eventList = new ArrayList<>();
@@ -175,7 +183,7 @@ public class HomeFragment extends Fragment {
     }
 
     private void getData(int currentPage) {
-        if (!kProgressHUD.isShowing()) {
+        if (!kProgressHUD.isShowing() && isLoadingMore) {
             kProgressHUD.show();
         }
         ApiService apiService = RetrofitClient.getInstance(Server.DOMAIN2).getRetrofit().create(ApiService.class);
@@ -195,7 +203,6 @@ public class HomeFragment extends Fragment {
                 if (kProgressHUD.isShowing()) {
                     kProgressHUD.dismiss();
                 }
-
                 isLoading = false;
             }
 

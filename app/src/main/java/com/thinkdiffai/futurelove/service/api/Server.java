@@ -20,6 +20,8 @@ public interface Server {
     String URI_LIST_COMMENT_BY_EVENT_ID = "lovehistory/comment/";
     String URI_LIST_COMMENT_NEW = "lovehistory/pageComment/";
     String URI_POST_COMMENT = "lovehistory/comment";
-
     String URI_LINK_WEB_DETAIL = "http://datanomic.online/sukien/";
+
+    String URI_LOG_IN = "login";
+    String URI_SIGN_UP = "register";
 }
