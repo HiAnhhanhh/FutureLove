@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="328dp"
+    android:layout_height="240dp"
+    android:background="@drawable/pay"
+    android:orientation="vertical"
+    android:layout_gravity="center"
+    android:gravity="center"
+    >
+    <androidx.appcompat.widget.AppCompatTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sorry!!!"
+        android:layout_marginTop="@dimen/define_dimen_12"
+        android:textSize="@dimen/define_dimen_30"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:fontFamily="@font/roboto_slab"
+        />
+    <androidx.appcompat.widget.AppCompatTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Your have to pay to add more events"
+        android:layout_marginTop="@dimen/define_dimen_8"
+        android:textSize="@dimen/define_dimen_16"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:fontFamily="@font/roboto_slab"
+        />
+    <androidx.appcompat.widget.AppCompatButton
+        android:layout_marginTop="@dimen/define_dimen_70"
+        android:layout_width="match_parent"
+        android:layout_marginLeft="@dimen/define_dimen_40"
+        android:layout_marginRight="@dimen/define_dimen_40"
+        android:layout_height="wrap_content"
+        android:text="Pay"
+        android:textColor="@color/white"
+        android:textSize="@dimen/define_dimen_16"
+        android:textStyle="bold"
+        android:fontFamily="@font/roboto_slab"
+        android:background="@drawable/btn_login_shape"
+        />
+</androidx.appcompat.widget.LinearLayoutCompat>

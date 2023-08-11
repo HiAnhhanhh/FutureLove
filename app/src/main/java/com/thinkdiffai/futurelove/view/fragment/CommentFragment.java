@@ -118,7 +118,9 @@ public class CommentFragment extends Fragment {
     private void goToPairingFragment() {
         NavHostFragment.findNavController(CommentFragment.this).navigate(R.id.action_commentFragment_to_pairingFragment);
     }
-
+    private void goToEventFragment(){
+        NavHostFragment.findNavController(CommentFragment.this).navigate(R.id.action_commentFragment_to_eventsFragment);
+    }
     private void goToTimeLineFragment() {
         NavHostFragment.findNavController(CommentFragment.this).navigate(R.id.action_commentFragment_to_timelineFragment);
     }
@@ -236,7 +238,6 @@ public class CommentFragment extends Fragment {
     private void initUi() {
         // Set isLoadingMore = true in order to set kud loading in the first api calling time
         isLoadingMore = true;
-
         commentsForAdapter = new ArrayList<>();
         linearLayoutManager = new LinearLayoutManager(getActivity(), GridLayoutManager.VERTICAL, false);
         fragmentCommentBinding.rcvComment.setLayoutManager(linearLayoutManager);

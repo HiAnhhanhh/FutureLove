@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="@dimen/define_dimen_16"
+    android:background="@color/black"
+    tools:context=".LoadingEventFragment">
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/loading"
+        android:layout_width="57dp"
+        android:layout_height="57dp"
+        android:background="@drawable/loading_events"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/define_dimen_140"
+        />
+    <androidx.appcompat.widget.AppCompatTextView
+        android:layout_marginTop="@dimen/define_dimen_30"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="We are working on your photos..."
+        android:fontFamily="@font/roboto_slab"
+        android:textColor="@color/white"
+        android:gravity="center_horizontal|top"
+        android:textStyle="bold"
+        android:textSize="@dimen/define_dimen_30"
+        />
+    <androidx.appcompat.widget.AppCompatTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Estimated time: 1 minutes"
+        android:fontFamily="@font/roboto_slab"
+        android:textColor="@color/white"
+        android:gravity="center_horizontal|top"
+        android:textStyle="bold"
+        android:textSize="@dimen/define_dimen_16"
+        />
+    <androidx.appcompat.widget.AppCompatTextView
+        android:layout_marginTop="@dimen/define_dimen_160"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Dont’t worry! The first time takes longer, the next will take less than 1 minute!"
+        android:fontFamily="@font/roboto_slab"
+        android:textColor="@color/white"
+        android:gravity="center_horizontal|top"
+        android:textStyle="bold"
+        android:textSize="@dimen/define_dimen_16"
+        />
+    <androidx.appcompat.widget.AppCompatTextView
+        android:layout_marginTop="@dimen/define_dimen_24"
+        android:layout_width="311dp"
+        android:padding="@dimen/define_dimen_10"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_meet"
+        android:text="Notify Me When Ready"
+        android:layout_gravity="center"
+        android:fontFamily="@font/roboto_slab"
+        android:textColor="@color/black"
+        android:gravity="center_horizontal|top"
+        android:textStyle="bold"
+        android:textSize="@dimen/define_dimen_20"
+        />
+</androidx.appcompat.widget.LinearLayoutCompat>

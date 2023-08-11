@@ -52,6 +52,9 @@
             app:destination="@id/timelineFragment"
             app:enterAnim="@anim/fade_in"
             app:exitAnim="@anim/fade_out" />
+        <action
+            android:id="@+id/action_commentFragment_to_eventsFragment"
+            app:destination="@id/eventsFragment" />
     </fragment>
     <fragment
         android:id="@+id/pairingFragment"
@@ -72,6 +75,9 @@
             app:destination="@id/timelineFragment"
             app:enterAnim="@anim/fade_in"
             app:exitAnim="@anim/fade_out" />
+        <action
+            android:id="@+id/action_pairingFragment_to_eventsFragment"
+            app:destination="@id/eventsFragment" />
     </fragment>
     <fragment
         android:id="@+id/timelineFragment"
@@ -95,7 +101,7 @@
     </fragment>
     <fragment
         android:id="@+id/userDetailFragment"
-        android:name="com.thinkdiffai.futurelove.UserDetailFragment"
+        android:name="com.thinkdiffai.futurelove.view.fragment.UserDetailFragment"
         android:label="fragment_user_detail"
         tools:layout="@layout/fragment_user_detail">
         <action
@@ -103,6 +109,20 @@
             app:destination="@id/homeFragment"
             app:enterAnim="@anim/fade_in"
             app:exitAnim="@anim/fade_out" />
+        <action
+            android:id="@+id/action_userDetailFragment_to_timeLineFragment"
+            app:destination="@id/timelineFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out" />
+    </fragment>
+    <fragment
+        android:id="@+id/eventAndCommentFragment"
+        android:name="com.thinkdiffai.futurelove.EventAndCommentFragment"
+        android:label="fragment_event_and_comment"
+        tools:layout="@layout/fragment_event_and_comment" >
+        <action
+            android:id="@+id/action_eventAndCommentFragment_to_eventsFragment"
+            app:destination="@id/eventsFragment" />
     </fragment>
     <fragment
         android:id="@+id/eventsFragment"
@@ -113,16 +133,37 @@
             android:id="@+id/action_eventsFragment_to_homeFragment"
             app:destination="@id/homeFragment" />
         <action
-            android:id="@+id/action_eventsFragment_to_fragmentEventsDetail"
-            app:destination="@id/fragmentEventsDetail" />
+            android:id="@+id/action_eventsFragment_to_eventAndCommentFragment"
+            app:destination="@id/eventAndCommentFragment" />
+        <action
+            android:id="@+id/action_eventsFragment_to_addEventFragment"
+            app:destination="@id/addEventFragment" />
+        <action
+            android:id="@+id/action_eventsFragment_to_commentFragment2"
+            app:destination="@id/commentFragment" />
+        <action
+            android:id="@+id/action_eventsFragment_to_pairingFragment"
+            app:destination="@id/pairingFragment" />
     </fragment>
     <fragment
-        android:id="@+id/fragmentEventsDetail"
-        android:name="com.thinkdiffai.futurelove.FragmentEventsDetail"
-        android:label="fragment_events_detail"
-        tools:layout="@layout/fragment_events_detail" >
+        android:id="@+id/addEventFragment"
+        android:name="com.thinkdiffai.futurelove.AddEventFragment"
+        android:label="fragment_add_event"
+        tools:layout="@layout/fragment_add_event" >
         <action
-            android:id="@+id/action_fragmentEventsDetail_to_eventsFragment"
+            android:id="@+id/action_addEventFragment_to_eventsFragment"
             app:destination="@id/eventsFragment" />
+        <action
+            android:id="@+id/action_addEventFragment_to_loadingEventFragment"
+            app:destination="@id/loadingEventFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/loadingEventFragment"
+        android:name="com.thinkdiffai.futurelove.LoadingEventFragment"
+        android:label="fragment_loading_event"
+        tools:layout="@layout/fragment_loading_event" >
+        <action
+            android:id="@+id/action_loadingEventFragment_to_addEventFragment"
+            app:destination="@id/addEventFragment" />
     </fragment>
 </navigation>

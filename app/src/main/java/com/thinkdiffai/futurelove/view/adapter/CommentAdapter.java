@@ -191,6 +191,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
         MyOwnDialogFragment deleteDialogFragment = new MyOwnDialogFragment();
         deleteDialogFragment.setDialogTitle("Delete Comment");
         deleteDialogFragment.setDialogMessage("Do you want to delete this comment?");
+        deleteDialogFragment.setImageSrc(R.drawable.ic_warning);
         deleteDialogFragment.setListener(new MyOwnDialogFragment.MyOwnDialogListener() {
             @Override
             public void onConfirm() {

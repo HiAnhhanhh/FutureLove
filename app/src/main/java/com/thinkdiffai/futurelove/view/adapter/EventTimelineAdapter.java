@@ -16,6 +16,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.thinkdiffai.futurelove.R;
 import com.thinkdiffai.futurelove.databinding.FragmentShowFullImageBinding;
 import com.thinkdiffai.futurelove.databinding.ItemTimelineEventBinding;
 import com.thinkdiffai.futurelove.model.DetailEvent;
@@ -105,6 +106,7 @@ public class EventTimelineAdapter extends RecyclerView.Adapter<EventTimelineAdap
                 MyOwnDialogFragment downLoadDialog = new MyOwnDialogFragment();
                 downLoadDialog.setDialogTitle("Download Image");
                 downLoadDialog.setDialogMessage("Do you want to download this image?");
+                downLoadDialog.setImageSrc(R.drawable.ic_info);
                 downLoadDialog.setListener(new MyOwnDialogFragment.MyOwnDialogListener() {
                     @Override
                     public void onConfirm() {
