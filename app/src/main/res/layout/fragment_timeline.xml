@@ -368,7 +368,6 @@
                     android:id="@+id/edt_comment"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-
                     android:layout_marginEnd="@dimen/define_dimen_2"
                     android:layout_weight="1"
                     android:backgroundTint="@color/white"

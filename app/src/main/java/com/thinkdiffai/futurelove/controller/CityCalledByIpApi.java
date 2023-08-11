@@ -8,7 +8,6 @@ import com.thinkdiffai.futurelove.service.api.IpRetrofitClient;
 import com.thinkdiffai.futurelove.service.api.QueryValueCallback;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 import retrofit2.Call;

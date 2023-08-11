@@ -24,4 +24,11 @@ public interface Server {
 
     String URI_LOG_IN = "login";
     String URI_SIGN_UP = "register";
+
+    // URI profile
+    String URI_PROFILE_USER="profile/";
+    // uri comments cua tung user
+    String URI_COMMENTS_USER="lovehistory/comment/user/";
+    // uri events cua tung user
+    String URI_EVENTS_USER="lovehistory/user/";
 }

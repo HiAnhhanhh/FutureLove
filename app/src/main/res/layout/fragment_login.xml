@@ -135,9 +135,10 @@
         <!--  Alert for Password  -->
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tv_password_alert"
-            android:layout_width="wrap_content"
+            android:layout_width="280dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
+            android:textAlignment="center"
             android:background="@drawable/bg_white_shape_corner_20"
             android:fontFamily="@font/roboto_slab"
             android:paddingHorizontal="8dp"

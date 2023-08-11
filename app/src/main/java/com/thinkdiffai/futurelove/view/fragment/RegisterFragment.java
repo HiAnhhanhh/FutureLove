@@ -1,6 +1,7 @@
 package com.thinkdiffai.futurelove.view.fragment;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -9,10 +10,13 @@ import android.text.TextWatcher;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.util.Patterns;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -107,6 +111,7 @@ public class RegisterFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+//                resizeLayoutComment();
                 passwordAlertVisibility();
             }
 
@@ -184,6 +189,7 @@ public class RegisterFragment extends Fragment {
     }
 
     private void clickOnRegisterBtn() {
+        closeKeyboard();
         Log.i(MY_OWN_TAG, "clickOnRegisterBtn");
         // show dialog
         binding.btnRegister.setOnClickListener(new View.OnClickListener() {
@@ -332,6 +338,20 @@ public class RegisterFragment extends Fragment {
                 navToLoginFragment();
             }
         });
+    }
+
+    private void resizeLayoutComment() {
+        RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) binding.btnAskBackToLogin.getLayoutParams();
+        layoutParams.height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50, getResources().getDisplayMetrics());
+        binding.btnAskBackToLogin.setLayoutParams(layoutParams);
+    }
+
+    private void closeKeyboard() {
+        View view = requireActivity().getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager) Objects.requireNonNull(getActivity()).getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
     }
 
     @Override

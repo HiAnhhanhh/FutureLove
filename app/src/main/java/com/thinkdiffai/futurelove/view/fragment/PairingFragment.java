@@ -88,30 +88,6 @@ public class PairingFragment extends Fragment {
     private MainActivity mainActivity;
     private MyDialog myDialog;
 
-//    private ActivityResultLauncher<Intent> imagePickerLauncher = registerForActivityResult(
-//            new ActivityResultContracts.StartActivityForResult(),
-//            new ActivityResultCallback<ActivityResult>() {
-//                @Override
-//                public void onActivityResult(ActivityResult result) {
-//                    Log.e(TAG1, "onActivityResult");
-//                    if (result.getResultCode() == RESULT_OK) {
-//                        // There are no request code
-//                        Intent data = result.getData();
-//                        if (data == null) {
-//                            return;
-//                        }
-//
-//                        Uri uri = data.getData();
-//                        try {
-//                            Bitmap bitmap = MediaStore.Images.Media.getBitmap(mainActivity.getContentResolver(), uri);
-//                        } catch (IOException e) {
-//                            throw new RuntimeException(e);
-//                        }
-//                    }
-//                }
-//            }
-//    );
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -124,16 +100,11 @@ public class PairingFragment extends Fragment {
                 .setCancellable(true)
                 .setAnimationSpeed(2)
                 .setDimAmount(0.5f);
-
-
-//        checkClickSetImageMale =  true;
         try {
             initListener();
-
         } catch (Exception e) {
             Log.e("ExceptionRuntime", e.toString());
         }
-
         return fragmentPairingBinding.getRoot();
     }
 
@@ -196,15 +167,6 @@ public class PairingFragment extends Fragment {
                     myDialog.show();
                 } else {
                     kProgressHUD.show();
-//                    urlImageMale = uploadImage2(imgBase64Male);
-//                    urlImageFemale = uploadImage2(imgBase64Female);
-//                    Handler handler = new Handler();
-//                    handler.postDelayed(() -> {
-//                        postData(urlImageMale, urlImageFemale);
-//                    }, 4000);
-//
-//                    if (kProgressHUD.isShowing())
-//                        kProgressHUD.dismiss();
 
                     new AsyncTask<Void, Void, Void>() {
                         @SuppressLint("StaticFieldLeak")

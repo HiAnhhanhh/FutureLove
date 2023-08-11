@@ -20,7 +20,7 @@ public class MyOwnDialogFragment extends DialogFragment {
 
     private int imageSrc;
 
-    public MyOwnDialogFragment(MyOwnDialogListener myOwnDialogListener, String dialogTitle, String dialogMessage, int imgSrc) {
+    public MyOwnDialogFragment(String dialogTitle, String dialogMessage, int imgSrc, MyOwnDialogListener myOwnDialogListener) {
         this.listener = myOwnDialogListener;
         this.dialogTitle = dialogTitle;
         this.dialogMessage = dialogMessage;

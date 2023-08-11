@@ -1,26 +1,22 @@
 package com.thinkdiffai.futurelove.service.api;
 
-import com.thinkdiffai.futurelove.model.DetailEventListParent;
-import com.thinkdiffai.futurelove.model.comment.eacheventcomment.EachEventCommentsList;
-import com.thinkdiffai.futurelove.model.EventHomeDto;
 import com.thinkdiffai.futurelove.model.DetailEventList;
-import com.thinkdiffai.futurelove.model.ResponsePairingDto;
+import com.thinkdiffai.futurelove.model.DetailEventListParent;
+import com.thinkdiffai.futurelove.model.EventHomeDto;
 import com.thinkdiffai.futurelove.model.comment.CommentList;
-import com.thinkdiffai.futurelove.model.ipinfor.IpInfoResponse;
+import com.thinkdiffai.futurelove.model.comment.DetailUser;
+import com.thinkdiffai.futurelove.model.comment.EventsUser.EventsUser;
+import com.thinkdiffai.futurelove.model.comment.UserComment;
+import com.thinkdiffai.futurelove.model.comment.eacheventcomment.EachEventCommentsList;
 import com.thinkdiffai.futurelove.modelfor4gdomain.NetworkModel;
 
 import java.util.List;
-import java.util.Map;
 
 import retrofit2.Call;
-
-import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
-import retrofit2.http.HeaderMap;
-import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
@@ -138,7 +134,14 @@ public interface ApiService {
             @Field("ip_register") String registerIp,
             @Field("device_register") String registerDevice
     );
-
-
+    // get detail user
+    @GET(Server.URI_PROFILE_USER+"{page}")
+    Call<DetailUser> getProfileUser(@Path("page")long id);
+    // GET comments user
+    @GET(Server.URI_COMMENTS_USER+"{page}")
+    Call<UserComment> getCommentUser(@Path("page")long id);
+    // get events theo user
+    @GET(Server.URI_EVENTS_USER+"{page}")
+    Call<EventsUser> getEventUser(@Path("page")long id);
 }
 
