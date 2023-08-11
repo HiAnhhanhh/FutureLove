@@ -23,6 +23,7 @@ import com.thinkdiffai.futurelove.DbStorage.Constant;
 import com.thinkdiffai.futurelove.R;
 import com.thinkdiffai.futurelove.controller.CityCalledByIpApi;
 import com.thinkdiffai.futurelove.databinding.ItemCommentBinding;
+import com.thinkdiffai.futurelove.service.api.QueryValueCallback;
 import com.thinkdiffai.futurelove.service.api.Server;
 import com.thinkdiffai.futurelove.util.Util;
 import com.thinkdiffai.futurelove.model.comment.Comment;
@@ -37,7 +38,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
     private String urlImgFemale;
     private List<Comment> comments;
 
-    private String city = "Address";
+    private String city = "empty address";
     public final IOnClickItemListener iOnClickItem;
     private Context context;
 
@@ -55,12 +56,12 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
         this.urlImgFemale = urlImgFemale;
     }
 
-    public CommentAdapter(Context context, List<Comment> comments, IOnClickItemListener iOnClickItem, String city) {
-        this.context = context;
-        this.comments = comments;
-        this.city = city;
-        this.iOnClickItem = iOnClickItem;
-    }
+//    public CommentAdapter(Context context, List<Comment> comments, IOnClickItemListener iOnClickItem, String city) {
+//        this.context = context;
+//        this.comments = comments;
+//        this.city = city;
+//        this.iOnClickItem = iOnClickItem;
+//    }
 
     public CommentAdapter(Context context, List<Comment> comments, IOnClickItemListener iOnClickItem) {
         this.context = context;
@@ -110,12 +111,23 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
         Log.d("IP", "IP: " + returnedIpAddress);
 
         if (!returnedIpAddress.equals("") && isIpAddressForm(returnedIpAddress)) {
+            // Show Ip
             holder.itemCommentBinding.tvDeviceName.setText("ip: " + comment.getDiaChiIp());
             holder.itemCommentBinding.tvDeviceName.setVisibility(View.VISIBLE);
-            // Set city name from API
-            city = CityCalledByIpApi.getInstance().getCityFromIpAddress(Server.GET_CITY_NAME_FROM_IP, returnedIpAddress);
-            holder.itemCommentBinding.tvAddress.setText(city);
-            holder.itemCommentBinding.tvAddress.setVisibility(View.VISIBLE);
+            // Show city name from API
+            CityCalledByIpApi.getInstance().getCityName(returnedIpAddress, new QueryValueCallback() {
+                @Override
+                public void onQueryValueReceived(String queryValue) {
+                    city = queryValue;
+                    holder.itemCommentBinding.tvAddress.setText(city);
+                    holder.itemCommentBinding.tvAddress.setVisibility(View.VISIBLE);
+                }
+                @Override
+                public void onApiCallFailed(Throwable t) {
+
+                }
+            });
+
         } else {
             holder.itemCommentBinding.tvDeviceName.setVisibility(View.GONE);
             holder.itemCommentBinding.tvAddress.setVisibility(View.GONE);

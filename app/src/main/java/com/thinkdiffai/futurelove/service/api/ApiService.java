@@ -6,6 +6,7 @@ import com.thinkdiffai.futurelove.model.EventHomeDto;
 import com.thinkdiffai.futurelove.model.DetailEventList;
 import com.thinkdiffai.futurelove.model.ResponsePairingDto;
 import com.thinkdiffai.futurelove.model.comment.CommentList;
+import com.thinkdiffai.futurelove.model.ipinfor.IpInfoResponse;
 import com.thinkdiffai.futurelove.modelfor4gdomain.NetworkModel;
 
 import java.util.List;
@@ -75,9 +76,6 @@ public interface ApiService {
 
     @GET(Server.URI_GET_NETWORK_STATUS)
     Call<NetworkModel> getIpApiResponse();
-
-    @GET("{ip}/city")
-    Call<String> getCityNameFromIpAddress(@Path("ip") String ip);
 
     @GET(Server.URI_LIST_EVENT_HOME + "{page}")
     Call<List<List<EventHomeDto>>> getListAllEventHome(@Path("page") long id);

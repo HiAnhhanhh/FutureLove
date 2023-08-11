@@ -2,11 +2,14 @@ package com.thinkdiffai.futurelove.controller;
 
 import android.util.Log;
 
-import com.thinkdiffai.futurelove.service.api.ApiService;
+import com.thinkdiffai.futurelove.model.ipinfor.IpInfoResponse;
+import com.thinkdiffai.futurelove.service.api.IpInfoService;
+import com.thinkdiffai.futurelove.service.api.IpRetrofitClient;
 import com.thinkdiffai.futurelove.service.api.QueryValueCallback;
-import com.thinkdiffai.futurelove.service.api.RetrofitClient;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -14,30 +17,39 @@ import retrofit2.Response;
 
 public class CityCalledByIpApi {
 
-    private ApiService apiService;
-    private String city = "Hanoi";
+    private ArrayList<String> cityList;
+
+    private IpInfoService ipInfoService;
+
+    public CityCalledByIpApi() {
+        ipInfoService = IpRetrofitClient.getClient().create(IpInfoService.class);
+    }
 
     public static CityCalledByIpApi getInstance() {
         return new CityCalledByIpApi();
     }
 
-    public String getCityFromIpAddress(String domain, String ip) {
-        apiService = RetrofitClient.getInstance(domain).getRetrofit().create(ApiService.class);
-        Call<String> call = apiService.getCityNameFromIpAddress(ip);
-        Log.d("CITY_NAME","Callback: " + call.toString());
-        call.enqueue(new Callback<String>() {
+    public void getCityName(String ip, QueryValueCallback callback) {
+        Call<IpInfoResponse> call = ipInfoService.getIpInfo(ip);
+        call.enqueue(new Callback<IpInfoResponse>() {
             @Override
-            public void onResponse(Call<String> call, Response<String> response) {
+            public void onResponse(Call<IpInfoResponse> call, Response<IpInfoResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    String returnCity = response.body();
-                    Log.d("CITY_NAME","City name:" + returnCity);
+                    IpInfoResponse ipInfoResponse = response.body();
+                    String cityName = ipInfoResponse.getCity();
+                    if (!Objects.equals(cityName, "")) {
+                        callback.onQueryValueReceived(cityName);
+                    }
+                } else {
+                    Log.e("City", "Error: " + response.message());
                 }
             }
+
             @Override
-            public void onFailure(Call<String> call, Throwable t) {
-                Log.d("CITY_NAME", "CALL FAILED");
+            public void onFailure(Call<IpInfoResponse> call, Throwable t) {
+                Log.e("City", "Error: " + t.getMessage());
             }
         });
-        return city;
     }
+
 }
