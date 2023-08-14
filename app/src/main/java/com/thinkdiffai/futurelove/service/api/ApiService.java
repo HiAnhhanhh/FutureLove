@@ -134,14 +134,28 @@ public interface ApiService {
             @Field("ip_register") String registerIp,
             @Field("device_register") String registerDevice
     );
+
+    @POST(Server.URI_GET_DATA_NGAM)
+    Call<Object> postImplicitEvent(
+            @Header(Server.KEY_HEADER1) String imageLink1,
+            @Header(Server.KEY_HEADER2) String imageLink2,
+            @Query("device_them_su_kien") String deviceThemSuKien,
+            @Query("ip_them_su_kien") String ipThemSuKien,
+            @Query("id_user") int userId,
+            @Query("ten_nam") String tenNam,
+            @Query("ten_nu") String tenNu
+    );
+
     // get detail user
-    @GET(Server.URI_PROFILE_USER+"{page}")
-    Call<DetailUser> getProfileUser(@Path("page")long id);
+    @GET(Server.URI_PROFILE_USER + "{page}")
+    Call<DetailUser> getProfileUser(@Path("page") long id);
+
     // GET comments user
-    @GET(Server.URI_COMMENTS_USER+"{page}")
-    Call<UserComment> getCommentUser(@Path("page")long id);
+    @GET(Server.URI_COMMENTS_USER + "{page}")
+    Call<UserComment> getCommentUser(@Path("page") long id);
+
     // get events theo user
-    @GET(Server.URI_EVENTS_USER+"{page}")
-    Call<EventsUser> getEventUser(@Path("page")long id);
+    @GET(Server.URI_EVENTS_USER + "{page}")
+    Call<EventsUser> getEventUser(@Path("page") long id);
 }
 

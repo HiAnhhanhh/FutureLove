@@ -167,7 +167,6 @@ public class PairingFragment extends Fragment {
                     myDialog.show();
                 } else {
                     kProgressHUD.show();
-
                     new AsyncTask<Void, Void, Void>() {
                         @SuppressLint("StaticFieldLeak")
                         @Override
@@ -192,8 +191,6 @@ public class PairingFragment extends Fragment {
                         }
                     }.execute();
                 }
-
-
             }
         });
     }
@@ -339,7 +336,12 @@ public class PairingFragment extends Fragment {
                     Handler handler = new Handler();
                     handler.postDelayed(() -> {
                         if (resultDetech != null && Objects.equals(resultDetech, "")) {
-                            imgBase64Female = imagefile;
+//                            imgBase64Female = imagefile;
+                            try {
+                                imgBase64Female = Util.convertBitmapToBase64(bitmap);
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
                             isCheckSetImageFemale = true;
                             fragmentPairingBinding.cvImageFemale.setVisibility(View.VISIBLE);
                             fragmentPairingBinding.imgFemale.setImageBitmap(bitmap);
@@ -347,14 +349,18 @@ public class PairingFragment extends Fragment {
                             isCheckSetImageFemale = false;
                         }
 
-                    }, 4000);
+                    }, 2000);
                 } else {
 
                     detectionFace(bitmap);
                     Handler handler = new Handler();
                     handler.postDelayed(() -> {
                         if (Objects.equals(resultDetech.toString(), "")) {
-                            imgBase64Male = imagefile;
+                            try {
+                                imgBase64Male = Util.convertBitmapToBase64(bitmap);
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
                             isCheckSetImageMale = true;
                             fragmentPairingBinding.cvImageMale.setVisibility(View.VISIBLE);
                             fragmentPairingBinding.imgMale.setImageBitmap(bitmap);

@@ -9,6 +9,7 @@ public interface Server {
     String GET_CITY_NAME_FROM_IP = "https://ipinfo.io/";
 
     String URI_PAIRING = "getdata";
+    String URI_GET_DATA_NGAM = "getdatangam";
     String URI_GET_NETWORK_STATUS = "json/";
 
     String URI_LIST_EVENT_HOME = "lovehistory/page/";
