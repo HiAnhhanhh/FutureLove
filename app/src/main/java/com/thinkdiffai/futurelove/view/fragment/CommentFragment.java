@@ -106,7 +106,13 @@ public class CommentFragment extends Fragment {
         fragmentCommentBinding.btnTimeline.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                goToTimeLineFragment();
+                goToEventFragment();
+            }
+        });
+        fragmentCommentBinding.btnUserAccount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                goToUserDetailFragment();
             }
         });
     }
@@ -124,7 +130,9 @@ public class CommentFragment extends Fragment {
     private void goToTimeLineFragment() {
         NavHostFragment.findNavController(CommentFragment.this).navigate(R.id.action_commentFragment_to_timelineFragment);
     }
-
+    private void goToUserDetailFragment(){
+        NavHostFragment.findNavController(CommentFragment.this).navigate(R.id.action_commentFragment_to_userDetailFragment);
+    }
     private void initListenerCommentNew() {
 
         fragmentCommentBinding.rcvComment.addOnScrollListener(new PaginationScrollListener(linearLayoutManager) {

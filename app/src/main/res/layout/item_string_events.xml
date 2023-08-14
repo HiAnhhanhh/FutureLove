@@ -3,7 +3,8 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
-    android:padding="@dimen/define_dimen_28"
+    android:id="@+id/ll_item_string"
+    android:padding="@dimen/define_dimen_20"
     >
 <androidx.appcompat.widget.AppCompatTextView
     android:layout_width="wrap_content"

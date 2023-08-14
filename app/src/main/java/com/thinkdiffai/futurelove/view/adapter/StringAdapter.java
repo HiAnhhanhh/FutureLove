@@ -5,6 +5,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.appcompat.widget.LinearLayoutCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.thinkdiffai.futurelove.R;
@@ -37,10 +38,11 @@ public class StringAdapter extends RecyclerView.Adapter<StringAdapter.StringView
 
     public class StringViewHolder extends RecyclerView.ViewHolder {
         TextView textView;
-
+        LinearLayoutCompat layoutCompat;
         public StringViewHolder(View itemView) {
             super(itemView);
             textView = itemView.findViewById(R.id.String_name_event);
+            layoutCompat=itemView.findViewById(R.id.ll_item_string);
         }
     }
 }

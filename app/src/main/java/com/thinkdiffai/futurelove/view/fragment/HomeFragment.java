@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -58,6 +59,7 @@ public class HomeFragment extends Fragment {
         kProgressHUD = mainActivity.createHud();
 
 //        checkClickSetImageMale =  true;
+        performSearch();
         try {
             initUi();
             getData(currentPage);
@@ -214,6 +216,23 @@ public class HomeFragment extends Fragment {
                     Log.e("MainActivityLog", t.getMessage().toString());
                 }
                 isLoading = false;
+            }
+        });
+    }
+    private void performSearch() {
+        fragmentHomeBinding.edtSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                eventHomeAdapter.getFilter().filter(query);
+                eventHomeAdapter.notifyDataSetChanged();
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                eventHomeAdapter.getFilter().filter(newText);
+                eventHomeAdapter.notifyDataSetChanged();
+                return true;
             }
         });
     }
