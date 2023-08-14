@@ -50,6 +50,7 @@ import com.thinkdiffai.futurelove.service.api.Server;
 import com.thinkdiffai.futurelove.util.MyDialog;
 import com.thinkdiffai.futurelove.util.Util;
 import com.thinkdiffai.futurelove.view.activity.MainActivity;
+import com.thinkdiffai.futurelove.view.fragment.dialog.MyOwnDialogFragment;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -93,13 +94,7 @@ public class PairingFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         fragmentPairingBinding = FragmentPairingBinding.inflate(inflater, container, false);
         mainActivity = (MainActivity) getActivity();
-        kProgressHUD = KProgressHUD.create(requireContext())
-                .setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
-                .setLabel("Please wait")
-                .setDetailsLabel("Downloading data")
-                .setCancellable(true)
-                .setAnimationSpeed(2)
-                .setDimAmount(0.5f);
+        kProgressHUD = mainActivity.createHud();
         try {
             initListener();
         } catch (Exception e) {
@@ -136,6 +131,13 @@ public class PairingFragment extends Fragment {
                 NavHostFragment.findNavController(PairingFragment.this).navigate(R.id.action_pairingFragment_to_timelineFragment);
             }
         });
+        // Click User Detail Button
+        fragmentPairingBinding.btnUserAccount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                NavHostFragment.findNavController(PairingFragment.this).navigate(R.id.action_pairingFragment_to_userDetailFragment);
+            }
+        });
     }
 
     private void initListener() {
@@ -167,7 +169,6 @@ public class PairingFragment extends Fragment {
                     myDialog.show();
                 } else {
                     kProgressHUD.show();
-
                     new AsyncTask<Void, Void, Void>() {
                         @SuppressLint("StaticFieldLeak")
                         @Override
@@ -192,8 +193,6 @@ public class PairingFragment extends Fragment {
                         }
                     }.execute();
                 }
-
-
             }
         });
     }
@@ -218,11 +217,23 @@ public class PairingFragment extends Fragment {
             public void onResponse(Call<Object> call, retrofit2.Response<Object> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     Log.d("PhongNN", "Post Image Success");
-                    myDialog = getDialog();
-                    myDialog.setTitle("Successfully!");
-                    myDialog.setContent("Post the two images of a couple successfully!");
-                    myDialog.setContentButton("OK");
-                    myDialog.show();
+//                    myDialog = getDialog();
+//                    myDialog.setTitle("Successfully!");
+//                    myDialog.setContent("Post the two images of a couple successfully!");
+//                    myDialog.setContentButton("OK");
+//                    myDialog.show();
+
+                    MyOwnDialogFragment myOwnDialogFragment = new MyOwnDialogFragment("Success!",
+                            "Couple Pairing Successfully",
+                            R.drawable.register_success, new MyOwnDialogFragment.MyOwnDialogListener() {
+                        @Override
+                        public void onConfirm() {
+                            navToHomeFragment();
+                        }
+                    });
+                    myOwnDialogFragment.show(getActivity().getSupportFragmentManager(), "pairing_dialog");
+
+
 //                    List<ResponsePairingDto.TimeResponse> eventFutures = responsePairingDto.getJson2();
 //                    mainActivity.eventSummaryCurrentId = eventFutures.get(0).getId_toan_bo_su_kien();
 //
@@ -251,6 +262,10 @@ public class PairingFragment extends Fragment {
                 }
             }
         });
+    }
+
+    private void navToHomeFragment() {
+        NavHostFragment.findNavController(PairingFragment.this).navigate(R.id.action_pairingFragment_to_homeFragment);
     }
 
 
@@ -339,7 +354,12 @@ public class PairingFragment extends Fragment {
                     Handler handler = new Handler();
                     handler.postDelayed(() -> {
                         if (resultDetech != null && Objects.equals(resultDetech, "")) {
-                            imgBase64Female = imagefile;
+//                            imgBase64Female = imagefile;
+                            try {
+                                imgBase64Female = Util.convertBitmapToBase64(bitmap);
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
                             isCheckSetImageFemale = true;
                             fragmentPairingBinding.cvImageFemale.setVisibility(View.VISIBLE);
                             fragmentPairingBinding.imgFemale.setImageBitmap(bitmap);
@@ -347,14 +367,18 @@ public class PairingFragment extends Fragment {
                             isCheckSetImageFemale = false;
                         }
 
-                    }, 4000);
+                    }, 2000);
                 } else {
 
                     detectionFace(bitmap);
                     Handler handler = new Handler();
                     handler.postDelayed(() -> {
                         if (Objects.equals(resultDetech.toString(), "")) {
-                            imgBase64Male = imagefile;
+                            try {
+                                imgBase64Male = Util.convertBitmapToBase64(bitmap);
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
                             isCheckSetImageMale = true;
                             fragmentPairingBinding.cvImageMale.setVisibility(View.VISIBLE);
                             fragmentPairingBinding.imgMale.setImageBitmap(bitmap);

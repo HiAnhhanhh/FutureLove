@@ -135,13 +135,15 @@ public interface ApiService {
             @Field("device_register") String registerDevice
     );
     // get detail user
-    @GET(Server.URI_PROFILE_USER+"{page}")
-    Call<DetailUser> getProfileUser(@Path("page")long id);
+    @GET(Server.URI_PROFILE_USER + "{page}")
+    Call<DetailUser> getProfileUser(@Path("page") long id);
+
     // GET comments user
-    @GET(Server.URI_COMMENTS_USER+"{page}")
-    Call<UserComment> getCommentUser(@Path("page")long id);
+    @GET(Server.URI_COMMENTS_USER + "{page}")
+    Call<UserComment> getCommentUser(@Path("page") long id);
+
     // get events theo user
-    @GET(Server.URI_EVENTS_USER+"{page}")
-    Call<EventsUser> getEventUser(@Path("page")long id);
+    @GET(Server.URI_EVENTS_USER + "{page}")
+    Call<EventsUser> getEventUser(@Path("page") long id);
 }
 

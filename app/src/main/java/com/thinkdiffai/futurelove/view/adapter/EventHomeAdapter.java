@@ -5,6 +5,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -16,15 +18,19 @@ import com.thinkdiffai.futurelove.model.Comon;
 import com.thinkdiffai.futurelove.model.DetailEvent;
 import com.squareup.picasso.Picasso;
 import com.thinkdiffai.futurelove.model.DetailEventList;
+import com.thinkdiffai.futurelove.model.comment.CommentUser;
 
+import java.util.ArrayList;
 import java.util.List;
-public class EventHomeAdapter extends RecyclerView.Adapter<EventHomeAdapter.EventHomeViewHolder> {
+public class EventHomeAdapter extends RecyclerView.Adapter<EventHomeAdapter.EventHomeViewHolder>  implements Filterable {
 
     private List<DetailEventList> eventList;
+    private List<DetailEventList> eventListOld;
     public final IOnClickItemListener iOnClickItem;
 
     public void setData(List<DetailEventList> eventList) {
         this.eventList = eventList;
+        this.eventListOld=eventList;
     }
 
     Context context;
@@ -92,6 +98,40 @@ public class EventHomeAdapter extends RecyclerView.Adapter<EventHomeAdapter.Even
     @Override
     public int getItemCount() {
         return null == eventList ? 0 : eventList.size();
+    }
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+                String searchString = constraint.toString();
+                if (searchString.isEmpty()) {
+                    eventList= new ArrayList<>(eventListOld);
+                } else {
+                    List<DetailEventList> filteredList = new ArrayList<>();
+                    for (DetailEventList item : eventListOld) {
+                        List<DetailEvent> detailEvents = item.getSukien();
+                        for (DetailEvent detailEvent: detailEvents){
+                            // dieu kien tim kiem
+                            if (detailEvent.getTenSuKien().toLowerCase().contains(searchString.toLowerCase())) {
+                                filteredList.add(item);
+                            }
+                        }
+
+                    }
+                    eventList= filteredList;
+                }
+                FilterResults filterResults = new FilterResults();
+                filterResults.values = eventList;
+                return filterResults;
+            }
+
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults results) {
+                eventList=(List<DetailEventList>) results.values;
+                notifyDataSetChanged();
+            }
+        };
     }
 
     public static class EventHomeViewHolder extends RecyclerView.ViewHolder {
