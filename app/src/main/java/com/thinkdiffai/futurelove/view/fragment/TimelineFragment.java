@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.Rect;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -19,9 +20,12 @@ import android.text.InputType;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -89,7 +93,6 @@ public class TimelineFragment extends Fragment {
     private CommentList pageCommentList;
 
     private List<Comment> commentsForAdapter;
-    private long elapsedTime;
     Handler handler;
     Runnable runnable;
     private String urlImageComment = "";
@@ -195,8 +198,11 @@ public class TimelineFragment extends Fragment {
                                     @Override
                                     protected void onPostExecute(Void result) {
                                         postComment(content, networkIp);
-
-                                        resizeLayoutComment();
+                                        urlImageComment = "";
+                                        imgBase64Female = "";
+                                        fragmentTimelineBinding.edtComment.setText("");
+                                        fragmentTimelineBinding.imageComment.setVisibility(View.GONE);
+                                        fragmentTimelineBinding.closeImage.setVisibility(View.GONE);
                                         closeKeyboard();
                                         if (kProgressHUD.isShowing())
                                             kProgressHUD.dismiss();
@@ -235,7 +241,11 @@ public class TimelineFragment extends Fragment {
         fragmentTimelineBinding.closeImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                resizeLayoutComment();
+                urlImageComment = "";
+                imgBase64Female = "";
+                fragmentTimelineBinding.edtComment.setText("");
+                fragmentTimelineBinding.imageComment.setVisibility(View.GONE);
+                fragmentTimelineBinding.closeImage.setVisibility(View.GONE);
 
             }
         });
@@ -401,6 +411,8 @@ public class TimelineFragment extends Fragment {
     private void initUi() {
 //        fragmentTimelineBinding.edtComment.setImeOptions(EditorInfo.IME_ACTION_DONE);
         fragmentTimelineBinding.edtComment.setInputType(InputType.TYPE_TEXT_FLAG_AUTO_COMPLETE);
+
+
         if (mainActivity.eventSummaryCurrentId < 0) {
             mainActivity.eventSummaryCurrentId = new Random().nextInt(10);
         }
@@ -600,13 +612,12 @@ public class TimelineFragment extends Fragment {
             }
         };
         handler.post(runnable);
-
     }
 
     public void stopTimer() {
         if (handler != null && runnable != null) {
             handler.removeCallbacks(runnable);
-            elapsedTime = 0;
+            long elapsedTime = 0;
         }
     }
 
@@ -687,16 +698,26 @@ public class TimelineFragment extends Fragment {
         stopTimer();
     }
 
-    private void resizeLayoutComment() {
-        urlImageComment = "";
-        imgBase64Female = "";
-        fragmentTimelineBinding.edtComment.setText("");
-        fragmentTimelineBinding.imageComment.setVisibility(View.GONE);
-        fragmentTimelineBinding.closeImage.setVisibility(View.GONE);
-        RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) fragmentTimelineBinding.layoutComment.getLayoutParams();
-        layoutParams.height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50, getResources().getDisplayMetrics());
-        fragmentTimelineBinding.layoutComment.setLayoutParams(layoutParams);
-    }
+//    private void resizeLayoutComment(boolean increaseMargin) {
+//        urlImageComment = "";
+//        imgBase64Female = "";
+//        fragmentTimelineBinding.edtComment.setText("");
+//        fragmentTimelineBinding.imageComment.setVisibility(View.GONE);
+//        fragmentTimelineBinding.closeImage.setVisibility(View.GONE);
+//
+//        RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) fragmentTimelineBinding.layoutComment.getLayoutParams();
+//
+//        if (increaseMargin) {
+//            // Set bottom margin to 60dp
+//            layoutParams.bottomMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 60, getResources().getDisplayMetrics());
+//        } else {
+//            // Reset bottom margin to default (0dp)
+//            layoutParams.bottomMargin = 0;
+//        }
+//
+//        // Apply the updated layout parameters
+//        fragmentTimelineBinding.layoutComment.setLayoutParams(layoutParams);
+//    }
 
     private void closeKeyboard() {
         View view = requireActivity().getCurrentFocus();

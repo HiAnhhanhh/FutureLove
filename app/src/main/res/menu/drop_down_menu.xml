@@ -1,0 +1,15 @@
+<!-- res/menu/nav_menu.xml -->
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group>
+        <item
+            android:id="@+id/item_logout"
+            android:title="Log-out"
+            />
+        <item
+            android:id="@+id/item_delete_account"
+            android:title="Delete Account" />
+        <item
+            android:id="@+id/item_change_password"
+            android:title="Change Account" />
+    </group>
+</menu>

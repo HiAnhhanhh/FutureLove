@@ -322,7 +322,6 @@
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_alignParentBottom="true"
-            android:layout_marginBottom="-6dp"
             android:orientation="vertical"
             android:paddingEnd="@dimen/define_dimen_12">
 

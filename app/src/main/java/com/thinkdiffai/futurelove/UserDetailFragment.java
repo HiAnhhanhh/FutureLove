@@ -46,7 +46,7 @@ public class UserDetailFragment extends Fragment {
         commentAdapter= new UserCommnetAdapter(commentList,getContext());
         fragmentUserDetailBinding.rcvPersonalComments.setAdapter(commentAdapter);
         // xu ly nut cancle
-        fragmentUserDetailBinding.btnCancelUser.setOnClickListener(new View.OnClickListener() {
+        fragmentUserDetailBinding.btnComeBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 NavHostFragment.findNavController(UserDetailFragment.this).navigate(R.id.action_userDetailFragment_to_homeFragment);
@@ -116,7 +116,7 @@ public class UserDetailFragment extends Fragment {
         });
     }
     private void performSearch() {
-        fragmentUserDetailBinding.searchUser.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+        fragmentUserDetailBinding.edtSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 commentAdapter.getFilter().filter(query);

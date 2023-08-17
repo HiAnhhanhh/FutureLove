@@ -3,10 +3,12 @@ package com.thinkdiffai.futurelove.view.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.navigation.NavController;
 
 import com.thinkdiffai.futurelove.R;
 import com.thinkdiffai.futurelove.databinding.ActivityMainBinding;
@@ -15,14 +17,29 @@ import io.github.rupinderjeet.kprogresshud.KProgressHUD;
 
 public class MainActivity extends AppCompatActivity {
 
+    // --------------------------------------------
+    // Params: check that home or comment or pairing fragment to user detail fragment
+    public boolean homeToUserDetail = false;
+    public boolean commentToUserDetail = false;
+    public boolean pairingToUserDetail = false;
+    // --------------------------------------------
+
     private SharedPreferences sharedPreferences;
     private ActivityMainBinding activityMainBinding;
     private KProgressHUD kProgressHUD;
-    public int eventSummaryCurrentId = -1;
+
+    public Bitmap maleImage;
+    public Bitmap femaleImage;
+    public long waitingSwapFaceTime = 0L;
+
+    public NavController navController;
+
     // checking login flag
     private boolean userLoggedIn = false;
 
     private boolean loginState;
+    public int eventSummaryCurrentId = -1;
+
     public int soThuTuSuKien = 0;
 
     @Override

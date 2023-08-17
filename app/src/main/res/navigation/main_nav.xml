@@ -116,7 +116,17 @@
             app:enterAnim="@anim/fade_in"
             app:exitAnim="@anim/fade_out" />
         <action
-            android:id="@+id/action_userDetailFragment_to_timeLineFragment"
+            android:id="@+id/action_userDetailFragment_to_commentFragment"
+            app:destination="@id/commentFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out" />
+        <action
+            android:id="@+id/action_userDetailFragment_to_pairingFragment"
+            app:destination="@id/pairingFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out" />
+        <action
+            android:id="@+id/action_userDetailFragment_to_timelineFragment"
             app:destination="@id/timelineFragment"
             app:enterAnim="@anim/fade_in"
             app:exitAnim="@anim/fade_out" />
@@ -172,4 +182,12 @@
             android:id="@+id/action_loadingEventFragment_to_addEventFragment"
             app:destination="@id/addEventFragment" />
     </fragment>
+    <dialog
+        android:id="@+id/myOwnDialogFragment"
+        android:name="com.thinkdiffai.futurelove.view.fragment.dialog.MyOwnDialogFragment"
+        android:label="MyOwnDialogFragment" >
+        <action
+            android:id="@+id/action_myOwnDialogFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+    </dialog>
 </navigation>

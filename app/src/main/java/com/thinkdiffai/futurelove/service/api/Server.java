@@ -9,7 +9,7 @@ public interface Server {
     String GET_CITY_NAME_FROM_IP = "https://ipinfo.io/";
 
     String URI_PAIRING = "getdata";
-    String URI_GET_DATA_NGAM = "getdatangam";
+    String URI_CREATE_IMPLICIT_DATA = "getdatangam";
     String URI_GET_NETWORK_STATUS = "json/";
 
     String URI_LIST_EVENT_HOME = "lovehistory/page/";
@@ -32,4 +32,8 @@ public interface Server {
     String URI_COMMENTS_USER="lovehistory/comment/user/";
     // uri events cua tung user
     String URI_EVENTS_USER="lovehistory/user/";
+    String URI_DELETE_ACCOUNT = "deleteuser/";
+
+    // uri doi passwork
+    String URI_CHANGE_PASSWORD="changepassword/";
 }

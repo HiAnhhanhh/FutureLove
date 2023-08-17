@@ -91,6 +91,7 @@ public class HomeFragment extends Fragment {
 
     private void navigateToUserDetailFragment() {
         NavHostFragment.findNavController(HomeFragment.this).navigate(R.id.action_homeFragment_to_userDetailFragment);
+        mainActivity.homeToUserDetail = true;
     }
 
     private void navigateToOtherFragments() {

@@ -1,26 +1,39 @@
 package com.thinkdiffai.futurelove.view.fragment;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatEditText;
+import androidx.appcompat.widget.PopupMenu;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.thinkdiffai.futurelove.R;
+import com.thinkdiffai.futurelove.presenter.crud.DeleteAccount;
 import com.thinkdiffai.futurelove.databinding.FragmentUserDetailBinding;
 import com.thinkdiffai.futurelove.model.comment.CommentUser;
 import com.thinkdiffai.futurelove.model.comment.DetailUser;
@@ -115,15 +128,15 @@ public class UserDetailFragment extends Fragment {
     }
 
     private void showPersonalDetailEvent() {
-        NavHostFragment.findNavController(UserDetailFragment.this).navigate(R.id.action_userDetailFragment_to_timeLineFragment);
+        NavHostFragment.findNavController(UserDetailFragment.this).navigate(R.id.action_userDetailFragment_to_timelineFragment);
     }
 
     private void getDataCommentUser() {
-        if (!kProgressHUD.isShowing()) {
-            kProgressHUD.show();
-        }
+//        if (!kProgressHUD.isShowing()) {
+//            kProgressHUD.show();
+//        }
         ApiService apiService = RetrofitClient.getInstance(Server.DOMAIN2).getRetrofit().create(ApiService.class);
-        Call<UserComment> call = apiService.getCommentUser(5);
+        Call<UserComment> call = apiService.getCommentUser(1);
         call.enqueue(new Callback<UserComment>() {
             @SuppressLint("NotifyDataSetChanged")
             @Override
@@ -144,9 +157,9 @@ public class UserDetailFragment extends Fragment {
             @Override
             public void onFailure(Call<UserComment> call, Throwable t) {
                 Toast.makeText(getActivity(), t.getMessage() + "", Toast.LENGTH_SHORT).show();
-                if (kProgressHUD.isShowing()) {
-                    kProgressHUD.dismiss();
-                }
+//                if (kProgressHUD.isShowing()) {
+//                    kProgressHUD.dismiss();
+//                }
             }
         });
     }
@@ -155,7 +168,7 @@ public class UserDetailFragment extends Fragment {
 
         ApiService apiService = RetrofitClient.getInstance(Server.DOMAIN2).getRetrofit().create(ApiService.class);
         // Id for test
-        Call<DetailUser> call = apiService.getProfileUser(5);
+        Call<DetailUser> call = apiService.getProfileUser(1);
         call.enqueue(new Callback<DetailUser>() {
             @Override
             public void onResponse(Call<DetailUser> call, Response<DetailUser> response) {
@@ -187,17 +200,131 @@ public class UserDetailFragment extends Fragment {
 
 
     private void userClickAnyButtonEventListener() {
-        clickCancel();
+        clickComeBack();
         clickLogout();
-    }
-
-    private void clickCancel() {
-        binding.btnCancelUser.setOnClickListener(new View.OnClickListener() {
+        binding.btnShowDropDown.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                navigateToHomeFragment();
+                clickShowDropDown();
             }
         });
+    }
+
+    private void clickShowDropDown() {
+        PopupMenu popupMenu = new PopupMenu(requireContext(), binding.btnShowDropDown);
+        popupMenu.getMenuInflater().inflate(R.menu.drop_down_menu, popupMenu.getMenu());
+
+        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.item_logout:
+                        // Show dialog to ask logout confirmation
+                        myOwnDialogFragment = new MyOwnDialogFragment(
+                                "Log-out now?",
+                                "Are you sure to quit the app?",
+                                R.drawable.ic_warning,
+                                new MyOwnDialogFragment.MyOwnDialogListener() {
+                                    @Override
+                                    public void onConfirm() {
+                                        // Navigate to Login Fragment
+                                        NavigateToLoginAndSignOutActivity();
+                                        // Update the LOGIN_STATE
+                                        // Change the LOGIN_STATE is FALSE - Not to keep the login state
+                                        changeLoginState();
+                                    }
+                                }
+                        );
+                        myOwnDialogFragment.show(mainActivity.getSupportFragmentManager(), "logout_dialog");
+                        return true;
+                    case R.id.item_delete_account:
+                        Toast.makeText(mainActivity, "Delete Account Processing...", Toast.LENGTH_SHORT).show();
+                        deleteAccountProcess(99L);
+                        return true;
+
+                    case R.id.item_change_password:
+                        Toast.makeText(mainActivity, "Change Password Processing...", Toast.LENGTH_SHORT).show();
+                        Dialog_PassWord();
+                        return true;
+
+                    default:
+                        return false;
+                }
+            }
+        });
+
+        popupMenu.show();
+    }
+
+    private void deleteAccountProcess(long l) {
+        DeleteAccount.getInstance().deleteAccount(requireContext(), l);
+    }
+
+
+    private void clickComeBack() {
+        binding.btnComeBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (mainActivity.homeToUserDetail) {
+                    navigateToHomeFragment();
+                    mainActivity.homeToUserDetail = false;
+                } else if (mainActivity.commentToUserDetail) {
+                    navigateToCommentFragment();
+                    mainActivity.commentToUserDetail = false;
+                } else if (mainActivity.pairingToUserDetail) {
+                    navigateToPairingFragment();
+                    mainActivity.pairingToUserDetail = false;
+                }
+
+            }
+        });
+    }
+
+    private void navigateToPairingFragment() {
+        NavHostFragment.findNavController(UserDetailFragment.this).navigate(R.id.action_userDetailFragment_to_pairingFragment);
+    }
+
+    private void navigateToCommentFragment() {
+        NavHostFragment.findNavController(UserDetailFragment.this).navigate(R.id.action_userDetailFragment_to_commentFragment);
+    }
+
+//    private void clickLogout() {
+//        binding.btnLogout.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//                // Show dialog to ask logout confirmation
+//                myOwnDialogFragment = new MyOwnDialogFragment(
+//                        "Log-out now?",
+//                        "Are you sure to quit the app?",
+//                        R.drawable.ic_warning,
+//                        new MyOwnDialogFragment.MyOwnDialogListener() {
+//                            @Override
+//                            public void onConfirm() {
+//                                // Navigate to Login Fragment
+//                                NavigateToLoginAndSignOutActivity();
+//                                // Update the LOGIN_STATE
+//                                // Change the LOGIN_STATE is FALSE - Not to keep the login state
+//                                changeLoginState();
+//                            }
+//                        }
+//                );
+//                myOwnDialogFragment.show(mainActivity.getSupportFragmentManager(), "logout_dialog");
+//            }
+//        });
+//    }
+
+    private void changeLoginState() {
+        sharedPreferences = Objects.requireNonNull(getActivity()).getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean("LOGIN_STATE", false);
+        editor.apply();
+    }
+
+    private void NavigateToLoginAndSignOutActivity() {
+        Intent i = new Intent(getActivity(), SignInSignUpActivity.class);
+        startActivity(i);
     }
 
     private void clickLogout() {
@@ -225,16 +352,124 @@ public class UserDetailFragment extends Fragment {
             }
         });
     }
-
-    private void changeLoginState() {
-        sharedPreferences = Objects.requireNonNull(getActivity()).getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean("LOGIN_STATE", false);
-        editor.apply();
+//    private void changeLoginState() {
+//        sharedPreferences = Objects.requireNonNull(getActivity()).getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
+//        SharedPreferences.Editor editor = sharedPreferences.edit();
+//        editor.putBoolean("LOGIN_STATE", false);
+//        editor.apply();
+//    }
+//
+//    private void NavigateToLoginAndSignOutActivity() {
+//        Intent i = new Intent(getActivity(), SignInSignUpActivity.class);
+//        startActivity(i);
+//    }
+    // xu ly menu tu chon
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_user_detail    , menu);
     }
 
-    private void NavigateToLoginAndSignOutActivity() {
-        Intent i = new Intent(getActivity(), SignInSignUpActivity.class);
-        startActivity(i);
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        // Handle menu item selections
+        switch (id) {
+            case R.id.action_edit:
+                Dialog_PassWord();
+                // Handle Edit
+                return true;
+            case R.id.action_delete:
+                // Handle Delete
+                return true;
+            case R.id.action_login:
+                clickLogout();
+                initUi();
+                // Handle login
+
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+    private  void Dialog_PassWord(){
+        final Dialog dialog= new Dialog(getContext());
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_password);
+        Window window= dialog.getWindow();
+        if(window== null){
+            return;
+        }
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT,WindowManager.LayoutParams.WRAP_CONTENT);
+        window.setBackgroundDrawable( new ColorDrawable(Color.TRANSPARENT));
+
+        WindowManager.LayoutParams windowAttributes= window.getAttributes();
+        windowAttributes.gravity= Gravity.CENTER;
+        window.setAttributes(windowAttributes);
+
+        dialog.setCancelable(true);
+        // anh xa dialog
+        AppCompatEditText newPassWord,oldPassWord,newPassWord1;
+        Button done;
+        newPassWord= dialog.findViewById(R.id.etnewPassword);
+        oldPassWord=dialog.findViewById(R.id.etOldPassword);
+        newPassWord1=dialog.findViewById(R.id.etConfirmPassword);
+        done=dialog.findViewById(R.id.btnChangePassword);
+        done.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String pw,pw1;
+                pw=newPassWord.getText().toString();
+                pw1=newPassWord1.getText().toString();
+                if(pw.contains(pw1)){
+                    if(isValidPassword(newPassWord.getText().toString())){
+
+                        ChangePassWordAPi(20,binding.tvUserName.getText().toString(),oldPassWord.getText().toString(),newPassWord.getText().toString());
+                        dialog.dismiss();
+                        Toast.makeText(mainActivity, "Change Password Successfully!", Toast.LENGTH_SHORT).show();
+                    }else {
+                        Toast.makeText(mainActivity, "Change Password Incompletely!", Toast.LENGTH_SHORT).show();
+                    }
+                }else{
+                    Toast.makeText(mainActivity, "Invalid Confirm Password!", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        //
+        dialog.show();
+    }
+    private  void ChangePassWordAPi(long id,String name,String oldpassword,String newpassword){
+        // Call login Api
+        ApiService apiService = RetrofitClient.getInstance(Server.DOMAIN2).getRetrofit().create(ApiService.class);
+        Call<Object> call = apiService.Change_Password( id,name,oldpassword,newpassword);
+        call.enqueue(new Callback<Object>() {
+            @Override
+            public void onResponse(Call<Object> call, Response<Object> response) {
+                if (response.isSuccessful()) {
+                    // response.body() chứa dữ liệu trả về từ API
+                } else {
+                    Toast.makeText(getContext(), ""+response.body().toString(), Toast.LENGTH_SHORT).show();
+                    // Xử lý lỗi khi API trả về mã lỗi
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Object> call, Throwable t) {
+                Toast.makeText(getContext(), ""+t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+    // check password
+    private boolean isValidPassword(String password) {
+        return password.length() >= 8 && !containSpecialCharacters(password);
+    }
+
+    private boolean containSpecialCharacters(String password) {
+        // Define a list of special characters that are not allowed
+        String specialCharacters = "~`!@#$%^&*()+={}[]|\\:;\"<>,.?/ ";
+        for (int i = 0; i < password.length(); i++) {
+            if (specialCharacters.contains(String.valueOf(password.charAt(i)))) {
+                return true; // Found any special character
+            }
+        }
+        return false;
     }
 }

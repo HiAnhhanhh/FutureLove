@@ -16,6 +16,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -23,11 +25,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatEditText;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
@@ -43,7 +45,10 @@ import com.google.mlkit.vision.face.FaceDetector;
 import com.google.mlkit.vision.face.FaceDetectorOptions;
 import com.google.mlkit.vision.face.FaceLandmark;
 import com.thinkdiffai.futurelove.R;
+import com.thinkdiffai.futurelove.databinding.DialogBottomSheetSelectedHomeBinding;
 import com.thinkdiffai.futurelove.databinding.FragmentPairingBinding;
+import com.thinkdiffai.futurelove.model.event.UploadingEvent;
+import com.thinkdiffai.futurelove.presenter.api.CreateImplicitEventImpl;
 import com.thinkdiffai.futurelove.service.api.ApiService;
 import com.thinkdiffai.futurelove.service.api.RetrofitClient;
 import com.thinkdiffai.futurelove.service.api.Server;
@@ -56,6 +61,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -65,15 +71,16 @@ import retrofit2.Call;
 import retrofit2.Callback;
 
 public class PairingFragment extends Fragment {
+    private static final String NO_FACE_DETECTED = "No faces detected";
+    private static final String MORE_THAN_ONE_FACE = "More than one face is recognized";
     private FragmentPairingBinding fragmentPairingBinding;
     private static final int IMAGE_PICKER_SELECT = 1889;
     private BottomSheetDialog bottomSheetDialog;
     private static final int CAMERA_REQUEST = 1888;
 
-
     private static final String TAG = "CameraActivity";
-    private static final String TAG1 = MainActivity.class.getName();
 
+    private static final String TAG1 = MainActivity.class.getName();
     private static final int REQUEST_CODE_PERMISSIONS = 100;
     private static final int REQUEST_CODE_PERMISSIONS_STORAGE = 101;
     private boolean checkClickSetImageMale;
@@ -86,8 +93,21 @@ public class PairingFragment extends Fragment {
     private String imgBase64Female;
     private String urlImageMale;
     private String urlImageFemale;
+
+    private String maleName = "";
+    private String femaleName = "";
     private MainActivity mainActivity;
     private MyDialog myDialog;
+
+    private SimpleDateFormat dateFormat;
+
+    private static final String PATTERN_DATE = "yyyy-MM-dd, HH:mm:ss";
+    private long startPairingTimeStamp;
+    private Handler handler;
+    private Runnable runnable;
+    private long elapsedTime;
+    private DialogBottomSheetSelectedHomeBinding bottomDialogBinding;
+    private boolean isNameFilled = false;
 
     @Nullable
     @Override
@@ -96,11 +116,34 @@ public class PairingFragment extends Fragment {
         mainActivity = (MainActivity) getActivity();
         kProgressHUD = mainActivity.createHud();
         try {
+            initUi();
             initListener();
         } catch (Exception e) {
             Log.e("ExceptionRuntime", e.toString());
         }
         return fragmentPairingBinding.getRoot();
+    }
+
+    private void initUi() {
+        // If swap face process is running, switch on maleImage and female image
+        // Else, turn them off
+        if (mainActivity.waitingSwapFaceTime != 0 && mainActivity.maleImage != null && mainActivity.femaleImage != null) {
+            Toast.makeText(mainActivity, "Running Process ...", Toast.LENGTH_SHORT).show();
+            getTimeIncreaseAndShow(Util.getTimeStampNow(), mainActivity.waitingSwapFaceTime);
+            fragmentPairingBinding.cvImageMale.setVisibility(View.VISIBLE);
+            fragmentPairingBinding.imgMale.setImageBitmap(mainActivity.maleImage);
+            fragmentPairingBinding.cvImageFemale.setVisibility(View.VISIBLE);
+            fragmentPairingBinding.imgFemale.setImageBitmap(mainActivity.femaleImage);
+            lockBtnSelectImage();
+        } else {
+            resetDetect();
+        }
+    }
+
+    private void lockBtnSelectImage() {
+        fragmentPairingBinding.btnSelectPersonMale.setEnabled(false);
+        fragmentPairingBinding.btnSelectPersonFemale.setEnabled(false);
+        fragmentPairingBinding.btnSubmit.setEnabled(false);
     }
 
     @Override
@@ -136,11 +179,13 @@ public class PairingFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 NavHostFragment.findNavController(PairingFragment.this).navigate(R.id.action_pairingFragment_to_userDetailFragment);
+                mainActivity.pairingToUserDetail = true;
             }
         });
     }
 
     private void initListener() {
+
         fragmentPairingBinding.btnSelectPersonFemale.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -161,6 +206,7 @@ public class PairingFragment extends Fragment {
             @SuppressLint("StaticFieldLeak")
             @Override
             public void onClick(View view) {
+
                 if (!isCheckSetImageFemale || !isCheckSetImageMale) {
                     myDialog = getDialog();
                     myDialog.setTitle("Can not Face recognition");
@@ -168,7 +214,15 @@ public class PairingFragment extends Fragment {
                     myDialog.setContentButton("Ok");
                     myDialog.show();
                 } else {
-                    kProgressHUD.show();
+                    Toast.makeText(getActivity(), "Please waiting a time!", Toast.LENGTH_SHORT).show();
+                    // Lock all buttons when running
+                    lockBtnSelectImage();
+                    // Start counting time
+                    startPairingTimeStamp = startCountingTime();
+                    mainActivity.waitingSwapFaceTime = startPairingTimeStamp;
+                    // Compare timestamps and set on view
+                    getTimeIncreaseAndShow(Util.getTimeStampNow(), startPairingTimeStamp);
+
                     new AsyncTask<Void, Void, Void>() {
                         @SuppressLint("StaticFieldLeak")
                         @Override
@@ -197,53 +251,65 @@ public class PairingFragment extends Fragment {
         });
     }
 
+    private long startCountingTime() {
+        long currentTimestamp = Util.getTimeStampNow();
+        Log.d("TIME_DURATION", "currentTimestamp: " + currentTimestamp);
+        return currentTimestamp;
+    }
+
     private void postData(String imageUrl1, String imageUrl2) {
-        if (!kProgressHUD.isShowing()) {
-            kProgressHUD.show();
-        }
-//        Map<String, String> headers = new HashMap<>();
-//        headers.put(Server.KEY_HEADER1, imageUrl1);
-//        headers.put(Server.KEY_HEADER2, imageUrl2);
+
         String deviceThemSuKien = "Iphone 14 Pro mux";
         String ipThemSuKien = "3.3.3.3";
         int idUser = 1;
-        String tenNam = "Lam";
-        String tenNu = "Lu";
+
+        UploadingEvent uploadingEvent = new UploadingEvent(
+                deviceThemSuKien,
+                ipThemSuKien,
+                idUser,
+                maleName,
+                femaleName
+        );
 
         ApiService apiService = RetrofitClient.getInstance(Server.DOMAIN2).getRetrofit().create(ApiService.class);
-        Call<Object> call = apiService.postEvent(imageUrl1, imageUrl2, deviceThemSuKien, ipThemSuKien, idUser, tenNam, tenNu);
+        Call<Object> call = apiService.postEvent(
+                imageUrl1,
+                imageUrl2,
+                uploadingEvent.getDevice_them_su_kien(),
+                uploadingEvent.getIp_them_su_kien(),
+                uploadingEvent.getId_user(),
+                uploadingEvent.getTen_nam(),
+                uploadingEvent.getTen_nu());
         call.enqueue(new Callback<Object>() {
             @Override
             public void onResponse(Call<Object> call, retrofit2.Response<Object> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     Log.d("PhongNN", "Post Image Success");
-//                    myDialog = getDialog();
-//                    myDialog.setTitle("Successfully!");
-//                    myDialog.setContent("Post the two images of a couple successfully!");
-//                    myDialog.setContentButton("OK");
-//                    myDialog.show();
+                    Log.d("PhongNN", "Name: " + response.body().toString());
 
                     MyOwnDialogFragment myOwnDialogFragment = new MyOwnDialogFragment("Success!",
                             "Couple Pairing Successfully",
                             R.drawable.register_success, new MyOwnDialogFragment.MyOwnDialogListener() {
                         @Override
                         public void onConfirm() {
-                            navToHomeFragment();
+                            // Nav to home fragment
+//                            mainActivity.navController.navigate(R.id.fragment_home);
+                            Intent intent = new Intent(getActivity(), MainActivity.class);
+                            startActivity(intent);
                         }
                     });
                     myOwnDialogFragment.show(getActivity().getSupportFragmentManager(), "pairing_dialog");
-
-
-//                    List<ResponsePairingDto.TimeResponse> eventFutures = responsePairingDto.getJson2();
-//                    mainActivity.eventSummaryCurrentId = eventFutures.get(0).getId_toan_bo_su_kien();
-//
-//                    goToEventDetail(mainActivity.eventSummaryCurrentId);
-
+                    // Stop timer when finish merging
+                    stopTimer();
                 }
                 resetDetect();
-                if (kProgressHUD.isShowing()) {
-                    kProgressHUD.dismiss();
-                }
+
+                // Create some implicit events
+                CreateImplicitEventImpl.getInstance().generateImplicitEvent(
+                        requireContext(),
+                        uploadingEvent
+                );
+
             }
 
             @Override
@@ -253,15 +319,86 @@ public class PairingFragment extends Fragment {
                     myDialog = getDialog();
                     myDialog.setTitle("internet connection error");
                     myDialog.setContent("Make sure internet connection and try again!");
-                    myDialog.setContentButton("Ok");
+                    myDialog.setContentButton("OK");
                     myDialog.show();
                 }
-
-                if (kProgressHUD.isShowing()) {
-                    kProgressHUD.dismiss();
-                }
+                stopTimer();
             }
         });
+    }
+
+    private void getTimeIncreaseAndShow(long stop, long start) {
+        long increase = stop - start;
+        changeIntoDateTime(increase);
+    }
+
+    private void changeIntoDateTime(long increase) {
+        long second = increase / 1000;
+        long minute = second / 60;
+        long hour = minute / 60;
+        final long[] finalDays = {hour / 24};
+        final long[] finalSeconds = {second % 60};
+        final long[] finalMinutes = {minute % 60};
+        final long[] finalHours = {hour % 24};
+
+        handler = new Handler();
+        runnable = new Runnable() {
+            @Override
+            public void run() {
+                String secondsStr, minutesStr, hoursStr, daysStr;
+                finalSeconds[0]++;
+                if (finalSeconds[0] == 60) {
+                    finalSeconds[0] = 0;
+                    finalMinutes[0]++;
+                }
+                if (finalMinutes[0] == 60) {
+                    finalMinutes[0] = 0;
+                    finalHours[0]++;
+                }
+                if (finalHours[0] == 24) {
+                    finalHours[0] = 0;
+                    finalDays[0]++;
+                }
+
+                if (finalSeconds[0] < 10) {
+                    secondsStr = "0" + finalSeconds[0];
+                } else {
+                    secondsStr = String.valueOf(finalSeconds[0]);
+                }
+                if (finalMinutes[0] < 10) {
+                    minutesStr = "0" + finalMinutes[0];
+                } else {
+                    minutesStr = String.valueOf(finalMinutes[0]);
+                }
+                if (finalHours[0] < 10) {
+                    hoursStr = "0" + finalHours[0];
+                } else {
+                    hoursStr = String.valueOf(finalHours[0]);
+                }
+                if (finalDays[0] < 10) {
+
+                    daysStr = "0" + finalDays[0];
+                } else {
+                    daysStr = String.valueOf(finalDays[0]);
+                }
+                fragmentPairingBinding.timeDay.setText(daysStr);
+                fragmentPairingBinding.timeHours.setText(hoursStr);
+                fragmentPairingBinding.timeMinute.setText(minutesStr);
+                fragmentPairingBinding.timeSecond.setText(secondsStr);
+                handler.postDelayed(runnable, 1000);
+            }
+        };
+        handler.post(runnable);
+    }
+
+    public void stopTimer() {
+        if (handler != null && runnable != null) {
+            handler.removeCallbacks(runnable);
+            elapsedTime = 0;
+            mainActivity.waitingSwapFaceTime = 0L;
+            mainActivity.maleImage = null;
+            mainActivity.femaleImage = null;
+        }
     }
 
     private void navToHomeFragment() {
@@ -309,6 +446,7 @@ public class PairingFragment extends Fragment {
 
     private void startOpenStorage() {
         closeDialog();
+        isNameFilled = false;
         Intent pickIntent = new Intent(Intent.ACTION_GET_CONTENT, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         pickIntent.setType("image/* video/*");
         startActivityForResult(pickIntent, IMAGE_PICKER_SELECT);
@@ -316,6 +454,7 @@ public class PairingFragment extends Fragment {
 
     private void startCamera() throws FileNotFoundException {
         closeDialog();
+        isNameFilled = false;
         File cacheDir = Objects.requireNonNull(getActivity()).getApplicationContext().getCacheDir();
         // start default camera
         Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
@@ -339,54 +478,48 @@ public class PairingFragment extends Fragment {
     @SuppressLint("StaticFieldLeak")
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        kProgressHUD.show();
         if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {
             try {
                 String imagefile = imageFile.getAbsolutePath();
 
                 Bitmap bitmap = rotaImageHadlee(imagefile);
+                // Check that user is clicking on Male or not
                 if (!checkClickSetImageMale) {
-
-//                    mActivityMainBinding.btnSelectPersonFemale.setImageBitmap(bitmap);
-
                     detectionFace(bitmap);
-
                     Handler handler = new Handler();
                     handler.postDelayed(() -> {
-                        if (resultDetech != null && Objects.equals(resultDetech, "")) {
-//                            imgBase64Female = imagefile;
+                        if (resultDetech != null && Objects.equals(resultDetech, "ok")) {
                             try {
                                 imgBase64Female = Util.convertBitmapToBase64(bitmap);
+                                mainActivity.femaleImage = bitmap;
                             } catch (IOException e) {
                                 throw new RuntimeException(e);
                             }
                             isCheckSetImageFemale = true;
-                            fragmentPairingBinding.cvImageFemale.setVisibility(View.VISIBLE);
-                            fragmentPairingBinding.imgFemale.setImageBitmap(bitmap);
+//                            fragmentPairingBinding.cvImageFemale.setVisibility(View.VISIBLE);
+//                            fragmentPairingBinding.imgFemale.setImageBitmap(bitmap);
                         } else {
                             isCheckSetImageFemale = false;
                         }
-
-                    }, 2000);
+                    }, 4000);
                 } else {
-
                     detectionFace(bitmap);
                     Handler handler = new Handler();
                     handler.postDelayed(() -> {
-                        if (Objects.equals(resultDetech.toString(), "")) {
+                        if (resultDetech != null && Objects.equals(resultDetech, "ok")) {
                             try {
                                 imgBase64Male = Util.convertBitmapToBase64(bitmap);
+                                mainActivity.maleImage = bitmap;
                             } catch (IOException e) {
                                 throw new RuntimeException(e);
                             }
                             isCheckSetImageMale = true;
-                            fragmentPairingBinding.cvImageMale.setVisibility(View.VISIBLE);
-                            fragmentPairingBinding.imgMale.setImageBitmap(bitmap);
+//                            fragmentPairingBinding.cvImageMale.setVisibility(View.VISIBLE);
+//                            fragmentPairingBinding.imgMale.setImageBitmap(bitmap);
                         } else {
                             isCheckSetImageMale = false;
                         }
                     }, 4000);
-
                 }
             } catch (Exception e) {
 
@@ -401,56 +534,51 @@ public class PairingFragment extends Fragment {
 //                bitmap = rotaImageHadlee(selectedMediaUri);
                 if (selectedMediaUri.toString().contains("image")) {
                     if (!checkClickSetImageMale) {
-
                         detectionFace(bitmap);
                         Handler handler = new Handler();
                         handler.postDelayed(() -> {
-                            if (Objects.equals(resultDetech.toString(), "")) {
+                            if (resultDetech != null && Objects.equals(resultDetech, "ok")) {
                                 try {
                                     imgBase64Female = Util.convertBitmapToBase64(bitmap);
+                                    mainActivity.femaleImage = bitmap;
                                 } catch (IOException e) {
                                     throw new RuntimeException(e);
                                 }
                                 isCheckSetImageFemale = true;
-                                fragmentPairingBinding.cvImageFemale.setVisibility(View.VISIBLE);
-                                fragmentPairingBinding.imgFemale.setImageBitmap(bitmap);
+//                                fragmentPairingBinding.cvImageFemale.setVisibility(View.VISIBLE);
+//                                fragmentPairingBinding.imgFemale.setImageBitmap(bitmap);
                             } else {
                                 isCheckSetImageFemale = false;
+                                mainActivity.femaleImage = null;
                             }
 
                         }, 4000);
-
                     } else {
-
                         detectionFace(bitmap);
                         Handler handler = new Handler();
                         handler.postDelayed(() -> {
-                            if (Objects.equals(resultDetech.toString(), "")) {
+                            if (resultDetech != null && Objects.equals(resultDetech, "ok")) {
                                 try {
                                     imgBase64Male = Util.convertBitmapToBase64(bitmap);
+                                    mainActivity.maleImage = bitmap;
                                 } catch (IOException e) {
                                     throw new RuntimeException(e);
                                 }
 //                                imgMalePath = uriToFilePath(selectedMediaUri);
 
                                 isCheckSetImageMale = true;
-                                fragmentPairingBinding.cvImageMale.setVisibility(View.VISIBLE);
-                                fragmentPairingBinding.imgMale.setImageBitmap(bitmap);
+//                                fragmentPairingBinding.cvImageMale.setVisibility(View.VISIBLE);
+//                                fragmentPairingBinding.imgMale.setImageBitmap(bitmap);
                             } else {
                                 isCheckSetImageMale = false;
+                                mainActivity.maleImage = null;
                             }
-
                         }, 4000);
                     }
-//
                 }
-//
-
             } catch (Exception e) {
             }
         }
-        hideHub();
-
     }
 
     private Bitmap rotaImageHadlee(Uri uri) {
@@ -531,24 +659,40 @@ public class PairingFragment extends Fragment {
     }
 
     private void openDialog(View view) {
-        View viewDialog = getLayoutInflater().inflate(R.layout.dialog_bottom_sheet_selected_home, null);
-        bottomSheetDialog = new BottomSheetDialog(requireContext());
-        bottomSheetDialog.setContentView(viewDialog);
-        ImageButton btnSelectImage = viewDialog.findViewById(R.id.btn_select_image);
-        ImageButton btnOpenCamera = viewDialog.findViewById(R.id.btn_open_camera);
 
-        btnSelectImage.setOnClickListener(new View.OnClickListener() {
+        bottomDialogBinding = DialogBottomSheetSelectedHomeBinding.inflate(LayoutInflater.from(getContext()));
+        bottomSheetDialog = new BottomSheetDialog(requireContext());
+        bottomSheetDialog.setContentView(bottomDialogBinding.getRoot());
+
+        setUpTextWatcher(bottomDialogBinding.edtEnterName);
+
+        if (!checkClickSetImageMale) {
+            // get name
+            femaleName = bottomDialogBinding.edtEnterName.getText().toString();
+        } else {
+            maleName = bottomDialogBinding.edtEnterName.getText().toString();
+        }
+
+        bottomDialogBinding.btnSelectImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openStorage();
+                if (isNameFilled)
+                    openStorage();
+                else {
+                    Toast.makeText(mainActivity, "Please enter name", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
-        btnOpenCamera.setOnClickListener(new View.OnClickListener() {
+        bottomDialogBinding.btnOpenCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 try {
-                    openCamera();
+                    if (isNameFilled)
+                        openCamera();
+                    else {
+                        Toast.makeText(mainActivity, "Please enter name", Toast.LENGTH_SHORT).show();
+                    }
                 } catch (FileNotFoundException e) {
                     throw new RuntimeException(e);
                 }
@@ -556,6 +700,26 @@ public class PairingFragment extends Fragment {
         });
         bottomSheetDialog.show();
     }
+
+    private void setUpTextWatcher(AppCompatEditText edtEnterName) {
+        edtEnterName.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                isNameFilled = true;
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+    }
+
 
     private void closeDialog() {
         if (bottomSheetDialog.isShowing()) {
@@ -573,8 +737,9 @@ public class PairingFragment extends Fragment {
 
 
     private String detectionFace(Bitmap bitmap) {
-
-
+        if (!kProgressHUD.isShowing()) {
+            kProgressHUD.show();
+        }
         resultDetech = "";
         FaceDetectorOptions options =
                 new FaceDetectorOptions.Builder()
@@ -586,36 +751,47 @@ public class PairingFragment extends Fragment {
                         .build();
 
         FaceDetector faceDetector = FaceDetection.getClient(options);
-////// Tải ảnh từ storage
-////        String imagePath = ...; // Đường dẫn tới ảnh trong storage
-//        Bitmap bitmap = BitmapFactory.decodeFile(imagePath);
+        // Tải ảnh từ storage
+        //        String imagePath = ...; // Đường dẫn tới ảnh trong storage
+        //        Bitmap bitmap = BitmapFactory.decodeFile(imagePath);
 
-// Tạo đối tượng InputImage từ bitmap
+        // Tạo đối tượng InputImage từ bitmap
         InputImage image = InputImage.fromBitmap(bitmap, 0);
 
-// Nhận dạng khuôn mặt từ ảnh
+        // Nhận dạng khuôn mặt từ ảnh
         Task<List<Face>> result = faceDetector.process(image)
                 .addOnSuccessListener(faces -> {
-//                    resultDetech.set(processFaceDetectionResult(faces));
-
                     resultDetech = processFaceDetectionResult(faces);
-                    if (!resultDetech.toString().equals("")) {
+                    if (!resultDetech.equals("ok")) {
                         myDialog = getDialog();
                         myDialog.setTitle("Can not process the face recognition");
-                        myDialog.setContent(resultDetech.toString());
-                        myDialog.setContentButton("Ok");
+                        myDialog.setContent(resultDetech);
+                        myDialog.setContentButton("OK");
                         myDialog.show();
+                    } else {
+                        if (!checkClickSetImageMale) {
+                            fragmentPairingBinding.cvImageFemale.setVisibility(View.VISIBLE);
+                            fragmentPairingBinding.imgFemale.setImageBitmap(bitmap);
+                        } else {
+                            fragmentPairingBinding.cvImageMale.setVisibility(View.VISIBLE);
+                            fragmentPairingBinding.imgMale.setImageBitmap(bitmap);
+                        }
                     }
+                    hideHub();
                 })
                 .addOnFailureListener(e -> {
                     // Xử lý khi có lỗi xảy ra trong quá trình nhận dạng khuôn mặt
+                    fragmentPairingBinding.cvImageFemale.setVisibility(View.GONE);
+                    fragmentPairingBinding.cvImageMale.setVisibility(View.GONE);
+                    Toast.makeText(mainActivity, "Fail to recognize face", Toast.LENGTH_SHORT).show();
+                    hideHub();
                 });
 
         return resultDetech;
     }
 
     private String processFaceDetectionResult(List<Face> faces) {
-        String result = "";
+        String result = "ok";
         List<Face> faceList = new ArrayList<>();
 
         for (Face face : faces) {
@@ -625,10 +801,10 @@ public class PairingFragment extends Fragment {
             }
         }
         if (faceList.size() == 0) {
-            return "No faces detected";
+            return NO_FACE_DETECTED;
         }
         if (faceList.size() > 1) {
-            return "more than one face is recognized";
+            return MORE_THAN_ONE_FACE;
         }
 //
 
@@ -702,6 +878,10 @@ public class PairingFragment extends Fragment {
         fragmentPairingBinding.imgMale.setImageDrawable(null);
         fragmentPairingBinding.cvImageFemale.setVisibility(View.GONE);
         fragmentPairingBinding.cvImageMale.setVisibility(View.GONE);
+
+        fragmentPairingBinding.btnSelectPersonMale.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.img_add_male));
+        fragmentPairingBinding.btnSelectPersonFemale.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.img_add_female));
+
         isCheckSetImageFemale = false;
         isCheckSetImageMale = false;
         imgBase64Female = "";

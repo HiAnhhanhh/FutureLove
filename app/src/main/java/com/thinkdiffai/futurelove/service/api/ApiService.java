@@ -64,7 +64,16 @@ public interface ApiService {
             @Header(Server.KEY_HEADER2) String imageLink2,
             @Query("device_them_su_kien") String deviceThemSuKien,
             @Query("ip_them_su_kien") String ipThemSuKien,
-            @Query("id_user") int userId,
+            @Query("id_user") long userId,
+            @Query("ten_nam") String tenNam,
+            @Query("ten_nu") String tenNu
+    );
+
+    @GET(Server.URI_CREATE_IMPLICIT_DATA)
+    Call<Object> postImplicitEvent(
+            @Query("device_them_su_kien") String deviceThemSuKien,
+            @Query("ip_them_su_kien") String ipThemSuKien,
+            @Query("id_user") long userId,
             @Query("ten_nam") String tenNam,
             @Query("ten_nu") String tenNu
     );
@@ -145,5 +154,18 @@ public interface ApiService {
     // get events theo user
     @GET(Server.URI_EVENTS_USER + "{page}")
     Call<EventsUser> getEventUser(@Path("page") long id);
+
+    @GET(Server.URI_DELETE_ACCOUNT + "{user_id}")
+    Call<Object> deleteAccount(@Path("user_id") long id);
+
+    // CHANGE PASSWORD
+    @FormUrlEncoded
+    @POST(Server.URI_CHANGE_PASSWORD+"{page}")
+    Call<Object> Change_Password(
+            @Path("page")long id,
+            @Field("email_or_username") String email,
+            @Field("oldPassword") String oldpassword,
+            @Field("newPassword") String newpassword
+    );
 }
 

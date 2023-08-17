@@ -17,10 +17,10 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.thinkdiffai.futurelove.R;
-import com.thinkdiffai.futurelove.controller.CityCalledByIpApi;
 import com.thinkdiffai.futurelove.databinding.FragmentCommentBinding;
 import com.thinkdiffai.futurelove.model.comment.CommentList;
 import com.thinkdiffai.futurelove.model.comment.Comment;
+import com.thinkdiffai.futurelove.model.comment.CommentUser;
 import com.thinkdiffai.futurelove.service.api.ApiService;
 import com.thinkdiffai.futurelove.service.api.RetrofitClient;
 import com.thinkdiffai.futurelove.service.api.Server;
@@ -60,6 +60,7 @@ public class CommentFragment extends Fragment {
     private boolean isLoadingMore;
 
     private boolean isLastPage;
+    private List<CommentUser> commentList;
 
     @Nullable
     @Override
@@ -106,7 +107,7 @@ public class CommentFragment extends Fragment {
         fragmentCommentBinding.btnTimeline.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                goToEventFragment();
+                goToTimeLineFragment();
             }
         });
         fragmentCommentBinding.btnUserAccount.setOnClickListener(new View.OnClickListener() {
@@ -132,6 +133,7 @@ public class CommentFragment extends Fragment {
     }
     private void goToUserDetailFragment(){
         NavHostFragment.findNavController(CommentFragment.this).navigate(R.id.action_commentFragment_to_userDetailFragment);
+        mainActivity.commentToUserDetail = true;
     }
     private void initListenerCommentNew() {
 
