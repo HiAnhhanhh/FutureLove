@@ -32,11 +32,10 @@
         <activity
             android:name=".view.activity.SignInSignUpActivity"
             android:exported="false"
-            android:windowSoftInputMode="adjustResize" />
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".view.activity.AddEventActivity"
-            android:exported="true"
-            android:windowSoftInputMode="adjustResize" />
+            android:exported="true" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -56,7 +55,7 @@
         <activity
             android:name=".view.activity.MainActivity"
             android:exported="true"
-            android:windowSoftInputMode="adjustResize">
+            android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
