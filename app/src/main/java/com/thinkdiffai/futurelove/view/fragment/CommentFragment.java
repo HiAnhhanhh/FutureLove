@@ -174,7 +174,7 @@ public class CommentFragment extends Fragment {
         if (currentPage == 1) {
             commentsForAdapter.clear();
         }
-        ApiService apiService = RetrofitClient.getInstance(Server.DOMAIN2).getRetrofit().create(ApiService.class);
+        ApiService apiService = RetrofitClient.getInstance(Server.DOMAIN1).getRetrofit().create(ApiService.class);
         Call<CommentList> call = apiService.getListCommentNew(currentPage);
         call.enqueue(new Callback<CommentList>() {
             @SuppressLint("NotifyDataSetChanged")
@@ -209,7 +209,7 @@ public class CommentFragment extends Fragment {
         if (currentPage == 1) {
             commentsForAdapter.clear();
         }
-        ApiService apiService = RetrofitClient.getInstance(Server.DOMAIN2).getRetrofit().create(ApiService.class);
+        ApiService apiService = RetrofitClient.getInstance(Server.DOMAIN1).getRetrofit().create(ApiService.class);
         Call<CommentList> call = apiService.getListCommentNew(currentPage);
         call.enqueue(new Callback<CommentList>() {
             @SuppressLint("NotifyDataSetChanged")
@@ -217,6 +217,7 @@ public class CommentFragment extends Fragment {
             public void onResponse(@NonNull Call<CommentList> call, @NonNull Response<CommentList> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     CommentList _commentList = response.body();
+                    Log.d("check_newComment", "onResponse: thành công");
                     commentsForAdapter = _commentList.getComment();
                     numberOfElements = _commentList.getSophantu();
                     pageNumber = _commentList.getSotrang();
@@ -255,7 +256,7 @@ public class CommentFragment extends Fragment {
         fragmentCommentBinding.rcvComment.setAdapter(commentAdapter);
     }
 
-    private void iOnClickItem(int idToanBoSuKien, int soThuTuSuKienCon) {
+    private void iOnClickItem(long idToanBoSuKien, int soThuTuSuKienCon) {
         mainActivity.eventSummaryCurrentId = idToanBoSuKien;
         mainActivity.soThuTuSuKien = soThuTuSuKienCon;
         goToTimeLineFragment();

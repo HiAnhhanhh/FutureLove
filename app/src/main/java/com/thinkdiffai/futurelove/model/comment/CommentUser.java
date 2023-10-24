@@ -5,7 +5,7 @@ public class CommentUser {
     private String device_cmt;
     private String dia_chi_ip;
     private int id_comment;
-    private int id_toan_bo_su_kien;
+    private long id_toan_bo_su_kien;
     private int id_user;
     private String imageattach;
     private String link_nam_goc;
@@ -42,11 +42,11 @@ public class CommentUser {
         this.id_comment = id_comment;
     }
 
-    public int getId_toan_bo_su_kien() {
+    public long getId_toan_bo_su_kien() {
         return id_toan_bo_su_kien;
     }
 
-    public void setId_toan_bo_su_kien(int id_toan_bo_su_kien) {
+    public void setId_toan_bo_su_kien(long id_toan_bo_su_kien) {
         this.id_toan_bo_su_kien = id_toan_bo_su_kien;
     }
 
@@ -122,7 +122,7 @@ public class CommentUser {
         this.user_name = user_name;
     }
 
-    public CommentUser(String avatar_user, String device_cmt, String dia_chi_ip, int id_comment, int id_toan_bo_su_kien, int id_user, String imageattach, String link_nam_goc, String link_nu_goc, String location, String noi_dung_cmt, int so_thu_tu_su_kien, String thoi_gian_release, String user_name) {
+    public CommentUser(String avatar_user, String device_cmt, String dia_chi_ip, int id_comment, long id_toan_bo_su_kien, int id_user, String imageattach, String link_nam_goc, String link_nu_goc, String location, String noi_dung_cmt, int so_thu_tu_su_kien, String thoi_gian_release, String user_name) {
         this.avatar_user = avatar_user;
         this.device_cmt = device_cmt;
         this.dia_chi_ip = dia_chi_ip;

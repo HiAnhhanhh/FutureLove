@@ -9,7 +9,7 @@ public interface Server {
     String GET_CITY_NAME_FROM_IP = "https://ipinfo.io/";
 
     String URI_PAIRING = "getdata";
-    String URI_CREATE_IMPLICIT_DATA = "getdatangam";
+    String URI_CREATE_IMPLICIT_DATA = "getdata/skngam";
     String URI_GET_NETWORK_STATUS = "json/";
 
     String URI_LIST_EVENT_HOME = "lovehistory/page/";
@@ -23,8 +23,11 @@ public interface Server {
     String URI_POST_COMMENT = "lovehistory/comment";
     String URI_LINK_WEB_DETAIL = "http://datanomic.online/detail/";
 
-    String URI_LOG_IN = "login";
-    String URI_SIGN_UP = "register";
+//    String URI_LOG_IN = "login";
+
+    String URI_LOG_IN = "login/";
+//    String URI_SIGN_UP = "register";
+    String URI_SIGN_UP = "register/user/";
 
     // URI profile
     String URI_PROFILE_USER="profile/";

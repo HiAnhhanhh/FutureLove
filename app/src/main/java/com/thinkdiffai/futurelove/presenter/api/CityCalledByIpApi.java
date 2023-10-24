@@ -43,7 +43,6 @@ public class CityCalledByIpApi {
                     Log.e("City", "Error: " + response.message());
                 }
             }
-
             @Override
             public void onFailure(Call<IpInfoResponse> call, Throwable t) {
                 Log.e("City", "Error: " + t.getMessage());

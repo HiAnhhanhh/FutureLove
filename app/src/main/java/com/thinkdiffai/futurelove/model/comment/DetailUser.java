@@ -1,11 +1,13 @@
 package com.thinkdiffai.futurelove.model.comment;
 
 public class DetailUser {
-       private String  cover_pic, device_register, email, ip_register,
+
+       private String  covre_pic;
+       private String   device_register, email, ip_register,
                link_avatar, user_name;
 
-       public DetailUser(String cover_pic, String device_register, String email, String ip_register, String link_avatar, String user_name, int count_comment, int count_sukien, int count_view, int id_user) {
-              this.cover_pic = cover_pic;
+       public DetailUser(String device_register, String email, String ip_register, String link_avatar, String user_name, int count_comment, int count_sukien, int count_view, int id_user) {
+//              this.cover_pic = cover_pic;
               this.device_register = device_register;
               this.email = email;
               this.ip_register = ip_register;
@@ -19,13 +21,13 @@ public class DetailUser {
 
        private int count_comment, count_sukien, count_view, id_user;
 
-       public String getCover_pic() {
-              return cover_pic;
-       }
+//       public String getCover_pic() {
+//              return cover_pic;
+//       }
 
-       public void setCover_pic(String cover_pic) {
-              this.cover_pic = cover_pic;
-       }
+//       public void setCover_pic(String cover_pic) {
+//              this.cover_pic = cover_pic;
+//       }
 
        public String getDevice_register() {
               return device_register;

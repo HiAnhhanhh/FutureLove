@@ -5,13 +5,16 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
 
 import com.thinkdiffai.futurelove.R;
 import com.thinkdiffai.futurelove.databinding.ActivityMainBinding;
+import com.thinkdiffai.futurelove.view.fragment.HomeFragment;
 
 import io.github.rupinderjeet.kprogresshud.KProgressHUD;
 
@@ -38,7 +41,9 @@ public class MainActivity extends AppCompatActivity {
     private boolean userLoggedIn = false;
 
     private boolean loginState;
-    public int eventSummaryCurrentId = -1;
+    public long eventSummaryCurrentId = -1;
+
+    private String user_id;
 
     public int soThuTuSuKien = 0;
 

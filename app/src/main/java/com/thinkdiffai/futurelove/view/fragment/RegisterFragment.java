@@ -49,10 +49,11 @@ public class RegisterFragment extends Fragment {
     private KProgressHUD kProgressHUD;
     private final String MY_OWN_TAG = "PHONG";
 
+
     private final String EXISTED_ACCOUNT_STR = "{message=Account already exists!}";
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentRegisterBinding.inflate(inflater, container, false);
         signInSignUpActivity = (SignInSignUpActivity) getActivity();
@@ -193,6 +194,7 @@ public class RegisterFragment extends Fragment {
         Log.i(MY_OWN_TAG, "clickOnRegisterBtn");
         // show dialog
         binding.btnRegister.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
                 // Step 1: Check valid forms
@@ -244,30 +246,31 @@ public class RegisterFragment extends Fragment {
             @Override
             public void onApiCallFailed(Throwable t) {
             }
-        },username , email, password);
+        }, email, password);
     }
 
     private void navToLoginFragment() {
         NavHostFragment.findNavController(RegisterFragment.this).navigate(R.id.action_registerFragment_to_loginFragment);
     }
 
-    private void callSignUpApi(QueryValueCallback callback, String userName, String email, String password) {
+    private void callSignUpApi(QueryValueCallback callback, String email, String password) {
         Log.i(MY_OWN_TAG, "callSignUpApi");
         if (!kProgressHUD.isShowing()) {
             kProgressHUD.show();
         }
         // Call login Api
-        ApiService apiService = RetrofitClient.getInstance(Server.DOMAIN2).getRetrofit().create(ApiService.class);
+        ApiService apiService = RetrofitClient.getInstance(Server.DOMAIN1).getRetrofit().create(ApiService.class);
         Log.i(MY_OWN_TAG, "API Service: " + apiService);
-        Call<Object> call = apiService.signUp(email, password, userName, "abc.jpg", "1.1.1.1", "Nokia 1280");
+        Call<Object> call = apiService.signUp(email, password,"abc.jpg", "1.1.1.1", "Nokia 1280");
         Log.d("PHONG", "api call: " + call.toString());
         call.enqueue(new Callback<Object>() {
             @Override
             public void onResponse(Call<Object> call, Response<Object> response) {
+                Log.d("Phong", "onResponse: "+ response.body());
                 if (response.isSuccessful() && response.body() != null) {
                     Log.i(MY_OWN_TAG, "response.body() calling");
                     callback.onQueryValueReceived(response.body().toString());
-                    Log.d("PHONG", "callback: " + response.body().toString());
+                    Log.d("PHONG", "callback: " + response.body());
                 }
                 if (kProgressHUD.isShowing()) {
                     kProgressHUD.dismiss();

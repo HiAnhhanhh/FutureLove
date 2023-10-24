@@ -9,7 +9,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.Rect;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -20,12 +19,9 @@ import android.text.InputType;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -40,7 +36,6 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.viewpager2.widget.ViewPager2;
 
-import com.thinkdiffai.futurelove.DbStorage.EventHistoryDb;
 import com.thinkdiffai.futurelove.R;
 import com.thinkdiffai.futurelove.databinding.FragmentTimelineBinding;
 import com.thinkdiffai.futurelove.model.DetailEvent;
@@ -74,7 +69,6 @@ import io.github.rupinderjeet.kprogresshud.KProgressHUD;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.http.Field;
 
 public class TimelineFragment extends Fragment {
     private static final int REQUEST_CODE_PERMISSIONS_STORAGE = 101;
@@ -387,13 +381,13 @@ public class TimelineFragment extends Fragment {
             public void onResponse(Call<Object> call, retrofit2.Response<Object> response) {
                 if (response.isSuccessful() && response.body() != null) {
 //                    xu ly sau khi comment
+                    Log.d("check_post_comment", "onResponse: Thanh Cong");
                     getDataComment(mainActivity.soThuTuSuKien, mainActivity.eventSummaryCurrentId);
                 }
                 if (kProgressHUD.isShowing()) {
                     kProgressHUD.dismiss();
                 }
             }
-
             @Override
             public void onFailure(Call<Object> call, Throwable t) {
                 Toast.makeText(getActivity(), t.toString() + "", Toast.LENGTH_SHORT).show();
@@ -418,7 +412,7 @@ public class TimelineFragment extends Fragment {
         }
 //        initViewpagerEvent
         detailEventList = new ArrayList<>();
-        eventTimelineAdapter = new EventTimelineAdapter(detailEventList, this::iOnClickAddEvent, this::iOnScrollEventList, getContext());
+        eventTimelineAdapter = new EventTimelineAdapter(detailEventList, id_event -> iOnClickAddEvent(id_event), this::iOnScrollEventList, getContext());
         fragmentTimelineBinding.viewpagerTimeline.setAdapter(eventTimelineAdapter);
 
 //        initRcvComment
@@ -434,7 +428,7 @@ public class TimelineFragment extends Fragment {
         mainActivity.soThuTuSuKien = soThuTuSuKien;
     }
 
-    private void iOnClickAddEvent(int id_event) {
+    private void iOnClickAddEvent(long id_event) {
         Intent intent = new Intent(getActivity(), AddEventActivity.class);
         // intent.putExtra("id_summary_event", id_summary_event);
         // intent.putExtra("id_event", id_event);
@@ -442,7 +436,7 @@ public class TimelineFragment extends Fragment {
 
         Bundle bundle = new Bundle();
         //bundle.putLong("id_summary_event", id_summary_event);
-        bundle.putInt("id_event", id_event);
+        bundle.putLong("id_event",  id_event);
         intent.putExtra("send_id", bundle);
         startActivity(intent);
 
@@ -497,7 +491,7 @@ public class TimelineFragment extends Fragment {
 
     // Get comments list of each event
     @SuppressLint("NotifyDataSetChanged")
-    private void getDataComment(int soThuTuSuKien, int idToanBoSuKien) {
+    private void getDataComment(int soThuTuSuKien, long idToanBoSuKien) {
         commentsForAdapter.clear();
 //        if (!kProgressHUD.isShowing()) {
 //            kProgressHUD.show();
@@ -656,7 +650,7 @@ public class TimelineFragment extends Fragment {
 //        } else {
 //            return null;
 //        }
-        ApiService getIpApi = RetrofitIp.getInstance("http://ip-api.com/").getRetrofit().create(ApiService.class);
+        ApiService getIpApi = RetrofitIp.getInstance("https://sakaivn.online/").getRetrofit().create(ApiService.class);
         Call<NetworkModel> call = getIpApi.getIpApiResponse();
 
         call.enqueue(new Callback<NetworkModel>() {

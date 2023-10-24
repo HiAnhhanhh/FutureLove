@@ -27,12 +27,13 @@ public class DeleteAccount implements CommonCrud{
         if (context instanceof FragmentActivity) {
             FragmentActivity fragmentActivity = (FragmentActivity) context;
             // Handle delete account action using the fragment activity
-            ApiService apiService = RetrofitClient.getInstance(Server.DOMAIN2).getRetrofit().create(ApiService.class);
+            ApiService apiService = RetrofitClient.getInstance(Server.DOMAIN3).getRetrofit().create(ApiService.class);
             Call<Object> callDeleteAccount = apiService.deleteAccount(id);
             callDeleteAccount.enqueue(new Callback<Object>() {
                 @Override
                 public void onResponse(Call<Object> call, Response<Object> response) {
                     if (response.isSuccessful() && response.body() != null) {
+                        Log.d("check_delete", "onResponse: ");
                         Toast.makeText(fragmentActivity, "Delete Account Complete!", Toast.LENGTH_SHORT).show();
                         Log.i("DELETE_ACCOUNT", "Delete Account Complete!");
                     }

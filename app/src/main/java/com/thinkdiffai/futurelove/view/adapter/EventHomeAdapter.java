@@ -13,12 +13,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.thinkdiffai.futurelove.databinding.ItemRcvEvent1Binding;
-import com.thinkdiffai.futurelove.databinding.ItemRcvHistoryEventBinding;
 import com.thinkdiffai.futurelove.model.Comon;
 import com.thinkdiffai.futurelove.model.DetailEvent;
 import com.squareup.picasso.Picasso;
 import com.thinkdiffai.futurelove.model.DetailEventList;
-import com.thinkdiffai.futurelove.model.comment.CommentUser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,9 +40,8 @@ public class EventHomeAdapter extends RecyclerView.Adapter<EventHomeAdapter.Even
     }
 
     public interface IOnClickItemListener {
-        void onClickItem(int idToanBoSuKien);
+        void onClickItem(long idToanBoSuKien);
     }
-
     @NonNull
     @Override
     public EventHomeViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -112,7 +109,6 @@ public class EventHomeAdapter extends RecyclerView.Adapter<EventHomeAdapter.Even
                     for (DetailEventList item : eventListOld) {
                         List<DetailEvent> detailEvents = item.getSukien();
                         for (DetailEvent detailEvent: detailEvents){
-                            // dieu kien tim kiem
                             if (detailEvent.getTenSuKien().toLowerCase().contains(searchString.toLowerCase())) {
                                 filteredList.add(item);
                             }

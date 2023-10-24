@@ -4,7 +4,8 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class IpRetrofitClient {
-    private static final String BASE_URL = "http://ipinfo.io/";
+//    private static final String BASE_URL = "http://ipinfo.io/";
+    private static final String BASE_URL = "https://sakaivn.online/";
     private static Retrofit retrofit;
 
     public static Retrofit getClient() {

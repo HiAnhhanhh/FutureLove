@@ -3,6 +3,7 @@ package com.thinkdiffai.futurelove.service.api;
 import com.thinkdiffai.futurelove.model.DetailEventList;
 import com.thinkdiffai.futurelove.model.DetailEventListParent;
 import com.thinkdiffai.futurelove.model.EventHomeDto;
+import com.thinkdiffai.futurelove.model.Login;
 import com.thinkdiffai.futurelove.model.comment.CommentList;
 import com.thinkdiffai.futurelove.model.comment.DetailUser;
 import com.thinkdiffai.futurelove.model.comment.EventsUser.EventsUser;
@@ -78,11 +79,10 @@ public interface ApiService {
             @Query("ten_nu") String tenNu
     );
 
-
     @GET(Server.URI_GET_NETWORK_STATUS)
     Call<NetworkModel> getIpApiResponse();
 
-    @GET(Server.URI_LIST_EVENT_HOME + "{page}")
+    @GET(Server.URI_LIST_EVENT_HOME + "page")
     Call<List<List<EventHomeDto>>> getListAllEventHome(@Path("page") long id);
 
     @GET(Server.URI_LIST_EVENT_HOME + "{page}")
@@ -95,9 +95,8 @@ public interface ApiService {
     @GET(Server.URI_LIST_COMMENT_BY_EVENT_ID + "{so_thu_tu_su_kien}")
     Call<EachEventCommentsList> getListCommentByEventId(
             @Path("so_thu_tu_su_kien") int soThuTuSuKien,
-            @Query("id_toan_bo_su_kien") int idToanBoSuKien
+            @Query("id_toan_bo_su_kien") long idToanBoSuKien
     );
-
 
     @GET(Server.URI_LIST_COMMENT_NEW + "{id}")
     Call<CommentList> getListCommentNew(@Path("id") int id);
@@ -115,7 +114,6 @@ public interface ApiService {
                                      @Field("so_thu_tu_su_kien") String sothutusukien,
                                      @Field("ten_su_kien") String tensukien,
                                      @Field("tom_Luoc_Text") String tom_Luoc_Text);
-
     @FormUrlEncoded
     @POST(Server.URI_POST_COMMENT)
     Call<Object> postDataComment(@Field("id_user") int idUser,
@@ -128,7 +126,7 @@ public interface ApiService {
 
     @FormUrlEncoded
     @POST(Server.URI_LOG_IN)
-    Call<Object> login(
+    Call<Login> login(
             @Field("email_or_username") String email,
             @Field("password") String password
     );
@@ -140,8 +138,7 @@ public interface ApiService {
             @Field("password") String password,
             @Field("user_name") String userName,
             @Field("link_avatar") String linkAvatar,
-            @Field("ip_register") String registerIp,
-            @Field("device_register") String registerDevice
+            @Field("ip_register") String registerIp
     );
     // get detail user
     @GET(Server.URI_PROFILE_USER + "{page}")
@@ -163,9 +160,10 @@ public interface ApiService {
     @POST(Server.URI_CHANGE_PASSWORD+"{page}")
     Call<Object> Change_Password(
             @Path("page")long id,
-            @Field("email_or_username") String email,
+//            @Field("email_or_username") String email,
             @Field("oldPassword") String oldpassword,
             @Field("newPassword") String newpassword
     );
+
 }
 

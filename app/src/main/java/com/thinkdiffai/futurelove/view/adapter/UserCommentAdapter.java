@@ -31,7 +31,7 @@ public class UserCommentAdapter extends RecyclerView.Adapter<UserCommentAdapter.
     public final IOnClickItemListener iOnClickItem;
 
     public interface IOnClickItemListener {
-        void onClickItem(int idToanBoSuKien, int soThuTuSuKienCon);
+        void onClickItem(long idToanBoSuKien, int soThuTuSuKienCon);
     }
 
     public void setData(List<CommentUser> comments) {
@@ -115,7 +115,7 @@ public class UserCommentAdapter extends RecyclerView.Adapter<UserCommentAdapter.
         holder.itemCommentBinding.layoutComment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                iOnClickItem.onClickItem(comment.getId_toan_bo_su_kien(), comment.getId_toan_bo_su_kien());
+                iOnClickItem.onClickItem(comment.getId_toan_bo_su_kien(), (int) comment.getId_toan_bo_su_kien());
             }
         });
     }

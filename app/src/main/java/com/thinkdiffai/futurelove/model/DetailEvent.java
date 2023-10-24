@@ -9,11 +9,11 @@ public class DetailEvent {
     @SerializedName("count_view")
     private int countView;
     @SerializedName("id")
-    private int id;
+    private long id;
     @SerializedName("id_template")
     private int idTemplate;
     @SerializedName("id_toan_bo_su_kien")
-    private int idToanBoSuKien;
+    private long idToanBoSuKien;
     @SerializedName("id_user")
     private int idUser;
     @SerializedName("link_da_swap")
@@ -41,7 +41,7 @@ public class DetailEvent {
     @SerializedName("ten_su_kien")
     private String tenSuKien;
 
-    public DetailEvent(int countComment, int countView, int id, int idTemplate, int idToanBoSuKien, int idUser, String linkDaSwap, String linkNamChuaSwap, String linkNamGoc, String linkNuChuaSwap, String linkNuGoc, String noiDungSuKien, int phantramLoading, String realTime, double soThuTuSuKien, String tenNam, String tenNu, String tenSuKien) {
+    public DetailEvent(int countComment, int countView, long id, int idTemplate, int idToanBoSuKien, int idUser, String linkDaSwap, String linkNamChuaSwap, String linkNamGoc, String linkNuChuaSwap, String linkNuGoc, String noiDungSuKien, int phantramLoading, String realTime, double soThuTuSuKien, String tenNam, String tenNu, String tenSuKien) {
         this.countComment = countComment;
         this.countView = countView;
         this.id = id;
@@ -78,11 +78,11 @@ public class DetailEvent {
         this.countView = countView;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -94,8 +94,8 @@ public class DetailEvent {
         this.idTemplate = idTemplate;
     }
 
-    public int getIdToanBoSuKien() {
-        return idToanBoSuKien;
+    public long getIdToanBoSuKien() {
+        return idToanBoSuKien ;
     }
 
     public void setIdToanBoSuKien(int idToanBoSuKien) {

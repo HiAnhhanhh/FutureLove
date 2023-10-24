@@ -2,8 +2,6 @@ package com.thinkdiffai.futurelove.model.comment;
 
 import com.google.gson.annotations.SerializedName;
 
-import retrofit2.http.Field;
-
 public class Comment {
     @SerializedName("avatar_user")
     private String avatarUser;
@@ -14,7 +12,7 @@ public class Comment {
     @SerializedName("id_comment")
     private int idComment;
     @SerializedName("id_toan_bo_su_kien")
-    private int idToanBoSuKien;
+    private long idToanBoSuKien;
     @SerializedName("id_user")
     private int idUser;
     @SerializedName("imageattach")
@@ -48,7 +46,7 @@ public class Comment {
         this.userName = userName;
     }
 
-    public Comment(int idUser, String content, String device, int idSummary, int soThuTuSuKien, String diaChiIp, String imageAttach) {
+    public Comment(int idUser, String content, String device, long idSummary, int soThuTuSuKien, String diaChiIp, String imageAttach) {
         this.deviceCmt = device;
         this.diaChiIp = diaChiIp;
         this.idToanBoSuKien = idSummary;
@@ -90,11 +88,11 @@ public class Comment {
         this.idComment = idComment;
     }
 
-    public int getIdToanBoSuKien() {
+    public long getIdToanBoSuKien() {
         return idToanBoSuKien;
     }
 
-    public void setIdToanBoSuKien(int idToanBoSuKien) {
+    public void setIdToanBoSuKien(long idToanBoSuKien) {
         this.idToanBoSuKien = idToanBoSuKien;
     }
 

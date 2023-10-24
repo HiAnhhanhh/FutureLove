@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.AppCompatImageView;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -20,8 +19,6 @@ import com.thinkdiffai.futurelove.R;
 import com.thinkdiffai.futurelove.databinding.FragmentShowFullImageBinding;
 import com.thinkdiffai.futurelove.databinding.ItemTimelineEventBinding;
 import com.thinkdiffai.futurelove.model.DetailEvent;
-import com.thinkdiffai.futurelove.model.DetailEventList;
-import com.thinkdiffai.futurelove.model.EventHomeDto;
 import com.squareup.picasso.Picasso;
 import com.thinkdiffai.futurelove.view.fragment.dialog.MyOwnDialogFragment;
 
@@ -45,7 +42,7 @@ public class EventTimelineAdapter extends RecyclerView.Adapter<EventTimelineAdap
     public final IOnClickAddEventListener iOnClickAddEvent;
     public final IOnScrollEventList iOnScrollEventList;
     public interface IOnClickAddEventListener {
-        void onClickAddEvent(int id_event);
+        void onClickAddEvent(long id_event);
     }
 
     // Interface for callback soThuTuSuKien where it scrolls to

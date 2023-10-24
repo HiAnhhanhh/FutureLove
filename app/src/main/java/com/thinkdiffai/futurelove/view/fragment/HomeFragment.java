@@ -1,6 +1,7 @@
 package com.thinkdiffai.futurelove.view.fragment;
 
 import android.annotation.SuppressLint;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -64,13 +65,26 @@ public class HomeFragment extends Fragment {
             initUi();
             getData(currentPage);
             initListener();
-
+            initData();
         } catch (Exception e) {
             Log.e("ExceptionRuntime", e.toString());
         }
 
-
         return fragmentHomeBinding.getRoot();
+    }
+
+    private void initData() {
+        Log.d("CHECK_LOGIN_FRAGMENT", "initData: oke");
+        Bundle data = getArguments();
+        Log.d("CHECK_LOGIN_FRAGMENT", "initData: oke");
+        if(data!=null){
+            String user_id = data.getString("user_id");
+            Log.d("id_user_detail", "initData: "+ user_id);
+            SharedPreferences sharedPreferences = getActivity().getSharedPreferences("id_user",0);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString("id_user",user_id);
+            editor.commit();
+        }
     }
 
     @Override
@@ -174,12 +188,12 @@ public class HomeFragment extends Fragment {
         linearLayoutManager = new LinearLayoutManager(getActivity(), GridLayoutManager.VERTICAL, false);
         fragmentHomeBinding.rcvHome.setLayoutManager(linearLayoutManager);
         // It automatically get the id of all events in EventHomeAdapter and assign into this::goToEventDetail
-        eventHomeAdapter = new EventHomeAdapter(eventList, this::goToEventDetail, getContext());
+        eventHomeAdapter = new EventHomeAdapter(eventList, idToanBoSuKien -> goToEventDetail(idToanBoSuKien), getContext());
         fragmentHomeBinding.rcvHome.setAdapter(eventHomeAdapter);
     }
 
     // Current page is 4 because it is Timeline Fragment
-    private void goToEventDetail(int idToanBoSuKien) {
+    private void goToEventDetail(long idToanBoSuKien) {
         mainActivity.eventSummaryCurrentId = idToanBoSuKien;
         goToTimeLineFragment();
 //        mainActivity.setCurrentPage(4);
@@ -189,13 +203,16 @@ public class HomeFragment extends Fragment {
         if (!kProgressHUD.isShowing() && isLoadingMore) {
             kProgressHUD.show();
         }
-        ApiService apiService = RetrofitClient.getInstance(Server.DOMAIN2).getRetrofit().create(ApiService.class);
+        ApiService apiService = RetrofitClient.getInstance(Server.DOMAIN1).getRetrofit().create(ApiService.class);
         Call<DetailEventListParent> call = apiService.getEventListForHome(currentPage);
+        Log.d("check_response", "getData: "+ call.toString());
         call.enqueue(new Callback<DetailEventListParent>() {
             @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onResponse(Call<DetailEventListParent> call, Response<DetailEventListParent> response) {
                 if (response.isSuccessful() && response.body() != null) {
+                    Log.d("check_response", "onResponse: pke");
+                    Log.d("check_response", "onResponse: "+ response.body().getListSukien().size());
                     DetailEventListParent detailEventListParent = response.body();
                     List<DetailEventList> detailEventLists = detailEventListParent.getListSukien();
                     if (!detailEventLists.isEmpty()){

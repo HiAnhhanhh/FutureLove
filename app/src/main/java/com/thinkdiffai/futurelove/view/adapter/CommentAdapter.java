@@ -42,7 +42,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
     private Context context;
 
     public interface IOnClickItemListener {
-        void onClickItem(int idToanBoSuKien, int soThuTuSuKienCon);
+        void onClickItem(long idToanBoSuKien, int soThuTuSuKienCon);
     }
 
     public void setData(List<Comment> comments) {

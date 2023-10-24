@@ -61,6 +61,8 @@ public class UserDetailFragment extends Fragment {
     private List<CommentUser> commentList = new ArrayList<>();
     private UserCommentAdapter commentAdapter;
 
+    private int id_user ;
+
     private MainActivity mainActivity;
     private KProgressHUD kProgressHUD;
     private LinearLayoutManager linearLayoutManager;
@@ -74,11 +76,18 @@ public class UserDetailFragment extends Fragment {
         binding = FragmentUserDetailBinding.inflate(getLayoutInflater());
         // Initialize UI
         initUi();
+        initData();
         // Load user details from API
         loadingUserDetailFromApi();
         // Load user comments from API
         loadingUserCommentsFromApi();
         return binding.getRoot();
+    }
+
+    private void initData() {
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("id_user",0);
+        id_user = Integer.parseInt(sharedPreferences.getString("id_user", "no")) ;
+        Log.d("id_user_detail", "initData: "+ id_user);
     }
 
     @Override
@@ -117,7 +126,7 @@ public class UserDetailFragment extends Fragment {
         binding.rcvPersonalComments.setLayoutManager(linearLayoutManager);
         commentAdapter = new UserCommentAdapter(commentList, new UserCommentAdapter.IOnClickItemListener() {
             @Override
-            public void onClickItem(int idToanBoSuKien, int soThuTuSuKienCon) {
+            public void onClickItem(long idToanBoSuKien, int soThuTuSuKienCon) {
                 // store id_toan_bo_su_kien to open the detail event
                 mainActivity.eventSummaryCurrentId = idToanBoSuKien;
                 mainActivity.soThuTuSuKien = soThuTuSuKienCon;
@@ -136,13 +145,14 @@ public class UserDetailFragment extends Fragment {
 //            kProgressHUD.show();
 //        }
         ApiService apiService = RetrofitClient.getInstance(Server.DOMAIN2).getRetrofit().create(ApiService.class);
-        Call<UserComment> call = apiService.getCommentUser(1);
+        Call<UserComment> call = apiService.getCommentUser(id_user);
         call.enqueue(new Callback<UserComment>() {
             @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onResponse(Call<UserComment> call, Response<UserComment> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     UserComment userComment = response.body();
+                    Log.d("check_comment_user", "onResponse: " );
                     commentList = userComment.getComment_user();
                     if (!commentList.isEmpty()) {
                         commentAdapter.setData(commentList);
@@ -157,6 +167,7 @@ public class UserDetailFragment extends Fragment {
             @Override
             public void onFailure(Call<UserComment> call, Throwable t) {
                 Toast.makeText(getActivity(), t.getMessage() + "", Toast.LENGTH_SHORT).show();
+                Log.d("check_user_comment", "onFailure: "+ t.getMessage());
 //                if (kProgressHUD.isShowing()) {
 //                    kProgressHUD.dismiss();
 //                }
@@ -165,15 +176,16 @@ public class UserDetailFragment extends Fragment {
     }
 
     private void getDataUserDetail() {
-
-        ApiService apiService = RetrofitClient.getInstance(Server.DOMAIN2).getRetrofit().create(ApiService.class);
+        ApiService apiService = RetrofitClient.getInstance(Server.DOMAIN1).getRetrofit().create(ApiService.class);
         // Id for test
-        Call<DetailUser> call = apiService.getProfileUser(1);
+        Call<DetailUser> call = apiService.getProfileUser(id_user);
+        Log.d("check_user", "getDataUserDetail: "+ call.toString());
         call.enqueue(new Callback<DetailUser>() {
             @Override
             public void onResponse(Call<DetailUser> call, Response<DetailUser> response) {
                 if (response.isSuccessful()) {
                     DetailUser detailUsers = response.body();
+                    Log.d("check_user", "onResponse: "+ detailUsers.getUser_name() + detailUsers.getId_user()+ detailUsers.getEmail());
                     binding.tvUserName.setText(String.valueOf(Objects.requireNonNull(detailUsers).getUser_name()));
                     binding.tvUserEventsNumber.setText(String.valueOf(detailUsers.getCount_sukien()));
                     binding.tvUserCommentNumber.setText(String.valueOf(detailUsers.getCount_comment()));
@@ -213,7 +225,6 @@ public class UserDetailFragment extends Fragment {
     private void clickShowDropDown() {
         PopupMenu popupMenu = new PopupMenu(requireContext(), binding.btnShowDropDown);
         popupMenu.getMenuInflater().inflate(R.menu.drop_down_menu, popupMenu.getMenu());
-
         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
@@ -439,12 +450,12 @@ public class UserDetailFragment extends Fragment {
     private  void ChangePassWordAPi(long id,String name,String oldpassword,String newpassword){
         // Call login Api
         ApiService apiService = RetrofitClient.getInstance(Server.DOMAIN2).getRetrofit().create(ApiService.class);
-        Call<Object> call = apiService.Change_Password( id,name,oldpassword,newpassword);
+        Call<Object> call = apiService.Change_Password(id,oldpassword,newpassword);
         call.enqueue(new Callback<Object>() {
             @Override
             public void onResponse(Call<Object> call, Response<Object> response) {
                 if (response.isSuccessful()) {
-                    // response.body() chứa dữ liệu trả về từ API
+                    Log.d("check_password", "onResponse: oke");
                 } else {
                     Toast.makeText(getContext(), ""+response.body().toString(), Toast.LENGTH_SHORT).show();
                     // Xử lý lỗi khi API trả về mã lỗi
