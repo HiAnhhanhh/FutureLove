@@ -204,7 +204,7 @@ public class HomeFragment extends Fragment {
             kProgressHUD.show();
         }
         ApiService apiService = RetrofitClient.getInstance(Server.DOMAIN1).getRetrofit().create(ApiService.class);
-        Call<DetailEventListParent> call = apiService.getEventListForHome(currentPage);
+        Call<DetailEventListParent> call = apiService.getEventListForHome(1);
         Log.d("check_response", "getData: "+ call.toString());
         call.enqueue(new Callback<DetailEventListParent>() {
             @SuppressLint("NotifyDataSetChanged")

@@ -23,7 +23,6 @@ import android.widget.EditText;
 
 import com.thinkdiffai.futurelove.R;
 import com.thinkdiffai.futurelove.databinding.FragmentLoginBinding;
-import com.thinkdiffai.futurelove.model.Login;
 import com.thinkdiffai.futurelove.service.api.ApiService;
 import com.thinkdiffai.futurelove.service.api.QueryValueCallback;
 import com.thinkdiffai.futurelove.service.api.RetrofitClient;
@@ -173,9 +172,8 @@ public class LoginFragment extends Fragment {
             @Override
             public void onQueryValueReceived(String queryValue) {
                 if (!queryValue.contains("{ketqua=")){
-                    navToMainActivity();
                     Log.d("PHONG", "queryValue = " + queryValue);
-
+                    navToMainActivity();
                     // Store LOGIN STATE not to login again
                     sharedPreferences = Objects.requireNonNull(getActivity()).getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -219,25 +217,29 @@ public class LoginFragment extends Fragment {
         myOwnDialogFragment.show((signInSignUpActivity).getSupportFragmentManager(), "login_dialog");
     }
 
-    private void callLoginApi(QueryValueCallback callback, String email, String password) {
+    private void callLoginApi(QueryValueCallback queryValueCallback, String email, String password) {
         if (!kProgressHUD.isShowing()) {
             kProgressHUD.show();
         }
+
         // Call login Api
-        ApiService apiService = RetrofitClient.getInstance(Server.DOMAIN1).getRetrofit().create(ApiService.class);
-        Call<Login> call = apiService.login(email, password);
-        call.enqueue(new Callback<Login>() {
+        ApiService apiService = RetrofitClient.getInstance(Server.DOMAIN2).getRetrofit().create(ApiService.class);
+        Call<Object> call = apiService.login(email, password);
+        Log.d("PHONG", "callLoginApi: "+ apiService);
+        call.enqueue(new Callback<Object>() {
             @Override
-            public void onResponse(Call<Login> call, Response<Login> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    callback.onQueryValueReceived(response.body().toString());
-                    Log.d("PHONG", "callback: " );
-                    String user_id = String.valueOf(response.body().getId_user());
-                    SharedPreferences sharedPreferences = getActivity().getSharedPreferences("id_user",0);
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putString("id_user",user_id);
-                    editor.commit();
-                    Log.d("id_user_detail", "onResponse: "+ user_id);
+            public void onResponse(Call<Object> call, Response<Object> response) {
+                Log.d("PHONG", "onResponse:" + response);
+
+                if (response.isSuccessful() ) {
+                    queryValueCallback.onQueryValueReceived(response.toString());
+                    Log.d("PHONG", "callback: "+ response );
+//                    String user_id = String.valueOf(response.body().getId_user());
+//                    SharedPreferences sharedPreferences = getActivity().getSharedPreferences("id_user",0);
+//                    SharedPreferences.Editor editor = sharedPreferences.edit();
+//                    editor.putString("id_user",user_id);
+//                    editor.commit();
+//                    Log.d("id_user_detail", "onResponse: "+ user_id);
                 }
                 if (kProgressHUD.isShowing()) {
                     kProgressHUD.dismiss();
@@ -245,7 +247,7 @@ public class LoginFragment extends Fragment {
             }
 
             @Override
-            public void onFailure(Call<Login> call, Throwable t) {
+            public void onFailure(Call<Object> call, Throwable t) {
                 if (kProgressHUD.isShowing()) {
                     kProgressHUD.dismiss();
                 }

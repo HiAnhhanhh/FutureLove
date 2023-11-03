@@ -94,7 +94,9 @@ public class Util {
 //        return result;
 //    }
 
-    public  static String uploadImage2(String imageBase64, Context context) {
+
+
+    public static String uploadImage2(String imageBase64, Context context) {
         OkHttpClient client = new OkHttpClient();
 
 //        String boundary = "Boundary-" + UUID.randomUUID().toString();

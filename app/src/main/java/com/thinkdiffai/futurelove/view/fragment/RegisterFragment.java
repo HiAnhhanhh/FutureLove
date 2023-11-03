@@ -259,7 +259,7 @@ public class RegisterFragment extends Fragment {
             kProgressHUD.show();
         }
         // Call login Api
-        ApiService apiService = RetrofitClient.getInstance(Server.DOMAIN1).getRetrofit().create(ApiService.class);
+        ApiService apiService = RetrofitClient.getInstance(Server.DOMAIN2).getRetrofit().create(ApiService.class);
         Log.i(MY_OWN_TAG, "API Service: " + apiService);
         Call<Object> call = apiService.signUp(email, password,"abc.jpg", "1.1.1.1", "Nokia 1280");
         Log.d("PHONG", "api call: " + call.toString());

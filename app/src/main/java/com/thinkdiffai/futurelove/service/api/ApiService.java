@@ -126,7 +126,7 @@ public interface ApiService {
 
     @FormUrlEncoded
     @POST(Server.URI_LOG_IN)
-    Call<Login> login(
+    Call<Object> login(
             @Field("email_or_username") String email,
             @Field("password") String password
     );

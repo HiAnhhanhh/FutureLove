@@ -1,9 +1,15 @@
 package com.thinkdiffai.futurelove.service.api;
 
 public interface Server {
-    String  DOMAIN1 = "http://14.225.7.221:9090/";
-    String  DOMAIN2 = "http://14.225.7.221:8989/";
-    String  DOMAIN3 = "http://127.0.0.1:8888/";
+//    String  DOMAIN1 = "http://14.225.7.221:9090/";
+//    String  DOMAIN2 = "http://14.225.7.221:8989/";
+//
+//
+//    String  DOMAIN3 = "http://127.0.0.1:8888/";
+    String DOMAIN1 = "https://metatechvn.store/";
+    String DOMAIN2 = "http://192.168.50.146:9090/";
+    String DOMAIN3 = "https://metatechvn.store/";
+
 
     String GET_NETWORK_API_DOMAIN = "http://ip-api.com/";
     String GET_CITY_NAME_FROM_IP = "https://ipinfo.io/";

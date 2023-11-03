@@ -76,7 +76,7 @@ public class UserDetailFragment extends Fragment {
         binding = FragmentUserDetailBinding.inflate(getLayoutInflater());
         // Initialize UI
         initUi();
-        initData();
+//        initData();
         // Load user details from API
         loadingUserDetailFromApi();
         // Load user comments from API
@@ -145,7 +145,7 @@ public class UserDetailFragment extends Fragment {
 //            kProgressHUD.show();
 //        }
         ApiService apiService = RetrofitClient.getInstance(Server.DOMAIN2).getRetrofit().create(ApiService.class);
-        Call<UserComment> call = apiService.getCommentUser(id_user);
+        Call<UserComment> call = apiService.getCommentUser(2);
         call.enqueue(new Callback<UserComment>() {
             @SuppressLint("NotifyDataSetChanged")
             @Override
