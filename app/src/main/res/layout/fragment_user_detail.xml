@@ -102,13 +102,17 @@
         <androidx.appcompat.widget.LinearLayoutCompat
             android:id="@+id/ll_user"
             android:layout_width="match_parent"
-            android:layout_height="152dp"
+            android:layout_height="wrap_content"
             android:gravity="center"
+            android:weightSum="5"
             android:orientation="horizontal">
 
             <androidx.appcompat.widget.LinearLayoutCompat
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:padding="5dp"
+                android:gravity="center"
                 android:orientation="vertical">
 
                 <androidx.cardview.widget.CardView
@@ -133,15 +137,29 @@
                     android:layout_height="@dimen/define_dimen_20"
                     android:fontFamily="@font/roboto_slab"
                     android:gravity="center"
-                    android:text="Username"
+                    android:text="@string/username"
                     android:textColor="@color/white"
                     android:textSize="16sp"
                     android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvEmail_user"
+                    android:fontFamily="@font/roboto_slab"
+                    android:gravity="center"
+                    android:text="nguyenvananm768678@gmail.com"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    android:textStyle="bold"/>
+
             </androidx.appcompat.widget.LinearLayoutCompat>
 
             <androidx.appcompat.widget.LinearLayoutCompat
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:layout_gravity="center"
                 android:layout_marginStart="20dp"
                 android:orientation="vertical">
 
@@ -247,6 +265,8 @@
                     android:textSize="16sp"
                     android:textStyle="bold" />
             </androidx.appcompat.widget.LinearLayoutCompat>
+
+
         </androidx.appcompat.widget.LinearLayoutCompat>
 
     </androidx.cardview.widget.CardView>

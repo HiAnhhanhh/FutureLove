@@ -7,6 +7,7 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -42,7 +43,7 @@ import com.thinkdiffai.futurelove.model.DetailEvent;
 import com.thinkdiffai.futurelove.model.DetailEventList;
 import com.thinkdiffai.futurelove.model.comment.eacheventcomment.EachEventCommentsList;
 import com.thinkdiffai.futurelove.model.EventHomeDto;
-import com.thinkdiffai.futurelove.model.comment.Comment;
+import com.thinkdiffai.futurelove.model.comment.CommentPage;
 import com.thinkdiffai.futurelove.model.comment.CommentList;
 import com.thinkdiffai.futurelove.modelfor4gdomain.NetworkModel;
 import com.thinkdiffai.futurelove.service.api.QueryValueCallback;
@@ -82,11 +83,12 @@ public class TimelineFragment extends Fragment {
     SimpleDateFormat dateFormat;
     private LinearLayoutManager linearLayoutManager;
     private CommentAdapter commentAdapter;
+    private int id_user;
 
     // this model is used to serialize with api callback model
     private CommentList pageCommentList;
 
-    private List<Comment> commentsForAdapter;
+    private List<CommentPage> commentsForAdapter;
     Handler handler;
     Runnable runnable;
     private String urlImageComment = "";
@@ -121,6 +123,21 @@ public class TimelineFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         navigateToOtherFragments();
+        initData();
+    }
+
+    private void initData() {
+        initIdUser();
+    }
+
+    private void initIdUser() {
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("id_user",0);
+        String id_user_str = sharedPreferences.getString("id_user", "");
+        if (id_user_str == "") {
+            id_user = 0;
+        }else{
+            id_user = Integer.parseInt(id_user_str);
+        }
     }
 
     private void navigateToOtherFragments() {
@@ -338,7 +355,7 @@ public class TimelineFragment extends Fragment {
             kProgressHUD.show();
         }
         String deviceName = Build.MANUFACTURER + Build.MODEL;
-        Comment comment = new Comment(
+        CommentPage comment = new CommentPage(
                 1,
                 content,
                 deviceName,
@@ -498,7 +515,7 @@ public class TimelineFragment extends Fragment {
 //        }
 
         ApiService apiService = RetrofitClient.getInstance(Server.DOMAIN2).getRetrofit().create(ApiService.class);
-        Call<EachEventCommentsList> call = apiService.getListCommentByEventId(soThuTuSuKien, idToanBoSuKien);
+        Call<EachEventCommentsList> call = apiService.getListCommentByEventId(soThuTuSuKien, idToanBoSuKien,id_user);
 
         call.enqueue(new Callback<EachEventCommentsList>() {
             @SuppressLint("NotifyDataSetChanged")
@@ -506,7 +523,7 @@ public class TimelineFragment extends Fragment {
             public void onResponse(Call<EachEventCommentsList> call, Response<EachEventCommentsList> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     EachEventCommentsList eachEventCommentsList = response.body();
-                    List<Comment> _comments = eachEventCommentsList.getEachEventCommentList();
+                    List<CommentPage> _comments = eachEventCommentsList.getEachEventCommentList();
                     if (!_comments.isEmpty()) {
                         commentAdapter.setData(_comments, urlImgMale, urlImgFemale);
                         commentAdapter.notifyDataSetChanged();
@@ -515,7 +532,6 @@ public class TimelineFragment extends Fragment {
                     if (kProgressHUD.isShowing()) {
                         kProgressHUD.dismiss();
                     }
-
                 }
             }
 

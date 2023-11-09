@@ -2,6 +2,7 @@ package com.thinkdiffai.futurelove.view.fragment;
 
 import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,6 +22,7 @@ import com.thinkdiffai.futurelove.R;
 import com.thinkdiffai.futurelove.databinding.FragmentHomeBinding;
 import com.thinkdiffai.futurelove.model.DetailEventList;
 import com.thinkdiffai.futurelove.model.DetailEventListParent;
+import com.thinkdiffai.futurelove.model.Page;
 import com.thinkdiffai.futurelove.service.api.ApiService;
 import com.thinkdiffai.futurelove.service.api.RetrofitClient;
 import com.thinkdiffai.futurelove.service.api.Server;
@@ -28,6 +30,7 @@ import com.thinkdiffai.futurelove.service.api.Server;
 import com.thinkdiffai.futurelove.util.PaginationScrollListener;
 import com.thinkdiffai.futurelove.view.activity.MainActivity;
 import com.thinkdiffai.futurelove.view.adapter.EventHomeAdapter;
+import com.thinkdiffai.futurelove.view.adapter.PageEventAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,14 +45,20 @@ public class HomeFragment extends Fragment {
     private KProgressHUD kProgressHUD;
     private FragmentHomeBinding fragmentHomeBinding;
     private MainActivity mainActivity;
+
+    private int id_user;
     private EventHomeAdapter eventHomeAdapter;
+
+    private PageEventAdapter pageEventAdapter;
     private List<DetailEventList> eventList;
+
+    private ArrayList<Integer> pageEventList;
     private LinearLayoutManager linearLayoutManager;
 
     private boolean isLoading;
     private boolean isLoadingMore;
     private boolean isLastPage;
-    private int currentPage = 1;
+//    private int currentPage = 1;
 
 
     @Nullable
@@ -63,14 +72,57 @@ public class HomeFragment extends Fragment {
         performSearch();
         try {
             initUi();
-            getData(currentPage);
-            initListener();
+            loadData();
+//            initListener();
             initData();
         } catch (Exception e) {
             Log.e("ExceptionRuntime", e.toString());
         }
 
         return fragmentHomeBinding.getRoot();
+    }
+
+
+
+
+
+    private void loadData() {
+        if (!kProgressHUD.isShowing() && isLoadingMore) {
+            kProgressHUD.show();
+        }
+        ApiService apiService = RetrofitClient.getInstance(Server.DOMAIN2).getRetrofit().create(ApiService.class);
+        Call<DetailEventListParent> call = apiService.getEventListForHome(1,id_user);
+        Log.d("check_response", "getData: "+ call.toString());
+        call.enqueue(new Callback<DetailEventListParent>() {
+            @SuppressLint("NotifyDataSetChanged")
+            @Override
+            public void onResponse(Call<DetailEventListParent> call, Response<DetailEventListParent> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    Log.d("check_response", "onResponse: pke");
+                    Log.d("check_response", "onResponse: "+ response.body());
+                    DetailEventListParent detailEventListParent = response.body();
+                    List<DetailEventList> detailEventLists = detailEventListParent.getListSukien();
+                    if (!detailEventLists.isEmpty()){
+                        eventHomeAdapter.setData(detailEventLists);
+                        eventHomeAdapter.notifyDataSetChanged();
+                    }
+                }
+                if (kProgressHUD.isShowing()) {
+                    kProgressHUD.dismiss();
+                }
+                isLoading = false;
+            }
+
+            @Override
+            public void onFailure(Call<DetailEventListParent> call, Throwable t) {
+                Toast.makeText(getActivity(), t.getMessage() + "", Toast.LENGTH_SHORT).show();
+                if (kProgressHUD.isShowing()) {
+                    kProgressHUD.dismiss();
+                    Log.e("MainActivityLog", t.getMessage().toString());
+                }
+                isLoading = false;
+            }
+        });
     }
 
     private void initData() {
@@ -84,6 +136,17 @@ public class HomeFragment extends Fragment {
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putString("id_user",user_id);
             editor.commit();
+        }
+        loadIdUser();
+    }
+
+    private void loadIdUser() {
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("id_user",0);
+        String id_user_str = sharedPreferences.getString("id_user", "");
+        if (id_user_str == "") {
+            id_user = 0;
+        }else{
+            id_user = Integer.parseInt(id_user_str);
         }
     }
 
@@ -131,7 +194,6 @@ public class HomeFragment extends Fragment {
             }
         });
     }
-
     private void goToPairingFragment() {
         NavHostFragment.findNavController(HomeFragment.this).navigate(R.id.action_homeFragment_to_pairingFragment);
     }
@@ -144,39 +206,39 @@ public class HomeFragment extends Fragment {
         NavHostFragment.findNavController(HomeFragment.this).navigate(R.id.action_homeFragment_to_commentFragment);
     }
 
-    private void initListener() {
-        fragmentHomeBinding.rcvHome.addOnScrollListener(new PaginationScrollListener(linearLayoutManager) {
-            @Override
-            public void loadMoreItem() {
-                // It help the kud not loading many times
-                isLoadingMore = false;
-                isLoading = true;
-                currentPage++;
-                loadNextPage();
-            }
-            @Override
-            public boolean isLoading() {
-                return isLoading;
-            }
+//    private void initListener() {
+//        fragmentHomeBinding.rcvHome.addOnScrollListener(new PaginationScrollListener(linearLayoutManager) {
+//            @Override
+//            public void loadMoreItem() {
+//                // It help the kud not loading many times
+//                isLoadingMore = false;
+//                isLoading = true;
+//                currentPage++;
+//                loadNextPage();
+//            }
+//            @Override
+//            public boolean isLoading() {
+//                return isLoading;
+//            }
+//
+//            @Override
+//            public boolean isLagePage() {
+//                return isLastPage;
+//            }
+//
+//            @Override
+//            public void ReloadItem() {
+//                // It help the kud not loading many times
+//                isLoadingMore = false;
+//                currentPage = 1;
+//                getData(currentPage);
+//            }
+//        });
+//    }
 
-            @Override
-            public boolean isLagePage() {
-                return isLastPage;
-            }
-
-            @Override
-            public void ReloadItem() {
-                // It help the kud not loading many times
-                isLoadingMore = false;
-                currentPage = 1;
-                getData(currentPage);
-            }
-        });
-    }
-
-    private void loadNextPage() {
-        getData(currentPage);
-    }
+//    private void loadNextPage() {
+//        getData(currentPage);
+//    }
 
     private void initUi() {
         // Set isLoadingMore = true in order to set kud loading in the first api calling time
@@ -190,6 +252,14 @@ public class HomeFragment extends Fragment {
         // It automatically get the id of all events in EventHomeAdapter and assign into this::goToEventDetail
         eventHomeAdapter = new EventHomeAdapter(eventList, idToanBoSuKien -> goToEventDetail(idToanBoSuKien), getContext());
         fragmentHomeBinding.rcvHome.setAdapter(eventHomeAdapter);
+
+        pageEventList = new ArrayList<>();
+        linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+        for(int i=1; i<=19;i++){
+            pageEventList.add(i);
+        }
+        pageEventAdapter = new PageEventAdapter(getContext(), pageEventList, position -> goToPageEvent(position));
+        fragmentHomeBinding.tabItem.setAdapter(pageEventAdapter);
     }
 
     // Current page is 4 because it is Timeline Fragment
@@ -199,12 +269,16 @@ public class HomeFragment extends Fragment {
 //        mainActivity.setCurrentPage(4);
     }
 
-    private void getData(int currentPage) {
+    private void goToPageEvent(int position){
+        getData(position);
+    }
+
+    private void getData(int position) {
         if (!kProgressHUD.isShowing() && isLoadingMore) {
             kProgressHUD.show();
         }
-        ApiService apiService = RetrofitClient.getInstance(Server.DOMAIN1).getRetrofit().create(ApiService.class);
-        Call<DetailEventListParent> call = apiService.getEventListForHome(1);
+        ApiService apiService = RetrofitClient.getInstance(Server.DOMAIN2).getRetrofit().create(ApiService.class);
+        Call<DetailEventListParent> call = apiService.getEventListForHome(position,id_user);
         Log.d("check_response", "getData: "+ call.toString());
         call.enqueue(new Callback<DetailEventListParent>() {
             @SuppressLint("NotifyDataSetChanged")
@@ -212,7 +286,7 @@ public class HomeFragment extends Fragment {
             public void onResponse(Call<DetailEventListParent> call, Response<DetailEventListParent> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     Log.d("check_response", "onResponse: pke");
-                    Log.d("check_response", "onResponse: "+ response.body().getListSukien().size());
+                    Log.d("check_response", "onResponse: "+ response.body());
                     DetailEventListParent detailEventListParent = response.body();
                     List<DetailEventList> detailEventLists = detailEventListParent.getListSukien();
                     if (!detailEventLists.isEmpty()){
@@ -237,6 +311,45 @@ public class HomeFragment extends Fragment {
             }
         });
     }
+
+//    private void getData() {
+//        if (!kProgressHUD.isShowing() && isLoadingMore) {
+//            kProgressHUD.show();
+//        }
+//        ApiService apiService = RetrofitClient.getInstance(Server.DOMAIN2).getRetrofit().create(ApiService.class);
+//        Call<DetailEventListParent> call = apiService.getEventListForHome(1);
+//        Log.d("check_response", "getData: "+ call.toString());
+//        call.enqueue(new Callback<DetailEventListParent>() {
+//            @SuppressLint("NotifyDataSetChanged")
+//            @Override
+//            public void onResponse(Call<DetailEventListParent> call, Response<DetailEventListParent> response) {
+//                if (response.isSuccessful() && response.body() != null) {
+//                    Log.d("check_response", "onResponse: pke");
+//                    Log.d("check_response", "onResponse: "+ response.body().getListSukien().size());
+//                    DetailEventListParent detailEventListParent = response.body();
+//                    List<DetailEventList> detailEventLists = detailEventListParent.getListSukien();
+//                    if (!detailEventLists.isEmpty()){
+//                        eventHomeAdapter.setData(detailEventLists);
+//                        eventHomeAdapter.notifyDataSetChanged();
+//                    }
+//                }
+//                if (kProgressHUD.isShowing()) {
+//                    kProgressHUD.dismiss();
+//                }
+//                isLoading = false;
+//            }
+//
+//            @Override
+//            public void onFailure(Call<DetailEventListParent> call, Throwable t) {
+//                Toast.makeText(getActivity(), t.getMessage() + "", Toast.LENGTH_SHORT).show();
+//                if (kProgressHUD.isShowing()) {
+//                    kProgressHUD.dismiss();
+//                    Log.e("MainActivityLog", t.getMessage().toString());
+//                }
+//                isLoading = false;
+//            }
+//        });
+//    }
     private void performSearch() {
         fragmentHomeBinding.edtSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override

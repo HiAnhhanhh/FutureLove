@@ -25,7 +25,7 @@ import com.thinkdiffai.futurelove.presenter.api.CityCalledByIpApi;
 import com.thinkdiffai.futurelove.databinding.ItemCommentBinding;
 import com.thinkdiffai.futurelove.service.api.QueryValueCallback;
 import com.thinkdiffai.futurelove.util.Util;
-import com.thinkdiffai.futurelove.model.comment.Comment;
+import com.thinkdiffai.futurelove.model.comment.CommentPage;
 import com.thinkdiffai.futurelove.view.fragment.dialog.MyOwnDialogFragment;
 
 import java.util.List;
@@ -35,7 +35,7 @@ import java.util.regex.Pattern;
 public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentViewHolder> {
     private String urlImgMale;
     private String urlImgFemale;
-    private List<Comment> comments;
+    private List<CommentPage> comments;
 
     private String city = "empty address";
     public final IOnClickItemListener iOnClickItem;
@@ -45,11 +45,12 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
         void onClickItem(long idToanBoSuKien, int soThuTuSuKienCon);
     }
 
-    public void setData(List<Comment> comments) {
+    public void setData(List<CommentPage> comments) {
         this.comments = comments;
+        Log.d("adapter_comment", "setData: "+ comments.size());
     }
 
-    public void setData(List<Comment> comments, String urlImgMale, String urlImgFemale) {
+    public void setData(List<CommentPage> comments, String urlImgMale, String urlImgFemale) {
         this.comments = comments;
         this.urlImgMale = urlImgMale;
         this.urlImgFemale = urlImgFemale;
@@ -62,13 +63,13 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
 //        this.iOnClickItem = iOnClickItem;
 //    }
 
-    public CommentAdapter(Context context, List<Comment> comments, IOnClickItemListener iOnClickItem) {
+    public CommentAdapter(Context context, List<CommentPage> comments, IOnClickItemListener iOnClickItem) {
         this.context = context;
         this.comments = comments;
         this.iOnClickItem = iOnClickItem;
     }
 
-    public CommentAdapter(String urlImgMale, String urlImgFemale, List<Comment> comments, IOnClickItemListener iOnClickItem) {
+    public CommentAdapter(String urlImgMale, String urlImgFemale, List<CommentPage> comments, IOnClickItemListener iOnClickItem) {
         this.urlImgMale = urlImgMale;
         this.urlImgFemale = urlImgFemale;
         this.comments = comments;
@@ -87,7 +88,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull CommentViewHolder holder, int position) {
-        Comment comment = comments.get(position);
+        CommentPage comment = comments.get(position);
 
         if (comment == null)
             return;
@@ -204,7 +205,8 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
 
     @Override
     public int getItemCount() {
-        return null == comments ? 0 : comments.size();
+        Log.d("adapter_comment", "getItemCount: "+ comments.size());
+        return comments.size();
     }
 
     public static class CommentViewHolder extends RecyclerView.ViewHolder {

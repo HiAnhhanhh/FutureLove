@@ -1,19 +1,19 @@
 package com.thinkdiffai.futurelove.model.comment.eacheventcomment;
 
 import com.google.gson.annotations.SerializedName;
-import com.thinkdiffai.futurelove.model.comment.Comment;
+import com.thinkdiffai.futurelove.model.comment.CommentPage;
 
 import java.util.List;
 
 public class EachEventCommentsList {
     @SerializedName("comment")
-    private List<Comment> eachEventCommentList;
+    private List<CommentPage> eachEventCommentList;
 
-    public List<Comment> getEachEventCommentList() {
+    public List<CommentPage> getEachEventCommentList() {
         return eachEventCommentList;
     }
 
-    public void setEachEventCommentList(List<Comment> eachEventCommentList) {
+    public void setEachEventCommentList(List<CommentPage> eachEventCommentList) {
         this.eachEventCommentList = eachEventCommentList;
     }
 }

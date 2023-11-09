@@ -20,9 +20,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.thinkdiffai.futurelove.R;
 import com.thinkdiffai.futurelove.databinding.FragmentLoginBinding;
+import com.thinkdiffai.futurelove.model.Login;
 import com.thinkdiffai.futurelove.service.api.ApiService;
 import com.thinkdiffai.futurelove.service.api.QueryValueCallback;
 import com.thinkdiffai.futurelove.service.api.RetrofitClient;
@@ -31,6 +33,7 @@ import com.thinkdiffai.futurelove.view.activity.MainActivity;
 import com.thinkdiffai.futurelove.view.activity.SignInSignUpActivity;
 import com.thinkdiffai.futurelove.view.fragment.dialog.MyOwnDialogFragment;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
 import io.github.rupinderjeet.kprogresshud.KProgressHUD;
@@ -58,6 +61,8 @@ public class LoginFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        initAction();
+
         // Set up TextWatcher to see that edit texts are valid or not and will show alerts or nothing
         setUpTextWatcher();
 
@@ -73,6 +78,27 @@ public class LoginFragment extends Fragment {
         // When users want to see their password clearly
         showPasswordClearly();
 
+    }
+
+    private void initAction() {
+        binding.skipLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                navToMainActivitySkipLogin();
+            }
+        });
+    }
+
+    private void navToMainActivitySkipLogin() {
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("id_user",0);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("id_user","0");
+        editor.commit();
+
+        boolean isLoginSuccess = true;
+        Intent i = new Intent(getActivity(), MainActivity.class);
+        i.putExtra("LOGIN_SUCCESS", isLoginSuccess);
+        startActivity(i);
     }
 
     private void setUpTextWatcher() {
@@ -153,9 +179,16 @@ public class LoginFragment extends Fragment {
         binding.btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+//                SharedPreferences sharedPreferences1 = getActivity().getSharedPreferences("check_internet",0);
+//                String check_internet = sharedPreferences1.getString("internet_state","0");
+//                Log.d("check_internet", "onQueryValueReceived: "+ check_internet);
+
                 String email = String.valueOf(binding.edtUserName.getText());
                 String password = String.valueOf(binding.edtPassword.getText());
                 // Check that it is full of needed information
+//                if(check_internet.equals("No Internet")){
+//                    Toast.makeText(signInSignUpActivity, "No Internet", Toast.LENGTH_SHORT).show();
+//                }
                 if (isCompletedInformation(email, password)) {
                     // Call API and Login
                     checkAccountRegistered(email, password);
@@ -171,7 +204,9 @@ public class LoginFragment extends Fragment {
         callLoginApi(new QueryValueCallback() {
             @Override
             public void onQueryValueReceived(String queryValue) {
-                if (!queryValue.contains("{ketqua=")){
+//                if (queryValue.contains("{ketqua="))
+
+                if(queryValue.contains("Logged in successfully")){
                     Log.d("PHONG", "queryValue = " + queryValue);
                     navToMainActivity();
                     // Store LOGIN STATE not to login again
@@ -179,7 +214,9 @@ public class LoginFragment extends Fragment {
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.putBoolean("LOGIN_STATE", true);
                     editor.apply();
-                } else{
+                }else if (queryValue.contains("Invalid Password!!")) {
+                    Toast.makeText(signInSignUpActivity, "Invalid Email or Password!!", Toast.LENGTH_SHORT).show();
+                }else{
                     showErrorLoginDialog();
                 }
             }
@@ -224,22 +261,26 @@ public class LoginFragment extends Fragment {
 
         // Call login Api
         ApiService apiService = RetrofitClient.getInstance(Server.DOMAIN2).getRetrofit().create(ApiService.class);
-        Call<Object> call = apiService.login(email, password);
+        Call<Login> call = apiService.login(email, password);
         Log.d("PHONG", "callLoginApi: "+ apiService);
-        call.enqueue(new Callback<Object>() {
+        call.enqueue(new Callback<Login>() {
             @Override
-            public void onResponse(Call<Object> call, Response<Object> response) {
-                Log.d("PHONG", "onResponse:" + response);
+            public void onResponse(Call<Login> call, Response<Login> response) {
+                Log.d("PHONG", "onResponse:" + response.body());
+                if (response.isSuccessful() && response.body() != null) {
+                    Log.d("PHONG", "callback_2: "+ response.body());
+                    String user_id = String.valueOf(response.body().getId_user());
+                    if(!user_id.equals("0")){
+                        queryValueCallback.onQueryValueReceived("Logged in successfully");
+                    }else {
+                        queryValueCallback.onQueryValueReceived("Invalid Password!!");
 
-                if (response.isSuccessful() ) {
-                    queryValueCallback.onQueryValueReceived(response.toString());
-                    Log.d("PHONG", "callback: "+ response );
-//                    String user_id = String.valueOf(response.body().getId_user());
-//                    SharedPreferences sharedPreferences = getActivity().getSharedPreferences("id_user",0);
-//                    SharedPreferences.Editor editor = sharedPreferences.edit();
-//                    editor.putString("id_user",user_id);
-//                    editor.commit();
-//                    Log.d("id_user_detail", "onResponse: "+ user_id);
+                    }
+                    SharedPreferences sharedPreferences = getActivity().getSharedPreferences("id_user",0);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putString("id_user",user_id);
+                    editor.commit();
+                    Log.d("id_user_detail", "onResponse: "+ user_id);
                 }
                 if (kProgressHUD.isShowing()) {
                     kProgressHUD.dismiss();
@@ -247,7 +288,7 @@ public class LoginFragment extends Fragment {
             }
 
             @Override
-            public void onFailure(Call<Object> call, Throwable t) {
+            public void onFailure(Call<Login> call, Throwable t) {
                 if (kProgressHUD.isShowing()) {
                     kProgressHUD.dismiss();
                 }

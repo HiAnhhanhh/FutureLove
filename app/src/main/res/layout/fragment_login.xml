@@ -188,6 +188,21 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/btn_login" />
 
+        <TextView
+            android:id="@+id/skipLogin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/skip_login"
+            android:textColor="@color/white"
+            android:fontFamily="@font/roboto_slab"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintVertical_bias="0"
+            app:layout_constraintBottom_toTopOf="@+id/ll_ask_to_register"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btn_ask_reset_password" />
+
         <!--  Don’t have an account?  -->
         <androidx.appcompat.widget.LinearLayoutCompat
             android:id="@+id/ll_ask_to_register"

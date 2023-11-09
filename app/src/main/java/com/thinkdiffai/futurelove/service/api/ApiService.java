@@ -5,6 +5,7 @@ import com.thinkdiffai.futurelove.model.DetailEventListParent;
 import com.thinkdiffai.futurelove.model.EventHomeDto;
 import com.thinkdiffai.futurelove.model.Login;
 import com.thinkdiffai.futurelove.model.comment.CommentList;
+import com.thinkdiffai.futurelove.model.comment.CommentPage;
 import com.thinkdiffai.futurelove.model.comment.DetailUser;
 import com.thinkdiffai.futurelove.model.comment.EventsUser.EventsUser;
 import com.thinkdiffai.futurelove.model.comment.UserComment;
@@ -85,8 +86,9 @@ public interface ApiService {
     @GET(Server.URI_LIST_EVENT_HOME + "page")
     Call<List<List<EventHomeDto>>> getListAllEventHome(@Path("page") long id);
 
-    @GET(Server.URI_LIST_EVENT_HOME + "{page}")
-    Call<DetailEventListParent> getEventListForHome(@Path("page") long id);
+    @GET(Server.URI_LIST_EVENT_HOME + "{page}" )
+    Call<DetailEventListParent> getEventListForHome(@Path("page") long id,
+                                                    @Query("id_user")int id_user);
 
     @GET(Server.URI_LIST_EVENT_TIMELINE + "{id}")
     Call<DetailEventList> getListEventDetail(@Path("id") long id);
@@ -95,11 +97,13 @@ public interface ApiService {
     @GET(Server.URI_LIST_COMMENT_BY_EVENT_ID + "{so_thu_tu_su_kien}")
     Call<EachEventCommentsList> getListCommentByEventId(
             @Path("so_thu_tu_su_kien") int soThuTuSuKien,
-            @Query("id_toan_bo_su_kien") long idToanBoSuKien
+            @Query("id_toan_bo_su_kien") long idToanBoSuKien,
+            @Query("id_user") int idUser
     );
 
     @GET(Server.URI_LIST_COMMENT_NEW + "{id}")
-    Call<CommentList> getListCommentNew(@Path("id") int id);
+    Call<CommentList> getListCommentNew(@Path("id") int id,
+                                        @Query("id_user") int id_user);
 
     @FormUrlEncoded
     @POST(Server.URI_POST_EVENT_TIMELINE)
@@ -126,7 +130,7 @@ public interface ApiService {
 
     @FormUrlEncoded
     @POST(Server.URI_LOG_IN)
-    Call<Object> login(
+    Call<Login> login(
             @Field("email_or_username") String email,
             @Field("password") String password
     );

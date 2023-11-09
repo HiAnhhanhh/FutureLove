@@ -10,8 +10,8 @@ android {
         applicationId 'com.thinkdiffai.futurelove'
         minSdk 24
         targetSdk 33
-        versionCode 10
-        versionName "9.1"
+        versionCode 15
+        versionName "9.6"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }

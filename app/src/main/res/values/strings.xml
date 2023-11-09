@@ -25,4 +25,11 @@
     <string name="enter_name">Enter name</string>
     <string name="click_here"><![CDATA[<-- Click here]]></string>
     <string name="_1">1</string>
+    <string name="skip_login">Skip Login</string>
+    <string name="content">Content</string>
+    <string name="address">Address</string>
+    <string name="device_name">Device name</string>
+    <string name="time">time</string>
+    <string name="btn_user_account">btn user account</string>
+    <string name="username">Username</string>
 </resources>

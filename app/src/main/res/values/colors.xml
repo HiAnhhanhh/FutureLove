@@ -18,10 +18,12 @@
     <color name="textColorSecondary">#6D6E70</color>
     <color name="textColorAccent">#A7A9AB</color>
     <color name="gray_white">#DBD9D9</color>
+    <color name="gray_white_1">#90DBD9D9</color>
     <color name="dividerColor">#BDBDBD</color>
     <color name="transparent">#00000000</color>
     <color name="purple">#9C27B0</color>
     <color name="green">#4CAF50</color>
+    <color name="green_light">#95F698</color>
     <color name="redAccent">#ffebee</color>
     <color name="red">#EF9A9A</color>
     <color name="pink">#F06292</color>

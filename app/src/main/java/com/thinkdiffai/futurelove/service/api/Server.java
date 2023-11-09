@@ -31,9 +31,9 @@ public interface Server {
 
 //    String URI_LOG_IN = "login";
 
-    String URI_LOG_IN = "login/";
+    String URI_LOG_IN = "login";
 //    String URI_SIGN_UP = "register";
-    String URI_SIGN_UP = "register/user/";
+    String URI_SIGN_UP = "register/user";
 
     // URI profile
     String URI_PROFILE_USER="profile/";

@@ -1,11 +1,15 @@
 package com.thinkdiffai.futurelove.view.activity;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
@@ -14,6 +18,7 @@ import androidx.navigation.NavController;
 
 import com.thinkdiffai.futurelove.R;
 import com.thinkdiffai.futurelove.databinding.ActivityMainBinding;
+import com.thinkdiffai.futurelove.view.BroadcastReceiver.InternetReceiver;
 import com.thinkdiffai.futurelove.view.fragment.HomeFragment;
 
 import io.github.rupinderjeet.kprogresshud.KProgressHUD;
@@ -31,6 +36,8 @@ public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding activityMainBinding;
     private KProgressHUD kProgressHUD;
 
+    private BroadcastReceiver broadcastReceiver = null;
+
     public Bitmap maleImage;
     public Bitmap femaleImage;
     public long waitingSwapFaceTime = 0L;
@@ -42,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
 
     private boolean loginState;
     public long eventSummaryCurrentId = -1;
+    Context context;
 
     private String user_id;
 
@@ -52,6 +60,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.transparent));
         activityMainBinding = ActivityMainBinding.inflate(getLayoutInflater());
+
+       broadcastReceiver = new InternetReceiver();
+       InternetStatus();
 
         // Check LOGIN_STATE
         sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
@@ -69,6 +80,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(activityMainBinding.getRoot());
     }
 
+
     public KProgressHUD createHud() {
         return kProgressHUD = KProgressHUD.create(this)
                 .setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
@@ -78,4 +90,11 @@ public class MainActivity extends AppCompatActivity {
                 .setAnimationSpeed(2)
                 .setDimAmount(0.5f);
     }
+
+    public void InternetStatus(){
+        registerReceiver(broadcastReceiver,new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+    }
+
 }
+
+

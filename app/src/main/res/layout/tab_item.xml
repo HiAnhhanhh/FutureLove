@@ -1,16 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="50dp"
     android:layout_height="50dp"
-    android:background="@color/white"
-    android:layout_marginEnd="5dp"
-    android:gravity="center">
+    android:background="@drawable/background_white_radius_10dp"
+    android:layout_marginEnd="5dp">
 
     <TextView
-        android:text="@string/_1"
+        android:id="@+id/pageEvent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="@string/_1"
+        android:textColor="@color/orange"
         android:textSize="20sp"
-        android:textColor="@color/orange"/>
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-</LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

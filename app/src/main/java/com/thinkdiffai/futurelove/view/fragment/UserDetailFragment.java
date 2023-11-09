@@ -76,7 +76,8 @@ public class UserDetailFragment extends Fragment {
         binding = FragmentUserDetailBinding.inflate(getLayoutInflater());
         // Initialize UI
         initUi();
-//        initData();
+
+        initData();
         // Load user details from API
         loadingUserDetailFromApi();
         // Load user comments from API
@@ -86,7 +87,12 @@ public class UserDetailFragment extends Fragment {
 
     private void initData() {
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("id_user",0);
-        id_user = Integer.parseInt(sharedPreferences.getString("id_user", "no")) ;
+        String id_user_str = sharedPreferences.getString("id_user", "");
+        if (id_user_str == "") {
+            id_user = 0;
+        }else{
+            id_user = Integer.parseInt(id_user_str);
+        }
         Log.d("id_user_detail", "initData: "+ id_user);
     }
 
@@ -145,14 +151,17 @@ public class UserDetailFragment extends Fragment {
 //            kProgressHUD.show();
 //        }
         ApiService apiService = RetrofitClient.getInstance(Server.DOMAIN2).getRetrofit().create(ApiService.class);
-        Call<UserComment> call = apiService.getCommentUser(2);
+        Call<UserComment> call = apiService.getCommentUser(id_user);
+
         call.enqueue(new Callback<UserComment>() {
             @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onResponse(Call<UserComment> call, Response<UserComment> response) {
-                if (response.isSuccessful() && response.body() != null) {
+                if(id_user==0){
+                    commentAdapter.setData(commentList);
+                } else if (response.isSuccessful() && response.body() != null) {
                     UserComment userComment = response.body();
-                    Log.d("check_comment_user", "onResponse: " );
+                    Log.d("check_comment_user", "onResponse: "+ id_user );
                     commentList = userComment.getComment_user();
                     if (!commentList.isEmpty()) {
                         commentAdapter.setData(commentList);
@@ -176,7 +185,7 @@ public class UserDetailFragment extends Fragment {
     }
 
     private void getDataUserDetail() {
-        ApiService apiService = RetrofitClient.getInstance(Server.DOMAIN1).getRetrofit().create(ApiService.class);
+        ApiService apiService = RetrofitClient.getInstance(Server.DOMAIN2).getRetrofit().create(ApiService.class);
         // Id for test
         Call<DetailUser> call = apiService.getProfileUser(id_user);
         Log.d("check_user", "getDataUserDetail: "+ call.toString());
@@ -186,6 +195,7 @@ public class UserDetailFragment extends Fragment {
                 if (response.isSuccessful()) {
                     DetailUser detailUsers = response.body();
                     Log.d("check_user", "onResponse: "+ detailUsers.getUser_name() + detailUsers.getId_user()+ detailUsers.getEmail());
+                    binding.tvEmailUser.setText(String.valueOf(Objects.requireNonNull(detailUsers).getEmail()));
                     binding.tvUserName.setText(String.valueOf(Objects.requireNonNull(detailUsers).getUser_name()));
                     binding.tvUserEventsNumber.setText(String.valueOf(detailUsers.getCount_sukien()));
                     binding.tvUserCommentNumber.setText(String.valueOf(detailUsers.getCount_comment()));

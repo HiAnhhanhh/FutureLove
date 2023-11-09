@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="@drawable/bg_comment"
     android:orientation="vertical">
 
@@ -53,6 +54,8 @@
                         android:textSize="14sp" />
                 </androidx.appcompat.widget.LinearLayoutCompat>
 
+
+
                 <androidx.appcompat.widget.AppCompatImageButton
                     android:id="@+id/btn_user_account"
                     android:layout_width="48dp"
@@ -60,6 +63,7 @@
                     android:layout_marginStart="16dp"
                     android:background="@drawable/bg_white_round"
                     android:scaleType="fitCenter"
+                    android:contentDescription="@string/btn_user_account"
                     android:src="@drawable/ic_user_account"
                     app:layout_constraintBottom_toBottomOf="@+id/ll_frame_search"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -68,16 +72,27 @@
             </androidx.appcompat.widget.LinearLayoutCompat>
 
             <androidx.recyclerview.widget.RecyclerView
+                android:layout_marginTop="10dp"
+                android:id="@+id/tabItem"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:orientation="horizontal"
+                tools:listitem="@layout/tab_item"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintTop_toBottomOf="@+id/ll_frame_search" />
+
+            <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rcv_comment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
+                tools:listitem="@layout/item_comment"
                 android:padding="8dp"
-                android:background="@drawable/color_bg_rcv"
-                android:layout_marginHorizontal="@dimen/define_dimen_16"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/ll_frame_search"
+                app:layout_constraintTop_toBottomOf="@id/tabItem"
                 app:layout_constraintBottom_toBottomOf="parent"
                 />
         </androidx.constraintlayout.widget.ConstraintLayout>
