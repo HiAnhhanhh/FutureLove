@@ -15,14 +15,14 @@
         android:textSize="@dimen/define_dimen_22"
         android:textStyle="bold" />
 
-    <androidx.appcompat.widget.AppCompatEditText
-        android:id="@+id/edt_enter_name"
-        android:layout_width="match_parent"
-        android:layout_marginHorizontal="@dimen/define_dimen_60"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/define_dimen_20"
-        android:fontFamily="@font/roboto_slab"
-        android:hint="@string/enter_name" />
+<!--    <androidx.appcompat.widget.AppCompatEditText-->
+<!--        android:id="@+id/edt_enter_name"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginHorizontal="@dimen/define_dimen_60"-->
+<!--        android:layout_marginTop="@dimen/define_dimen_20"-->
+<!--        android:fontFamily="@font/roboto_slab"-->
+<!--        android:hint="@string/enter_name" />-->
 
     <LinearLayout
         android:id="@+id/linearLayout2"

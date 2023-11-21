@@ -3,6 +3,7 @@ package com.thinkdiffai.futurelove.service.api;
 import com.thinkdiffai.futurelove.model.DetailEventList;
 import com.thinkdiffai.futurelove.model.DetailEventListParent;
 import com.thinkdiffai.futurelove.model.EventHomeDto;
+import com.thinkdiffai.futurelove.model.IpNetworkModel;
 import com.thinkdiffai.futurelove.model.Login;
 import com.thinkdiffai.futurelove.model.comment.CommentList;
 import com.thinkdiffai.futurelove.model.comment.CommentPage;
@@ -71,6 +72,12 @@ public interface ApiService {
             @Query("ten_nu") String tenNu
     );
 
+    @GET(Server.GET_VIDEO + "page")
+    Call<Object> getListVideo(
+            @Path("page") int id,
+            @Query("category") int id_categories
+    );
+
     @GET(Server.URI_CREATE_IMPLICIT_DATA)
     Call<Object> postImplicitEvent(
             @Query("device_them_su_kien") String deviceThemSuKien,
@@ -81,7 +88,7 @@ public interface ApiService {
     );
 
     @GET(Server.URI_GET_NETWORK_STATUS)
-    Call<NetworkModel> getIpApiResponse();
+    Call<IpNetworkModel> getIpApiResponse();
 
     @GET(Server.URI_LIST_EVENT_HOME + "page")
     Call<List<List<EventHomeDto>>> getListAllEventHome(@Path("page") long id);

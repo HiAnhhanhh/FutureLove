@@ -18,6 +18,8 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.gauravk.bubblenavigation.BubbleNavigationLinearView;
+import com.gauravk.bubblenavigation.listener.BubbleNavigationChangeListener;
 import com.thinkdiffai.futurelove.R;
 import com.thinkdiffai.futurelove.databinding.FragmentHomeBinding;
 import com.thinkdiffai.futurelove.model.DetailEventList;
@@ -48,6 +50,8 @@ public class HomeFragment extends Fragment {
 
     private int id_user;
     private EventHomeAdapter eventHomeAdapter;
+
+    private BubbleNavigationLinearView bubbleNavigationLinearView;
 
     private PageEventAdapter pageEventAdapter;
     private List<DetailEventList> eventList;
@@ -83,23 +87,20 @@ public class HomeFragment extends Fragment {
     }
 
 
-
-
-
     private void loadData() {
         if (!kProgressHUD.isShowing() && isLoadingMore) {
             kProgressHUD.show();
         }
         ApiService apiService = RetrofitClient.getInstance(Server.DOMAIN2).getRetrofit().create(ApiService.class);
-        Call<DetailEventListParent> call = apiService.getEventListForHome(1,id_user);
+        Call<DetailEventListParent> call = apiService.getEventListForHome(5,id_user);
         Log.d("check_response", "getData: "+ call.toString());
         call.enqueue(new Callback<DetailEventListParent>() {
             @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onResponse(Call<DetailEventListParent> call, Response<DetailEventListParent> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    Log.d("check_response", "onResponse: pke");
-                    Log.d("check_response", "onResponse: "+ response.body());
+                    Log.d("check_response_1", "onResponse: pke");
+                    Log.d("check_response_1", "onResponse: "+ response.body());
                     DetailEventListParent detailEventListParent = response.body();
                     List<DetailEventList> detailEventLists = detailEventListParent.getListSukien();
                     if (!detailEventLists.isEmpty()){
@@ -143,6 +144,7 @@ public class HomeFragment extends Fragment {
     private void loadIdUser() {
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("id_user",0);
         String id_user_str = sharedPreferences.getString("id_user", "");
+        Log.d("check_user_id", "loadIdUser: "+ id_user_str);
         if (id_user_str == "") {
             id_user = 0;
         }else{
@@ -172,27 +174,41 @@ public class HomeFragment extends Fragment {
     }
 
     private void navigateToOtherFragments() {
+        bubbleNavigationLinearView = fragmentHomeBinding.bubbleNavigation;
+        bubbleNavigationLinearView.setNavigationChangeListener(new BubbleNavigationChangeListener() {
+            @Override
+            public void onNavigationChanged(View view, int position) {
+                switch (position){
+                    case 1:
+                        fragmentHomeBinding.homeBubble.setVisibility(View.GONE);
+                        fragmentHomeBinding.pairingBubble.setVisibility(View.GONE);
+                        fragmentHomeBinding.commentBubble.setVisibility(View.GONE);
+                        goToCommentFragment();
+                        break;
+                    case 2:
+                        fragmentHomeBinding.homeBubble.setVisibility(View.GONE);
+                        fragmentHomeBinding.pairingBubble.setVisibility(View.GONE);
+                        fragmentHomeBinding.commentBubble.setVisibility(View.GONE);
+                        goToPairingFragment();
+                        break;
+                }
+            }
+        });
         // Click btn Comment
-        fragmentHomeBinding.btnComment.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                goToCommentFragment();
-            }
-        });
-        // Click btn Pairing
-        fragmentHomeBinding.btnPairing.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                goToPairingFragment();
-            }
-        });
+//        fragmentHomeBinding.commentBubble.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                goToCommentFragment();
+//            }
+//        });
+//        // Click btn Pairing
+//        fragmentHomeBinding.pairingBubble.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                goToPairingFragment();
+//            }
+//        });
         // Click btn Timeline
-        fragmentHomeBinding.btnTimeline.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                goToTimeLineFragment();
-            }
-        });
     }
     private void goToPairingFragment() {
         NavHostFragment.findNavController(HomeFragment.this).navigate(R.id.action_homeFragment_to_pairingFragment);
@@ -285,9 +301,9 @@ public class HomeFragment extends Fragment {
             @Override
             public void onResponse(Call<DetailEventListParent> call, Response<DetailEventListParent> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    Log.d("check_response", "onResponse: pke");
                     Log.d("check_response", "onResponse: "+ response.body());
                     DetailEventListParent detailEventListParent = response.body();
+
                     List<DetailEventList> detailEventLists = detailEventListParent.getListSukien();
                     if (!detailEventLists.isEmpty()){
                         eventHomeAdapter.setData(detailEventLists);

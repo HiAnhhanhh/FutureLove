@@ -25,6 +25,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -36,6 +37,8 @@ import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
+import com.gauravk.bubblenavigation.BubbleNavigationLinearView;
+import com.gauravk.bubblenavigation.listener.BubbleNavigationChangeListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.mlkit.vision.common.InputImage;
@@ -77,6 +80,8 @@ public class PairingFragment extends Fragment {
     private static final int IMAGE_PICKER_SELECT = 1889;
     private BottomSheetDialog bottomSheetDialog;
     private static final int CAMERA_REQUEST = 1888;
+
+    private BubbleNavigationLinearView bubbleNavigationLinearView;
 
     private static final String TAG = "CameraActivity";
 
@@ -123,7 +128,6 @@ public class PairingFragment extends Fragment {
         }
         return fragmentPairingBinding.getRoot();
     }
-
     private void initUi() {
         // If swap face process is running, switch on maleImage and female image
         // Else, turn them off
@@ -139,7 +143,6 @@ public class PairingFragment extends Fragment {
             resetDetect();
         }
     }
-
     private void lockBtnSelectImage() {
         fragmentPairingBinding.btnSelectPersonMale.setEnabled(false);
         fragmentPairingBinding.btnSelectPersonFemale.setEnabled(false);
@@ -153,27 +156,31 @@ public class PairingFragment extends Fragment {
     }
 
     private void navigateToOtherFragments() {
+
+        bubbleNavigationLinearView = fragmentPairingBinding.bubbleNavigation;
+
+        bubbleNavigationLinearView.setNavigationChangeListener(new BubbleNavigationChangeListener() {
+            @Override
+            public void onNavigationChanged(View view, int position) {
+                switch (position){
+                    case 0:
+                        fragmentPairingBinding.homeBubble.setVisibility(View.GONE);
+                        fragmentPairingBinding.commentBubble.setVisibility(View.GONE);
+                        fragmentPairingBinding.pairingBubble.setVisibility(View.GONE);
+                        NavHostFragment.findNavController(PairingFragment.this).navigate(R.id.action_pairingFragment_to_homeFragment);
+                        break;
+                    case 1:
+                        fragmentPairingBinding.homeBubble.setVisibility(View.GONE);
+                        fragmentPairingBinding.commentBubble.setVisibility(View.GONE);
+                        fragmentPairingBinding.pairingBubble.setVisibility(View.GONE);
+                        NavHostFragment.findNavController(PairingFragment.this).navigate(R.id.action_pairingFragment_to_commentFragment);
+                        break;
+                }
+            }
+        });
         // Click btn Home
-        fragmentPairingBinding.btnHome.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                NavHostFragment.findNavController(PairingFragment.this).navigate(R.id.action_pairingFragment_to_homeFragment);
-            }
-        });
         // Click btn Comment
-        fragmentPairingBinding.btnComment.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                NavHostFragment.findNavController(PairingFragment.this).navigate(R.id.action_pairingFragment_to_commentFragment);
-            }
-        });
         // Click btn Timeline
-        fragmentPairingBinding.btnTimeline.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                NavHostFragment.findNavController(PairingFragment.this).navigate(R.id.action_pairingFragment_to_timelineFragment);
-            }
-        });
         // Click User Detail Button
         fragmentPairingBinding.btnUserAccount.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -190,6 +197,9 @@ public class PairingFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 checkClickSetImageMale = false;
+                femaleName = String.valueOf(fragmentPairingBinding.edtEnterFemaleName.getText());
+                setUpTextWatcher((AppCompatEditText) fragmentPairingBinding.edtEnterFemaleName);
+                isNameFilled = true ;
                 openDialog(view);
             }
         });
@@ -198,6 +208,9 @@ public class PairingFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 checkClickSetImageMale = true;
+                maleName = String.valueOf(fragmentPairingBinding.edtEnterMaleName.getText());
+                setUpTextWatcher((AppCompatEditText) fragmentPairingBinding.edtEnterMaleName);
+                isNameFilled = true;
                 openDialog(view);
             }
         });
@@ -234,7 +247,6 @@ public class PairingFragment extends Fragment {
                             Log.d("PhongNN", "Male Image URL: " + urlImageMale + "\nFemale Image URL: " + urlImageFemale);
                             return null;
                         }
-
                         @SuppressLint("StaticFieldLeak")
                         @Override
                         protected void onPostExecute(Void result) {
@@ -483,7 +495,6 @@ public class PairingFragment extends Fragment {
                 String imagefile = imageFile.getAbsolutePath();
 
                 Bitmap bitmap = rotaImageHadlee(imagefile);
-                // Check that user is clicking on Male or not
                 if (!checkClickSetImageMale) {
                     detectionFace(bitmap);
                     Handler handler = new Handler();
@@ -580,21 +591,15 @@ public class PairingFragment extends Fragment {
             }
         }
     }
-
     private Bitmap rotaImageHadlee(Uri uri) {
-
         try {
-
             InputStream inputStream = requireActivity().getContentResolver().openInputStream(uri);
-
             // Tạo Bitmap từ URI
             Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
 
             // Đọc thông tin Exif của ảnh
             ExifInterface exifInterface = new ExifInterface(requireActivity().getContentResolver().openInputStream(uri));
             int orientation = exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED);
-
-
             return rotateBitmap(bitmap, orientation);
 
             // Hiển thị ảnh đã xoay
@@ -602,9 +607,7 @@ public class PairingFragment extends Fragment {
             e.printStackTrace();
         }
         return null;
-
     }
-
     private Bitmap rotateBitmap(Bitmap bitmap, int orientation) {
         Matrix matrix = new Matrix();
         switch (orientation) {
@@ -664,14 +667,14 @@ public class PairingFragment extends Fragment {
         bottomSheetDialog = new BottomSheetDialog(requireContext());
         bottomSheetDialog.setContentView(bottomDialogBinding.getRoot());
 
-        setUpTextWatcher(bottomDialogBinding.edtEnterName);
-
-        if (!checkClickSetImageMale) {
-            // get name
-            femaleName = bottomDialogBinding.edtEnterName.getText().toString();
-        } else {
-            maleName = bottomDialogBinding.edtEnterName.getText().toString();
-        }
+//        setUpTextWatcher(bottomDialogBinding.edtEnterName);
+//
+//        if (!checkClickSetImageMale) {
+//            // get name
+//            femaleName = bottomDialogBinding.edtEnterName.getText().toString();
+//        } else {
+//            maleName = bottomDialogBinding.edtEnterName.getText().toString();
+//        }
 
         bottomDialogBinding.btnSelectImage.setOnClickListener(new View.OnClickListener() {
             @Override

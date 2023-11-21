@@ -5,11 +5,12 @@
     android:layout_height="match_parent">
 
     <RelativeLayout
+        android:id="@+id/relativeLayout2"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="@dimen/define_dimen_60"
         android:background="@drawable/bg_comment"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent">
 
         <androidx.core.widget.NestedScrollView
             android:id="@+id/nest_scroll"
@@ -125,7 +126,6 @@
                             android:text="55"
                             android:textColor="@color/red_bold"
                             android:textSize="@dimen/define_dimen_50"
-
                             app:layout_constraintBottom_toBottomOf="@+id/imageView2"
                             app:layout_constraintEnd_toEndOf="@+id/imageView2"
                             app:layout_constraintStart_toStartOf="@+id/imageView2"
@@ -140,7 +140,6 @@
                             app:layout_constraintStart_toStartOf="@+id/imageView2"
                             app:layout_constraintTop_toTopOf="@+id/imageView2"
                             app:srcCompat="@drawable/decoration_count_time" />
-
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -237,7 +236,6 @@
                             android:text="55"
                             android:textColor="@color/red_bold"
                             android:textSize="@dimen/define_dimen_50"
-
                             app:layout_constraintBottom_toBottomOf="@+id/imageView4"
                             app:layout_constraintEnd_toEndOf="@+id/imageView4"
                             app:layout_constraintStart_toStartOf="@+id/imageView4"
@@ -415,71 +413,131 @@
             app:tint="@null" />
     </RelativeLayout>
 
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/img_bottom_nav_timeline"
-        android:layout_width="match_parent"
-        android:layout_height="92dp"
-        android:scaleType="centerCrop"
-        android:src="@drawable/timeline_selected"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+<!--    <com.gauravk.bubblenavigation.BubbleNavigationLinearView-->
+<!--        android:id="@+id/bubbleNavigation"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="0dp"-->
+<!--        android:background="@drawable/background_white_radius_20dp"-->
+<!--        android:orientation="horizontal"-->
+<!--        android:padding="10dp"-->
+<!--        android:weightSum="3"-->
+<!--        android:layout_margin="5dp"-->
+<!--        app:layout_constraintBottom_toBottomOf="@+id/relativeLayout2"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintHeight_percent=".1"-->
+<!--        app:layout_constraintStart_toStartOf="parent">-->
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+<!--        <com.gauravk.bubblenavigation.BubbleToggleView-->
+<!--            android:id="@+id/homeBubble"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_weight="1"-->
+<!--            app:bt_colorActive="@color/white"-->
+<!--            app:bt_colorInactive="@color/black"-->
+<!--            app:bt_iconHeight="30dp"-->
+<!--            app:bt_iconWidth="30dp"-->
+<!--            app:bt_active="false"-->
+<!--            app:bt_shape="@drawable/background_purple_radius_20dp"-->
+<!--            app:bt_title="Home"-->
+<!--            app:bt_titleSize="16sp" />-->
 
-        <!--  Fake Button  -->
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_home"
-            android:layout_width="wrap_content"
-            android:layout_height="60dp"
-            android:background="@null"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/btn_comment"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+<!--        <com.gauravk.bubblenavigation.BubbleToggleView-->
+<!--            android:id="@+id/commentBubble"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_weight="1"-->
+<!--            app:bt_colorActive="@color/white"-->
+<!--            app:bt_colorInactive="@color/black"-->
+<!--            app:bt_icon="@drawable/comment_lines_svgrepo_com"-->
+<!--            app:bt_iconHeight="30dp"-->
+<!--            app:bt_shape="@drawable/background_purple_radius_20dp"-->
+<!--            app:bt_iconWidth="30dp"-->
+<!--            app:bt_title="Comment" />-->
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_comment"
-            android:layout_width="wrap_content"
-            android:layout_height="60dp"
-            android:background="@null"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/btn_pairing"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/btn_home"
-            app:layout_constraintTop_toTopOf="parent" />
+<!--        <com.gauravk.bubblenavigation.BubbleToggleView-->
+<!--            android:id="@+id/pairingBubble"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_weight="1"-->
+<!--            app:bt_colorActive="@color/white"-->
+<!--            app:bt_colorInactive="@color/black"-->
+<!--            app:bt_icon="@drawable/baseline_favorite_border_24"-->
+<!--            app:bt_iconHeight="30dp"-->
+<!--            app:bt_iconWidth="30dp"-->
+<!--            app:bt_shape="@drawable/background_purple_radius_20dp"-->
+<!--            app:bt_title="Favorite"-->
+<!--            app:bt_titleSize="16sp" />-->
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_pairing"
-            android:layout_width="wrap_content"
-            android:layout_height="60dp"
-            android:background="@null"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/btn_timeline"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/btn_comment"
-            app:layout_constraintTop_toTopOf="parent" />
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_timeline"
-            android:layout_width="wrap_content"
-            android:layout_height="60dp"
-            android:background="@null"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/btn_pairing"
-            app:layout_constraintTop_toTopOf="parent" />
+<!--    </com.gauravk.bubblenavigation.BubbleNavigationLinearView>-->
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <!--    <androidx.appcompat.widget.AppCompatImageView-->
+<!--        android:id="@+id/img_bottom_nav_timeline"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="92dp"-->
+<!--        android:scaleType="centerCrop"-->
+<!--        android:src="@drawable/timeline_selected"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent" />-->
+
+<!--    <androidx.constraintlayout.widget.ConstraintLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="60dp"-->
+<!--        android:layout_alignParentStart="true"-->
+<!--        android:layout_alignParentEnd="true"-->
+<!--        android:layout_alignParentBottom="true"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent">-->
+
+<!--        &lt;!&ndash;  Fake Button  &ndash;&gt;-->
+<!--        <androidx.appcompat.widget.AppCompatButton-->
+<!--            android:id="@+id/btn_home"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="60dp"-->
+<!--            android:background="@null"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            app:layout_constraintEnd_toStartOf="@+id/btn_comment"-->
+<!--            app:layout_constraintHorizontal_bias="0.5"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="parent" />-->
+
+<!--        <androidx.appcompat.widget.AppCompatButton-->
+<!--            android:id="@+id/btn_comment"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="60dp"-->
+<!--            android:background="@null"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            app:layout_constraintEnd_toStartOf="@+id/btn_pairing"-->
+<!--            app:layout_constraintHorizontal_bias="0.5"-->
+<!--            app:layout_constraintStart_toEndOf="@+id/btn_home"-->
+<!--            app:layout_constraintTop_toTopOf="parent" />-->
+
+<!--        <androidx.appcompat.widget.AppCompatButton-->
+<!--            android:id="@+id/btn_pairing"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="60dp"-->
+<!--            android:background="@null"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            app:layout_constraintEnd_toStartOf="@+id/btn_timeline"-->
+<!--            app:layout_constraintHorizontal_bias="0.5"-->
+<!--            app:layout_constraintStart_toEndOf="@+id/btn_comment"-->
+<!--            app:layout_constraintTop_toTopOf="parent" />-->
+
+<!--        <androidx.appcompat.widget.AppCompatButton-->
+<!--            android:id="@+id/btn_timeline"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="60dp"-->
+<!--            android:background="@null"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintHorizontal_bias="0.5"-->
+<!--            app:layout_constraintStart_toEndOf="@+id/btn_pairing"-->
+<!--            app:layout_constraintTop_toTopOf="parent" />-->
+
+<!--    </androidx.constraintlayout.widget.ConstraintLayout>-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

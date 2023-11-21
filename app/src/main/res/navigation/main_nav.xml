@@ -32,6 +32,9 @@
         <action
             android:id="@+id/action_homeFragment_to_eventsFragment"
             app:destination="@id/eventsFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_listVideoFragment"
+            app:destination="@id/listVideoFragment" />
     </fragment>
     <fragment
         android:id="@+id/commentFragment"
@@ -190,4 +193,13 @@
             android:id="@+id/action_myOwnDialogFragment_to_homeFragment"
             app:destination="@id/homeFragment" />
     </dialog>
+    <fragment
+        android:id="@+id/listVideoFragment"
+        android:name="com.thinkdiffai.futurelove.view.fragment.ListVideoFragment"
+        android:label="fragment_list_video"
+        tools:layout="@layout/fragment_list_video" >
+        <action
+            android:id="@+id/action_listVideoFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+    </fragment>
 </navigation>

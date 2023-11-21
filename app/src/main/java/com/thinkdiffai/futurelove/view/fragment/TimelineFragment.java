@@ -37,10 +37,13 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.gauravk.bubblenavigation.BubbleNavigationLinearView;
+import com.gauravk.bubblenavigation.listener.BubbleNavigationChangeListener;
 import com.thinkdiffai.futurelove.R;
 import com.thinkdiffai.futurelove.databinding.FragmentTimelineBinding;
 import com.thinkdiffai.futurelove.model.DetailEvent;
 import com.thinkdiffai.futurelove.model.DetailEventList;
+import com.thinkdiffai.futurelove.model.IpNetworkModel;
 import com.thinkdiffai.futurelove.model.comment.eacheventcomment.EachEventCommentsList;
 import com.thinkdiffai.futurelove.model.EventHomeDto;
 import com.thinkdiffai.futurelove.model.comment.CommentPage;
@@ -73,6 +76,8 @@ import retrofit2.Response;
 
 public class TimelineFragment extends Fragment {
     private static final int REQUEST_CODE_PERMISSIONS_STORAGE = 101;
+
+    private BubbleNavigationLinearView bubbleNavigationLinearView;
     private static final int IMAGE_PICKER_SELECT = 1889;
     private FragmentTimelineBinding fragmentTimelineBinding;
     private MainActivity mainActivity;
@@ -122,7 +127,7 @@ public class TimelineFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        navigateToOtherFragments();
+//        navigateToOtherFragments();
         initData();
     }
 
@@ -140,29 +145,57 @@ public class TimelineFragment extends Fragment {
         }
     }
 
-    private void navigateToOtherFragments() {
-        // Click btn Home
-        fragmentTimelineBinding.btnHome.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                NavHostFragment.findNavController(TimelineFragment.this).navigate(R.id.action_timelineFragment_to_homeFragment);
-            }
-        });
-        // Click btn Pairing
-        fragmentTimelineBinding.btnPairing.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                NavHostFragment.findNavController(TimelineFragment.this).navigate(R.id.action_timelineFragment_to_pairingFragment);
-            }
-        });
-        // Click btn Comment
-        fragmentTimelineBinding.btnComment.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                NavHostFragment.findNavController(TimelineFragment.this).navigate(R.id.action_timelineFragment_to_commentFragment);
-            }
-        });
-    }
+//    private void navigateToOtherFragments() {
+//        bubbleNavigationLinearView = fragmentTimelineBinding.bubbleNavigation;
+//        bubbleNavigationLinearView.setNavigationChangeListener(new BubbleNavigationChangeListener() {
+//            @Override
+//            public void onNavigationChanged(View view, int position) {
+//                switch (position){
+//                    case 0:
+//                        fragmentTimelineBinding.homeBubble.setVisibility(View.GONE);
+//                        fragmentTimelineBinding.pairingBubble.setVisibility(View.GONE);
+//                        fragmentTimelineBinding.commentBubble.setVisibility(View.GONE);
+//                        NavHostFragment.findNavController(TimelineFragment.this).navigate(R.id.action_timelineFragment_to_homeFragment);
+//                        break;
+//                    case 1:
+//                        fragmentTimelineBinding.homeBubble.setVisibility(View.GONE);
+//                        fragmentTimelineBinding.pairingBubble.setVisibility(View.GONE);
+//                        fragmentTimelineBinding.commentBubble.setVisibility(View.GONE);
+//                        NavHostFragment.findNavController(TimelineFragment.this).navigate(R.id.action_timelineFragment_to_commentFragment);
+//                        break;
+//                    case 2:
+//                        fragmentTimelineBinding.homeBubble.setVisibility(View.GONE);
+//                        fragmentTimelineBinding.pairingBubble.setVisibility(View.GONE);
+//                        fragmentTimelineBinding.commentBubble.setVisibility(View.GONE);
+//                        NavHostFragment.findNavController(TimelineFragment.this).navigate(R.id.action_timelineFragment_to_pairingFragment);
+//                        break;
+//                }
+//            }
+//        });
+//
+//
+//        // Click btn Home
+//        fragmentTimelineBinding.homeBubble.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                NavHostFragment.findNavController(TimelineFragment.this).navigate(R.id.action_timelineFragment_to_homeFragment);
+//            }
+//        });
+////        // Click btn Pairing
+////        fragmentTimelineBinding.pairingBubble.setOnClickListener(new View.OnClickListener() {
+////            @Override
+////            public void onClick(View v) {
+////                NavHostFragment.findNavController(TimelineFragment.this).navigate(R.id.action_timelineFragment_to_pairingFragment);
+////            }
+////        });
+////        // Click btn Comment
+////        fragmentTimelineBinding.commentBubble.setOnClickListener(new View.OnClickListener() {
+////            @Override
+////            public void onClick(View v) {
+////                NavHostFragment.findNavController(TimelineFragment.this).navigate(R.id.action_timelineFragment_to_commentFragment);
+////            }
+////        });
+//    }
 
     private void initListener() {
 
@@ -182,18 +215,21 @@ public class TimelineFragment extends Fragment {
         });
 
         fragmentTimelineBinding.btnSend.setOnClickListener(new View.OnClickListener() {
+
             @SuppressLint("StaticFieldLeak")
             @Override
             public void onClick(View view) {
+
+                Log.d("check_post_comment", "onClick: ");
                 // Get a returned ip from api
                 callDeviceIpAddress(new QueryValueCallback() {
                     @Override
                     public void onQueryValueReceived(String queryValue) {
                         // Assign the return ip address by queryValue
                         networkIp = queryValue;
-
                         // Post comment with the current IP
                         String content = fragmentTimelineBinding.edtComment.getText().toString().trim();
+                        Log.d("check_comment", "onPostExecute_1: "+ content);
                         if (true) { //!content.isEmpty()
                             if (imgBase64Female != null && !imgBase64Female.trim().isEmpty()) {
                                 kProgressHUD.show();
@@ -208,6 +244,7 @@ public class TimelineFragment extends Fragment {
                                     @SuppressLint("StaticFieldLeak")
                                     @Override
                                     protected void onPostExecute(Void result) {
+                                        Log.d("check_comment", "onPostExecute_2: "+ content);
                                         postComment(content, networkIp);
                                         urlImageComment = "";
                                         imgBase64Female = "";
@@ -223,6 +260,7 @@ public class TimelineFragment extends Fragment {
 
                             } else {
                                 urlImageComment = "";
+                                Log.d("check_comment", "onPostExecute_3: "+ content);
                                 postComment(content, networkIp);
                                 fragmentTimelineBinding.edtComment.setText("");
                                 closeKeyboard();
@@ -236,6 +274,7 @@ public class TimelineFragment extends Fragment {
 
                     @Override
                     public void onApiCallFailed(Throwable t) {
+                        Log.d("check_post_comment", "onApiCallFailed: "+ t);
                     }
                 });
 
@@ -381,8 +420,6 @@ public class TimelineFragment extends Fragment {
         @Field("imageattach") String imagEattach)
 
         */
-
-
         ApiService apiService = RetrofitClient.getInstance(Server.DOMAIN2).getRetrofit().create(ApiService.class);
         Call<Object> call = apiService.postDataComment(
                 comment.getIdUser(),
@@ -398,7 +435,6 @@ public class TimelineFragment extends Fragment {
             public void onResponse(Call<Object> call, retrofit2.Response<Object> response) {
                 if (response.isSuccessful() && response.body() != null) {
 //                    xu ly sau khi comment
-                    Log.d("check_post_comment", "onResponse: Thanh Cong");
                     getDataComment(mainActivity.soThuTuSuKien, mainActivity.eventSummaryCurrentId);
                 }
                 if (kProgressHUD.isShowing()) {
@@ -466,7 +502,7 @@ public class TimelineFragment extends Fragment {
         if (!kProgressHUD.isShowing()) {
             kProgressHUD.show();
         }
-        ApiService apiService = RetrofitClient.getInstance(Server.DOMAIN1).getRetrofit().create(ApiService.class);
+        ApiService apiService = RetrofitClient.getInstance(Server.DOMAIN2).getRetrofit().create(ApiService.class);
         Call<DetailEventList> call = apiService.getListEventDetail(mainActivity.eventSummaryCurrentId);
 
         call.enqueue(new Callback<DetailEventList>() {
@@ -523,12 +559,12 @@ public class TimelineFragment extends Fragment {
             public void onResponse(Call<EachEventCommentsList> call, Response<EachEventCommentsList> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     EachEventCommentsList eachEventCommentsList = response.body();
+                    Log.d("GetDataComment", "onResponse: "+ response.body().getEachEventCommentList());
                     List<CommentPage> _comments = eachEventCommentsList.getEachEventCommentList();
                     if (!_comments.isEmpty()) {
                         commentAdapter.setData(_comments, urlImgMale, urlImgFemale);
                         commentAdapter.notifyDataSetChanged();
                     }
-
                     if (kProgressHUD.isShowing()) {
                         kProgressHUD.dismiss();
                     }
@@ -657,6 +693,8 @@ public class TimelineFragment extends Fragment {
      * @Param callback: listen a returned value from calling api
      * */
     public void callDeviceIpAddress(QueryValueCallback callback) {
+
+        Log.d("check_post_comment", "callDeviceIpAddress: ");
 //        WifiManager wifiManager = (WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
 //        if (wifiManager != null && wifiManager.isWifiEnabled()) {
 //            WifiInfo wifiInfo = wifiManager.getConnectionInfo();
@@ -666,23 +704,25 @@ public class TimelineFragment extends Fragment {
 //        } else {
 //            return null;
 //        }
-        ApiService getIpApi = RetrofitIp.getInstance("https://sakaivn.online/").getRetrofit().create(ApiService.class);
-        Call<NetworkModel> call = getIpApi.getIpApiResponse();
-
-        call.enqueue(new Callback<NetworkModel>() {
+        ApiService getIpApi = RetrofitIp.getInstance(Server.GET_CITY_NAME_FROM_IP).getRetrofit().create(ApiService.class);
+        Call<IpNetworkModel> call = getIpApi.getIpApiResponse();
+        Log.d("check_post_comment", "callDeviceIpAddress: "+ call);
+        call.enqueue(new Callback<IpNetworkModel>() {
             @Override
-            public void onResponse(Call<NetworkModel> call, Response<NetworkModel> response) {
+            public void onResponse(Call<IpNetworkModel> call, Response<IpNetworkModel> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    NetworkModel networkModel = response.body();
-                    String returnIp = networkModel.getQuery();
+                    IpNetworkModel networkModel = response.body();
+                    Log.d("check_post_comment", "onResponse: "+ networkModel.getIp());
+                    String returnIp = networkModel.getIp();
                     callback.onQueryValueReceived(returnIp);
                 } else {
+                    Log.d("check_comment_post", "onFailure: ");
                     callback.onApiCallFailed(new Throwable("API for IP call failed"));
                 }
             }
-
             @Override
-            public void onFailure(Call<NetworkModel> call, Throwable t) {
+            public void onFailure(Call<IpNetworkModel> call, Throwable t) {
+                Log.d("check_post_comment", "onFailure: "+ t);
                 callback.onApiCallFailed(t);
             }
         });

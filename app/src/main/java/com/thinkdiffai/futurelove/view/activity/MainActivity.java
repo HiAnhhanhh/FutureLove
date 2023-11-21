@@ -9,17 +9,24 @@ import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
 
+import com.gauravk.bubblenavigation.BubbleNavigationLinearView;
+import com.gauravk.bubblenavigation.listener.BubbleNavigationChangeListener;
 import com.thinkdiffai.futurelove.R;
 import com.thinkdiffai.futurelove.databinding.ActivityMainBinding;
 import com.thinkdiffai.futurelove.view.BroadcastReceiver.InternetReceiver;
+import com.thinkdiffai.futurelove.view.fragment.CommentFragment;
 import com.thinkdiffai.futurelove.view.fragment.HomeFragment;
+import com.thinkdiffai.futurelove.view.fragment.PairingFragment;
+import com.thinkdiffai.futurelove.view.fragment.TimelineFragment;
 
 import io.github.rupinderjeet.kprogresshud.KProgressHUD;
 
@@ -61,6 +68,9 @@ public class MainActivity extends AppCompatActivity {
         getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.transparent));
         activityMainBinding = ActivityMainBinding.inflate(getLayoutInflater());
 
+
+
+
        broadcastReceiver = new InternetReceiver();
        InternetStatus();
 
@@ -79,6 +89,7 @@ public class MainActivity extends AppCompatActivity {
         }
         setContentView(activityMainBinding.getRoot());
     }
+
 
 
     public KProgressHUD createHud() {

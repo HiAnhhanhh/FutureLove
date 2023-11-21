@@ -8,30 +8,34 @@
     android:orientation="vertical">
 
     <ScrollView
+        android:id="@+id/scrollView2"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:id="@+id/ll_frame_search"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:weightSum="6"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="60dp"
                 android:layout_marginEnd="16dp"
                 android:orientation="horizontal"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
+                android:weightSum="6"
                 app:layout_constraintEnd_toEndOf="parent"
-                >
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
                 <androidx.appcompat.widget.LinearLayoutCompat
                     android:layout_width="0dp"
                     android:layout_height="48dp"
                     android:layout_weight="6"
                     android:background="@drawable/frame_search"
                     android:orientation="horizontal">
+
                     <androidx.appcompat.widget.AppCompatImageButton
                         android:id="@+id/btn_search_process"
                         android:layout_width="24dp"
@@ -41,6 +45,7 @@
                         android:background="@color/transparent"
                         android:scaleType="fitCenter"
                         android:src="@drawable/ic_search_1" />
+
                     <androidx.appcompat.widget.AppCompatEditText
                         android:id="@+id/edt_search"
                         android:layout_width="match_parent"
@@ -55,15 +60,14 @@
                 </androidx.appcompat.widget.LinearLayoutCompat>
 
 
-
                 <androidx.appcompat.widget.AppCompatImageButton
                     android:id="@+id/btn_user_account"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:layout_marginStart="16dp"
                     android:background="@drawable/bg_white_round"
-                    android:scaleType="fitCenter"
                     android:contentDescription="@string/btn_user_account"
+                    android:scaleType="fitCenter"
                     android:src="@drawable/ic_user_account"
                     app:layout_constraintBottom_toBottomOf="@+id/ll_frame_search"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -72,89 +76,205 @@
             </androidx.appcompat.widget.LinearLayoutCompat>
 
             <androidx.recyclerview.widget.RecyclerView
-                android:layout_marginTop="10dp"
                 android:id="@+id/tabItem"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="5dp"
+                android:orientation="horizontal"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                android:orientation="horizontal"
-                tools:listitem="@layout/tab_item"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:layout_constraintTop_toBottomOf="@+id/ll_frame_search" />
+                app:layout_constraintTop_toBottomOf="@+id/ll_frame_search"
+                tools:listitem="@layout/tab_item" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rcv_comment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                tools:listitem="@layout/item_comment"
                 android:padding="8dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tabItem"
+                android:layout_marginBottom="80dp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                />
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tabItem"
+                tools:listitem="@layout/item_comment" />
         </androidx.constraintlayout.widget.ConstraintLayout>
+
     </ScrollView>
 
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/img_bottom_nav_comment"
+    <com.gauravk.bubblenavigation.BubbleNavigationLinearView
+        android:id="@+id/bubbleNavigation"
         android:layout_width="match_parent"
-        android:layout_height="92dp"
-        android:scaleType="centerCrop"
-        android:src="@drawable/comment_selected"
+        android:layout_height="0dp"
+        android:background="@drawable/background_white_radius_20dp"
+        android:orientation="horizontal"
+        android:padding="5dp"
+        android:layout_margin="5dp"
+        android:weightSum="3"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintHeight_percent=".1"
+        app:layout_constraintStart_toStartOf="parent">
 
-    <!--  Fake Button  -->
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btn_home"
-        android:layout_width="wrap_content"
-        android:layout_height="60dp"
-        android:layout_marginTop="24dp"
-        android:background="@null"
-        app:layout_constraintBottom_toBottomOf="@+id/img_bottom_nav_comment"
-        app:layout_constraintEnd_toStartOf="@+id/btn_comment"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="@+id/img_bottom_nav_comment"
-        app:layout_constraintTop_toTopOf="@+id/img_bottom_nav_comment" />
+        <com.gauravk.bubblenavigation.BubbleToggleView
+            android:id="@+id/homeBubble"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            app:bt_colorActive="@color/white"
+            app:bt_colorInactive="@color/black"
+            app:bt_iconHeight="30dp"
+            app:bt_iconWidth="30dp"
+            app:bt_shape="@drawable/background_purple_radius_20dp"
+            app:bt_title="Home"
+            app:bt_titleSize="16sp" />
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btn_comment"
-        android:layout_width="wrap_content"
-        android:layout_height="60dp"
-        android:layout_marginTop="20dp"
-        android:background="@null"
-        app:layout_constraintBottom_toBottomOf="@+id/img_bottom_nav_comment"
-        app:layout_constraintEnd_toStartOf="@+id/btn_pairing"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/btn_home"
-        app:layout_constraintTop_toTopOf="@+id/img_bottom_nav_comment" />
+        <com.gauravk.bubblenavigation.BubbleToggleView
+            android:id="@+id/commentBubble"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            app:bt_active="true"
+            app:bt_colorActive="@color/white"
+            app:bt_colorInactive="@color/black"
+            app:bt_icon="@drawable/comment_lines_svgrepo_com"
+            app:bt_iconHeight="30dp"
+            app:bt_iconWidth="30dp"
+            app:bt_shape="@drawable/background_purple_radius_20dp"
+            app:bt_title="Comment" />
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btn_pairing"
-        android:layout_width="wrap_content"
-        android:layout_height="60dp"
-        android:layout_marginTop="20dp"
-        android:background="@null"
-        app:layout_constraintBottom_toBottomOf="@+id/img_bottom_nav_comment"
-        app:layout_constraintEnd_toStartOf="@+id/btn_timeline"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/btn_comment"
-        app:layout_constraintTop_toTopOf="@+id/img_bottom_nav_comment" />
+        <com.gauravk.bubblenavigation.BubbleToggleView
+            android:id="@+id/pairingBubble"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            app:bt_colorActive="@color/white"
+            app:bt_colorInactive="@color/black"
+            app:bt_shape="@drawable/background_purple_radius_20dp"
+            app:bt_icon="@drawable/baseline_favorite_border_24"
+            app:bt_iconHeight="30dp"
+            app:bt_iconWidth="30dp"
+            app:bt_title="Favorite"
+            app:bt_titleSize="16sp" />
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btn_timeline"
-        android:layout_width="wrap_content"
-        android:layout_height="60dp"
-        android:layout_marginTop="20dp"
-        android:background="@null"
-        app:layout_constraintBottom_toBottomOf="@+id/img_bottom_nav_comment"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/btn_pairing"
-        app:layout_constraintTop_toTopOf="@+id/img_bottom_nav_comment" />
+
+    </com.gauravk.bubblenavigation.BubbleNavigationLinearView>
+
+
+    <!--    <com.gauravk.bubblenavigation.BubbleNavigationLinearView-->
+<!--        android:id="@+id/bubbleNavigation"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="0dp"-->
+<!--        android:weightSum="3"-->
+<!--        android:padding="5dp"-->
+<!--        app:layout_constraintHeight_percent=".1"-->
+<!--        android:orientation="horizontal"-->
+<!--        android:background="@drawable/bg_gradient_purple"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent">-->
+
+<!--        <com.gauravk.bubblenavigation.BubbleToggleView-->
+<!--            android:id="@+id/homeBubble"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            app:bt_title="Home"-->
+<!--            app:bt_titleSize="16sp"-->
+<!--            android:layout_weight="1"-->
+<!--            app:bt_shape="@drawable/bg_radius"-->
+<!--            app:bt_iconWidth="30dp"-->
+<!--            app:bt_iconHeight="30dp"-->
+<!--            app:bt_colorActive="@color/purple_200"-->
+<!--            app:bt_colorInactive="@color/black"/>-->
+
+<!--        <com.gauravk.bubblenavigation.BubbleToggleView-->
+<!--            android:id="@+id/commentBubble"-->
+<!--            android:layout_weight="1"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            app:bt_icon="@drawable/comment_lines_svgrepo_com"-->
+<!--            app:bt_title="Comment"-->
+<!--            app:bt_active="true"-->
+<!--            app:bt_iconHeight="30dp"-->
+<!--            app:bt_iconWidth="30dp"-->
+<!--            app:bt_colorActive="@color/purple_200"-->
+<!--            app:bt_colorInactive="@color/black"/>-->
+
+<!--        <com.gauravk.bubblenavigation.BubbleToggleView-->
+<!--            android:id="@+id/pairingBubble"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            app:bt_titleSize="16sp"-->
+<!--            app:bt_icon="@drawable/baseline_favorite_border_24"-->
+<!--            app:bt_title="Favorite"-->
+<!--            android:layout_weight="1"-->
+<!--            app:bt_iconWidth="30dp"-->
+<!--            app:bt_iconHeight="30dp"-->
+<!--            app:bt_colorActive="@color/purple_200"-->
+<!--            app:bt_colorInactive="@color/black"/>-->
+
+
+<!--    </com.gauravk.bubblenavigation.BubbleNavigationLinearView>-->
+
+
+    <!--    <androidx.appcompat.widget.AppCompatImageView-->
+<!--        android:id="@+id/img_bottom_nav_comment"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="92dp"-->
+<!--        android:scaleType="centerCrop"-->
+<!--        android:src="@drawable/comment_selected"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent" />-->
+
+<!--    &lt;!&ndash;  Fake Button  &ndash;&gt;-->
+<!--    <androidx.appcompat.widget.AppCompatButton-->
+<!--        android:id="@+id/btn_home"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="60dp"-->
+<!--        android:layout_marginTop="24dp"-->
+<!--        android:background="@null"-->
+<!--        app:layout_constraintBottom_toBottomOf="@+id/img_bottom_nav_comment"-->
+<!--        app:layout_constraintEnd_toStartOf="@+id/btn_comment"-->
+<!--        app:layout_constraintHorizontal_bias="0.5"-->
+<!--        app:layout_constraintStart_toStartOf="@+id/img_bottom_nav_comment"-->
+<!--        app:layout_constraintTop_toTopOf="@+id/img_bottom_nav_comment" />-->
+
+<!--    <androidx.appcompat.widget.AppCompatButton-->
+<!--        android:id="@+id/btn_comment"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="60dp"-->
+<!--        android:layout_marginTop="20dp"-->
+<!--        android:background="@null"-->
+<!--        app:layout_constraintBottom_toBottomOf="@+id/img_bottom_nav_comment"-->
+<!--        app:layout_constraintEnd_toStartOf="@+id/btn_pairing"-->
+<!--        app:layout_constraintHorizontal_bias="0.5"-->
+<!--        app:layout_constraintStart_toEndOf="@+id/btn_home"-->
+<!--        app:layout_constraintTop_toTopOf="@+id/img_bottom_nav_comment" />-->
+
+<!--    <androidx.appcompat.widget.AppCompatButton-->
+<!--        android:id="@+id/btn_pairing"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="60dp"-->
+<!--        android:layout_marginTop="20dp"-->
+<!--        android:background="@null"-->
+<!--        app:layout_constraintBottom_toBottomOf="@+id/img_bottom_nav_comment"-->
+<!--        app:layout_constraintEnd_toStartOf="@+id/btn_timeline"-->
+<!--        app:layout_constraintHorizontal_bias="0.5"-->
+<!--        app:layout_constraintStart_toEndOf="@+id/btn_comment"-->
+<!--        app:layout_constraintTop_toTopOf="@+id/img_bottom_nav_comment" />-->
+
+<!--    <androidx.appcompat.widget.AppCompatButton-->
+<!--        android:id="@+id/btn_timeline"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="60dp"-->
+<!--        android:layout_marginTop="20dp"-->
+<!--        android:background="@null"-->
+<!--        app:layout_constraintBottom_toBottomOf="@+id/img_bottom_nav_comment"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintHorizontal_bias="0.5"-->
+<!--        app:layout_constraintStart_toEndOf="@+id/btn_pairing"-->
+<!--        app:layout_constraintTop_toTopOf="@+id/img_bottom_nav_comment" />-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

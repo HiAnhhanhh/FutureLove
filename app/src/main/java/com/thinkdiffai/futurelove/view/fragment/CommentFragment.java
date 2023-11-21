@@ -17,6 +17,8 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.gauravk.bubblenavigation.BubbleNavigationLinearView;
+import com.gauravk.bubblenavigation.listener.BubbleNavigationChangeListener;
 import com.thinkdiffai.futurelove.R;
 import com.thinkdiffai.futurelove.databinding.FragmentCommentBinding;
 import com.thinkdiffai.futurelove.model.Comment;
@@ -44,6 +46,9 @@ public class CommentFragment extends Fragment {
     private FragmentCommentBinding fragmentCommentBinding;
     private MainActivity mainActivity;
     private KProgressHUD kProgressHUD;
+
+    private BubbleNavigationLinearView bubbleNavigationLinearView;
+
 
     // Returned list
     private List<CommentPage> commentsForAdapter;
@@ -150,27 +155,42 @@ public class CommentFragment extends Fragment {
     }
 
     private void navigateToOtherFragments() {
+        bubbleNavigationLinearView = fragmentCommentBinding.bubbleNavigation;
+
+        bubbleNavigationLinearView.setNavigationChangeListener(new BubbleNavigationChangeListener() {
+            @Override
+            public void onNavigationChanged(View view, int position) {
+                switch (position){
+                    case 0:
+                        fragmentCommentBinding.homeBubble.setVisibility(View.GONE);
+                        fragmentCommentBinding.pairingBubble.setVisibility(View.GONE);
+                        fragmentCommentBinding.commentBubble.setVisibility(View.GONE);
+                        goToHomeFragment();
+                        break;
+                    case 2:
+                        fragmentCommentBinding.homeBubble.setVisibility(View.GONE);
+                        fragmentCommentBinding.pairingBubble.setVisibility(View.GONE);
+                        fragmentCommentBinding.commentBubble.setVisibility(View.GONE);
+                        goToPairingFragment();
+                        break;
+                }
+            }
+        });
         // Click btn Home
-        fragmentCommentBinding.btnHome.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                goToHomeFragment();
-            }
-        });
-        // Click btn Pairing
-        fragmentCommentBinding.btnPairing.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                goToPairingFragment();
-            }
-        });
+//        fragmentCommentBinding.homeBubble.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                goToHomeFragment();
+//            }
+//        });
+//        // Click btn Pairing
+//        fragmentCommentBinding.pairingBubble.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                goToPairingFragment();
+//            }
+//        });
         // Click btn Timeline
-        fragmentCommentBinding.btnTimeline.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                goToTimeLineFragment();
-            }
-        });
         fragmentCommentBinding.btnUserAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

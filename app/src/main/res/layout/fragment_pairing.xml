@@ -336,7 +336,9 @@
             android:src="@drawable/img_add_male"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0" />
+
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cv_image_male"
@@ -356,8 +358,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:scaleType="centerCrop"
                 android:adjustViewBounds="true"
+                android:scaleType="centerCrop"
                 tools:srcCompat="@tools:sample/avatars" />
         </androidx.cardview.widget.CardView>
 
@@ -386,17 +388,18 @@
             android:src="@drawable/img_add_female"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@id/btn_submit"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0" />
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cv_image_female"
             android:layout_width="94dp"
             android:layout_height="94dp"
+            android:layout_marginTop="4.5dp"
+            android:layout_marginEnd="5.6dp"
+            android:visibility="gone"
             app:cardCornerRadius="1000dp"
             app:cardPreventCornerOverlap="false"
-            android:layout_marginEnd="5.6dp"
-            android:layout_marginTop="4.5dp"
-            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="@+id/btn_select_person_female"
             app:layout_constraintTop_toTopOf="@+id/btn_select_person_female">
 
@@ -404,69 +407,100 @@
                 android:id="@+id/img_female"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:scaleType="centerCrop"
                 android:layout_gravity="center"
+                android:scaleType="centerCrop"
                 tools:srcCompat="@tools:sample/avatars" />
         </androidx.cardview.widget.CardView>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/img_bottom_nav_pairing"
+    <EditText
+        android:id="@+id/edt_enter_male_name"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="5dp"
+        android:background="@drawable/background_et_male"
+        android:hint="@string/enter_name"
+        android:text="Male"
+        android:paddingStart="10dp"
+        app:layout_constraintBottom_toTopOf="@id/ll_btn_add_img"
+        app:layout_constraintEnd_toStartOf="@id/edt_enter_female_name"
+        app:layout_constraintHeight_percent=".06"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/layout_count_time"
+        app:layout_constraintWidth_percent=".45" />
+
+    <EditText
+        android:id="@+id/edt_enter_female_name"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="5dp"
+        android:background="@drawable/background_et_female"
+        android:hint="@string/enter_name"
+        android:text="female"
+        android:paddingStart="10dp"
+        app:layout_constraintBottom_toTopOf="@+id/ll_btn_add_img"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent=".06"
+        app:layout_constraintStart_toEndOf="@+id/edt_enter_male_name"
+        app:layout_constraintTop_toBottomOf="@+id/layout_count_time"
+        app:layout_constraintWidth_percent=".45" />
+
+    <com.gauravk.bubblenavigation.BubbleNavigationLinearView
+        android:id="@+id/bubbleNavigation"
         android:layout_width="match_parent"
-        android:layout_height="92dp"
-        android:scaleType="centerCrop"
-        android:src="@drawable/pairing_selected"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_height="0dp"
+        android:layout_margin="5dp"
+        android:background="@drawable/background_purple_radius_20dp"
+        android:orientation="horizontal"
+        android:padding="5dp"
+        android:weightSum="3"
+        app:layout_constraintBottom_toBottomOf="@+id/img_wave_2"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintHeight_percent=".1"
+        app:layout_constraintStart_toStartOf="parent">
 
-    <!--  Fake Button  -->
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btn_home"
-        android:layout_width="wrap_content"
-        android:layout_height="60dp"
-        android:layout_marginTop="24dp"
-        android:background="@null"
-        app:layout_constraintBottom_toBottomOf="@+id/img_bottom_nav_pairing"
-        app:layout_constraintEnd_toStartOf="@+id/btn_comment"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="@+id/img_bottom_nav_pairing"
-        app:layout_constraintTop_toTopOf="@+id/img_bottom_nav_pairing" />
+        <com.gauravk.bubblenavigation.BubbleToggleView
+            android:id="@+id/homeBubble"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            app:bt_colorActive="@color/purple_200"
+            app:bt_colorInactive="@color/black"
+            app:bt_iconHeight="30dp"
+            app:bt_iconWidth="30dp"
+            app:bt_shape="@drawable/bg_radius"
+            app:bt_title="Home"
+            app:bt_titleSize="16sp" />
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btn_comment"
-        android:layout_width="wrap_content"
-        android:layout_height="60dp"
-        android:layout_marginTop="20dp"
-        android:background="@null"
-        app:layout_constraintBottom_toBottomOf="@+id/img_bottom_nav_pairing"
-        app:layout_constraintEnd_toStartOf="@+id/btn_pairing"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/btn_home"
-        app:layout_constraintTop_toTopOf="@+id/img_bottom_nav_pairing" />
+        <com.gauravk.bubblenavigation.BubbleToggleView
+            android:id="@+id/commentBubble"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            app:bt_colorActive="@color/purple_200"
+            app:bt_colorInactive="@color/black"
+            app:bt_icon="@drawable/comment_lines_svgrepo_com"
+            app:bt_iconHeight="30dp"
+            app:bt_iconWidth="30dp"
+            app:bt_title="Comment" />
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btn_pairing"
-        android:layout_width="wrap_content"
-        android:layout_height="60dp"
-        android:layout_marginTop="20dp"
-        android:background="@null"
-        app:layout_constraintBottom_toBottomOf="@+id/img_bottom_nav_pairing"
-        app:layout_constraintEnd_toStartOf="@+id/btn_timeline"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/btn_comment"
-        app:layout_constraintTop_toTopOf="@+id/img_bottom_nav_pairing" />
+        <com.gauravk.bubblenavigation.BubbleToggleView
+            android:id="@+id/pairingBubble"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            app:bt_active="true"
+            app:bt_colorActive="@color/purple_200"
+            app:bt_colorInactive="@color/black"
+            app:bt_icon="@drawable/baseline_favorite_border_24"
+            app:bt_iconHeight="30dp"
+            app:bt_iconWidth="30dp"
+            app:bt_shape="@drawable/background_white_radius_20dp"
+            app:bt_title="Favorite"
+            app:bt_titleSize="16sp" />
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btn_timeline"
-        android:layout_width="wrap_content"
-        android:layout_height="60dp"
-        android:layout_marginTop="20dp"
-        android:background="@null"
-        app:layout_constraintBottom_toBottomOf="@+id/img_bottom_nav_pairing"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/btn_pairing"
-        app:layout_constraintTop_toTopOf="@+id/img_bottom_nav_pairing" />
+
+    </com.gauravk.bubblenavigation.BubbleNavigationLinearView>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

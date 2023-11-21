@@ -276,6 +276,7 @@ public class LoginFragment extends Fragment {
                         queryValueCallback.onQueryValueReceived("Invalid Password!!");
 
                     }
+                    Log.d("check_login", "onResponse: "+ user_id);
                     SharedPreferences sharedPreferences = getActivity().getSharedPreferences("id_user",0);
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.putString("id_user",user_id);

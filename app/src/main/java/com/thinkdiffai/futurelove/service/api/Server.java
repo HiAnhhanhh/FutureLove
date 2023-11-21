@@ -6,17 +6,19 @@ public interface Server {
 //
 //
 //    String  DOMAIN3 = "http://127.0.0.1:8888/";
-    String DOMAIN1 = "https://metatechvn.store/";
-    String DOMAIN2 = "http://192.168.50.146:9090/";
-    String DOMAIN3 = "https://metatechvn.store/";
+    String DOMAIN = "https://metatechvn.store/";
+    String DOMAIN1 = "http://192.168.50.146:9090/";
+    String DOMAIN2 = "https://metatechvn.store/";
 
 
     String GET_NETWORK_API_DOMAIN = "http://ip-api.com/";
     String GET_CITY_NAME_FROM_IP = "https://ipinfo.io/";
 
+    String GET_VIDEO = "lovehistory/listvideo/";
+
     String URI_PAIRING = "getdata";
     String URI_CREATE_IMPLICIT_DATA = "getdata/skngam";
-    String URI_GET_NETWORK_STATUS = "json/";
+    String URI_GET_NETWORK_STATUS = "json";
 
     String URI_LIST_EVENT_HOME = "lovehistory/page/";
     String URI_LIST_EVENT_TIMELINE = "lovehistory/";
@@ -28,9 +30,7 @@ public interface Server {
     String URI_LIST_COMMENT_NEW = "lovehistory/pageComment/";
     String URI_POST_COMMENT = "lovehistory/comment";
     String URI_LINK_WEB_DETAIL = "http://datanomic.online/detail/";
-
 //    String URI_LOG_IN = "login";
-
     String URI_LOG_IN = "login";
 //    String URI_SIGN_UP = "register";
     String URI_SIGN_UP = "register/user";
@@ -42,7 +42,6 @@ public interface Server {
     // uri events cua tung user
     String URI_EVENTS_USER="lovehistory/user/";
     String URI_DELETE_ACCOUNT = "deleteuser/";
-
     // uri doi passwork
     String URI_CHANGE_PASSWORD="changepassword/";
 }
