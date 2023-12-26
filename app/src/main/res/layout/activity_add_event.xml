@@ -7,7 +7,7 @@
     android:background="@drawable/bg_home"
     android:orientation="vertical"
     android:paddingVertical="@dimen/define_dimen_16"
-    tools:context="com.thinkdiffai.futurelove.view.activity.AddEventActivity">
+    tools:context="com.thinkdiffai.futurelove.view.fragment.activity.AddEventActivity">
 
     <LinearLayout
         android:id="@+id/header_title"

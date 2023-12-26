@@ -1,25 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-    <item
-        android:id="@+id/nav_home"
-        android:icon="@drawable/ic_home"
-        android:title=""
-        />
-    <item
-        android:id="@+id/nav_comment"
-        android:icon="@drawable/ic_comment"
-        android:title="" />
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/homeFragment"
+        android:icon="@drawable/btn_menu_home_black"
+        android:title="@string/home"/>
 
     <item
-        android:id="@+id/nav_pairing"
-        android:icon="@drawable/ic_pairing_couple"
-        android:title="" />
+        android:id="@+id/commentFragment"
+        android:icon="@drawable/comment"
+        android:title="@string/comment" />
 
     <item
-        android:id="@+id/nav_timeline"
-        android:icon="@drawable/ic_timeeline"
-        android:title="" />
+        android:id="@+id/pairingFragment"
+        android:icon="@drawable/baseline_favorite_border_24"
+        android:title="@string/pairing" />
 
+    <item
+        android:id="@+id/listVideoFragment"
+        android:icon="@drawable/video_frame_play_horizontal_svgrepo_com"
+        android:title="@string/video" />
 
 </menu>

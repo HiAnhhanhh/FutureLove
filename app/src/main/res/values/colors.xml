@@ -17,7 +17,7 @@
 
     <color name="textColorSecondary">#6D6E70</color>
     <color name="textColorAccent">#A7A9AB</color>
-    <color name="gray_white">#DBD9D9</color>
+    <color name="gray_white">#66DBD9D9</color>
     <color name="gray_white_1">#90DBD9D9</color>
     <color name="dividerColor">#BDBDBD</color>
     <color name="transparent">#00000000</color>

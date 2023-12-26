@@ -5,6 +5,7 @@ public class Comment {
     public String device_cmt;
     public String dia_chi_ip;
     public int id_comment;
+
     public long id_toan_bo_su_kien;
     public String imageattach;
     public String noi_dung_cmt;

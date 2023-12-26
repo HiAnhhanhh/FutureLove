@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="5dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/bg_non_registered_home_screen"
+    tools:context=".view.fragment.VideoResultsFragment">
+
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView"
+        android:layout_width="0dp"
+        app:layout_constraintWidth_percent=".49"
+        android:layout_height="340dp"
+        android:elevation="10dp"
+        android:padding="10dp"
+        app:cardBackgroundColor="@color/black"
+        app:cardCornerRadius="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <com.google.android.exoplayer2.ui.StyledPlayerView
+            android:id="@+id/videoSwapFace"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            app:hide_on_touch="true"
+            app:show_timeout="1000"
+            app:use_controller="true" />
+
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView_results"
+        android:layout_width="0dp"
+        android:layout_height="340dp"
+        android:elevation="10dp"
+        android:padding="10dp"
+        app:cardBackgroundColor="@color/black"
+        app:cardCornerRadius="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintWidth_percent=".49">
+
+        <com.google.android.exoplayer2.ui.StyledPlayerView
+            android:id="@+id/videoSwapFace_results"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            app:hide_on_touch="true"
+            app:show_timeout="1000"
+            app:use_controller="true" />
+
+    </androidx.cardview.widget.CardView>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

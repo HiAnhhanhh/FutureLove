@@ -5,20 +5,37 @@
     <uses-feature
         android:name="android.hardware.camera"
         android:required="false" />
+
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES"/>
+
+
+    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE"
+        tools:ignore="ScopedStorage" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
+<!--    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />-->
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
+
+<!--    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>-->
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
     <uses-permission
         android:name="android.permission.READ_EXTERNAL_STORAGE"
         android:maxSdkVersion="32" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+
     <uses-permission
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         android:maxSdkVersion="32"
         tools:ignore="ScopedStorage" />
 
+
+
     <application
+
+        android:requestLegacyExternalStorage="true"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -28,14 +45,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.FutureLove"
         android:usesCleartextTraffic="true"
-        android:enableOnBackInvokedCallback="true"
         tools:targetApi="31">
         <activity
-            android:name=".view.activity.SignInSignUpActivity"
+            android:name=".view.fragment.activity.SignInSignUpActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name=".view.activity.AddEventActivity"
+            android:name=".view.fragment.activity.AddEventActivity"
             android:exported="true" />
 
         <provider
@@ -54,7 +70,7 @@
             tools:replace="android:value" />
 
         <activity
-            android:name=".view.activity.MainActivity"
+            android:name=".view.fragment.activity.MainActivity"
             android:exported="true"
             android:windowSoftInputMode="adjustPan">
             <intent-filter>

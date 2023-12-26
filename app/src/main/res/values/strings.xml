@@ -32,4 +32,11 @@
     <string name="time">time</string>
     <string name="btn_user_account">btn user account</string>
     <string name="username">Username</string>
+    <string name="home">Home</string>
+    <string name="comment">Comment</string>
+    <string name="pairing">Pairing</string>
+    <string name="video">Video</string>
+    <string name="choose_file">Choose file</string>
+    <string name="video_swap">Video Swap</string>
+    <string name="ghjkl">TODO</string>
 </resources>

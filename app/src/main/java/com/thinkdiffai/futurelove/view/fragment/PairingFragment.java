@@ -4,8 +4,11 @@ import static android.app.Activity.RESULT_OK;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
@@ -25,7 +28,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -38,7 +40,6 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.gauravk.bubblenavigation.BubbleNavigationLinearView;
-import com.gauravk.bubblenavigation.listener.BubbleNavigationChangeListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.mlkit.vision.common.InputImage;
@@ -57,7 +58,7 @@ import com.thinkdiffai.futurelove.service.api.RetrofitClient;
 import com.thinkdiffai.futurelove.service.api.Server;
 import com.thinkdiffai.futurelove.util.MyDialog;
 import com.thinkdiffai.futurelove.util.Util;
-import com.thinkdiffai.futurelove.view.activity.MainActivity;
+import com.thinkdiffai.futurelove.view.fragment.activity.MainActivity;
 import com.thinkdiffai.futurelove.view.fragment.dialog.MyOwnDialogFragment;
 
 import java.io.File;
@@ -95,6 +96,7 @@ public class PairingFragment extends Fragment {
     private KProgressHUD kProgressHUD;
     private String resultDetech;
     private String imgBase64Male;
+    int id_user ;
     private String imgBase64Female;
     private String urlImageMale;
     private String urlImageFemale;
@@ -123,14 +125,31 @@ public class PairingFragment extends Fragment {
         try {
             initUi();
             initListener();
+            initData();
         } catch (Exception e) {
             Log.e("ExceptionRuntime", e.toString());
         }
         return fragmentPairingBinding.getRoot();
     }
+
+    private void initData() {
+        loadIdUser();
+    }
+
+    private void loadIdUser() {
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("id_user",0);
+        String id_user_str = sharedPreferences.getString("id_user", "");
+        Log.d("check_user_id", "loadIdUser: "+ id_user_str);
+        if (id_user_str == "") {
+            id_user = 0;
+        }else{
+            id_user = Integer.parseInt(id_user_str);
+        }
+
+    }
+
     private void initUi() {
-        // If swap face process is running, switch on maleImage and female image
-        // Else, turn them off
+
         if (mainActivity.waitingSwapFaceTime != 0 && mainActivity.maleImage != null && mainActivity.femaleImage != null) {
             Toast.makeText(mainActivity, "Running Process ...", Toast.LENGTH_SHORT).show();
             getTimeIncreaseAndShow(Util.getTimeStampNow(), mainActivity.waitingSwapFaceTime);
@@ -152,45 +171,53 @@ public class PairingFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        navigateToOtherFragments();
+//        navigateToOtherFragments();
     }
 
-    private void navigateToOtherFragments() {
-
-        bubbleNavigationLinearView = fragmentPairingBinding.bubbleNavigation;
-
-        bubbleNavigationLinearView.setNavigationChangeListener(new BubbleNavigationChangeListener() {
-            @Override
-            public void onNavigationChanged(View view, int position) {
-                switch (position){
-                    case 0:
-                        fragmentPairingBinding.homeBubble.setVisibility(View.GONE);
-                        fragmentPairingBinding.commentBubble.setVisibility(View.GONE);
-                        fragmentPairingBinding.pairingBubble.setVisibility(View.GONE);
-                        NavHostFragment.findNavController(PairingFragment.this).navigate(R.id.action_pairingFragment_to_homeFragment);
-                        break;
-                    case 1:
-                        fragmentPairingBinding.homeBubble.setVisibility(View.GONE);
-                        fragmentPairingBinding.commentBubble.setVisibility(View.GONE);
-                        fragmentPairingBinding.pairingBubble.setVisibility(View.GONE);
-                        NavHostFragment.findNavController(PairingFragment.this).navigate(R.id.action_pairingFragment_to_commentFragment);
-                        break;
-                }
-            }
-        });
-        // Click btn Home
-        // Click btn Comment
-        // Click btn Timeline
-        // Click User Detail Button
-        fragmentPairingBinding.btnUserAccount.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                NavHostFragment.findNavController(PairingFragment.this).navigate(R.id.action_pairingFragment_to_userDetailFragment);
-                mainActivity.pairingToUserDetail = true;
-            }
-        });
-    }
-
+//    private void navigateToOtherFragments() {
+//
+//        bubbleNavigationLinearView = fragmentPairingBinding.bubbleNavigation;
+//
+//        bubbleNavigationLinearView.setNavigationChangeListener(new BubbleNavigationChangeListener() {
+//            @Override
+//            public void onNavigationChanged(View view, int position) {
+//                switch (position){
+//                    case 0:
+//                        fragmentPairingBinding.homeBubble.setVisibility(View.GONE);
+//                        fragmentPairingBinding.commentBubble.setVisibility(View.GONE);
+//                        fragmentPairingBinding.pairingBubble.setVisibility(View.GONE);
+//                        fragmentPairingBinding.listVideoBubble.setVisibility(View.GONE);
+//                        NavHostFragment.findNavController(PairingFragment.this).navigate(R.id.action_pairingFragment_to_homeFragment);
+//                        break;
+//                    case 1:
+//                        fragmentPairingBinding.homeBubble.setVisibility(View.GONE);
+//                        fragmentPairingBinding.commentBubble.setVisibility(View.GONE);
+//                        fragmentPairingBinding.pairingBubble.setVisibility(View.GONE);
+//                        fragmentPairingBinding.listVideoBubble.setVisibility(View.GONE);
+//                        NavHostFragment.findNavController(PairingFragment.this).navigate(R.id.action_pairingFragment_to_commentFragment);
+//                        break;
+//                    case 3:
+//                        fragmentPairingBinding.homeBubble.setVisibility(View.GONE);
+//                        fragmentPairingBinding.commentBubble.setVisibility(View.GONE);
+//                        fragmentPairingBinding.pairingBubble.setVisibility(View.GONE);
+//                        fragmentPairingBinding.listVideoBubble.setVisibility(View.GONE);
+//                        NavHostFragment.findNavController(PairingFragment.this).navigate(R.id.action_pairingFragment_to_listVideoFragment );
+//                        break;
+//                }
+//            }
+//        });
+//        // Click btn Home
+//        // Click btn Comment
+//        // Click btn Timeline
+//        // Click User Detail Button
+//        fragmentPairingBinding.btnUserAccount.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                NavHostFragment.findNavController(PairingFragment.this).navigate(R.id.action_pairingFragment_to_userDetailFragment);
+//                mainActivity.pairingToUserDetail = true;
+//            }
+//        });
+//    }
     private void initListener() {
 
         fragmentPairingBinding.btnSelectPersonFemale.setOnClickListener(new View.OnClickListener() {
@@ -467,7 +494,7 @@ public class PairingFragment extends Fragment {
     private void startCamera() throws FileNotFoundException {
         closeDialog();
         isNameFilled = false;
-        File cacheDir = Objects.requireNonNull(getActivity()).getApplicationContext().getCacheDir();
+        File cacheDir = requireActivity().getApplicationContext().getCacheDir();
         // start default camera
         Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
         if (cameraIntent.resolveActivity(getActivity().getPackageManager()) != null) {
@@ -540,6 +567,7 @@ public class PairingFragment extends Fragment {
             try {
                 Uri selectedMediaUri = data.getData();
                 Bitmap bitmap;
+//                getData(selectedMediaUri);
 
                 bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), selectedMediaUri);
 //                bitmap = rotaImageHadlee(selectedMediaUri);
@@ -591,6 +619,50 @@ public class PairingFragment extends Fragment {
             }
         }
     }
+
+//    private void getData(Uri selectedMediaUri) {
+//        String filePath = getRealPathFromURI(getContext(), selectedImageUri);
+//        File imageFile = new File(filePath);
+//        Log.d("check_upload_image", "getData_0: "+ imageFile);
+//        RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), imageFile);
+//        MultipartBody.Part imagePart = MultipartBody.Part.createFormData("src_img", imageFile.getName(), requestBody);
+//        ApiService apiService = RetrofitClient.getInstance(Server.DOMAIN2).getRetrofit().create(ApiService.class);
+//        Log.d("check_upload_image", "getData: "+ id_user + imagePart);
+//        Call<String> call = apiService.uploadImage(id_user,"src_nam",imagePart);
+//        call.enqueue(new Callback<String>() {
+//            @Override
+//            public void onResponse(Call<String> call, Response<String> response) {
+//                if(response.isSuccessful()){
+//                    Log.d("check_upload_image", "onResponse: "+ response.body());
+//                    uriResponse =  response.body();
+//                    Log.d("check_upload_image", "onResponse_2: "+ uriResponse);
+////                    getVideoSwap(uriResponse);
+//                }else {
+//                }
+//            }
+//            @Override
+//            public void onFailure(Call<String> call, Throwable t) {
+//                Log.d("check_upload_image", "onFailure: "+ t.getMessage());
+//            }
+//        });
+//    }
+
+    public static String getRealPathFromURI(Context context, Uri contentUri) {
+        String[] projection = {MediaStore.Images.Media.DATA};
+        Cursor cursor = context.getContentResolver().query(contentUri, projection, null, null, null);
+
+        if (cursor != null) {
+            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            cursor.moveToFirst();
+            String filePath = cursor.getString(column_index);
+            cursor.close();
+            return filePath;
+        }
+
+        return null;
+    }
+
+
     private Bitmap rotaImageHadlee(Uri uri) {
         try {
             InputStream inputStream = requireActivity().getContentResolver().openInputStream(uri);
@@ -833,7 +905,6 @@ public class PairingFragment extends Fragment {
         if (leftEye == null || rightEye == null || nose == null || mouth == null || cheekLeft == null || cheekRight == null) {
             return "the picture is too blurry or because there are not enough eyes, nose, mouth";
         }
-
         return result;
     }
 

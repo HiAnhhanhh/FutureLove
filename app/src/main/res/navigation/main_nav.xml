@@ -9,6 +9,8 @@
         android:id="@+id/homeFragment"
         android:name="com.thinkdiffai.futurelove.view.fragment.HomeFragment"
         android:label="HomeFragment">
+
+
         <action
             android:id="@+id/action_homeFragment_to_commentFragment"
             app:destination="@id/commentFragment"
@@ -61,6 +63,9 @@
         <action
             android:id="@+id/action_commentFragment_to_userDetailFragment"
             app:destination="@id/userDetailFragment" />
+        <action
+            android:id="@+id/action_commentFragment_to_listVideoFragment"
+            app:destination="@id/listVideoFragment" />
     </fragment>
     <fragment
         android:id="@+id/pairingFragment"
@@ -87,6 +92,9 @@
         <action
             android:id="@+id/action_pairingFragment_to_userDetailFragment"
             app:destination="@id/userDetailFragment" />
+        <action
+            android:id="@+id/action_pairingFragment_to_listVideoFragment"
+            app:destination="@id/listVideoFragment" />
     </fragment>
     <fragment
         android:id="@+id/timelineFragment"
@@ -201,5 +209,71 @@
         <action
             android:id="@+id/action_listVideoFragment_to_homeFragment"
             app:destination="@id/homeFragment" />
+<!--        <action-->
+<!--            android:id="@+id/action_listVideoFragment_to_swapFaceFragment"-->
+<!--            app:destination="@id/swapFaceFragment" />-->
+
+        <action
+            android:id="@+id/action_listVideoFragment_to_pairingFragment"
+            app:destination="@id/pairingFragment" />
+        <action
+            android:id="@+id/action_listVideoFragment_to_commentFragment"
+            app:destination="@id/commentFragment" />
+        <action
+            android:id="@+id/action_listVideoFragment_to_swapFaceFragment"
+            app:destination="@id/swapFaceFragment" />
+        <action
+            android:id="@+id/action_listVideoFragment_to_swapFaceWithYourVideo"
+            app:destination="@id/swapFaceWithYourVideo" />
     </fragment>
+    <fragment
+        android:id="@+id/swapFaceFragment"
+        android:name="com.thinkdiffai.futurelove.view.fragment.SwapFaceFragment"
+        android:label="fragment_swap_face"
+        tools:layout="@layout/fragment_swap_face" >
+        <argument
+            android:name="argKey"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_swapFaceFragment_to_videoResultsFragment"
+            app:destination="@id/videoResultsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/videoResultsFragment"
+        android:name="com.thinkdiffai.futurelove.view.fragment.VideoResultsFragment"
+        android:label="fragment_video_results"
+        tools:layout="@layout/fragment_video_results" >
+        <action
+            android:id="@+id/action_videoResultsFragment_to_swapFaceFragment"
+            app:destination="@id/swapFaceFragment" />
+        <action
+            android:id="@+id/action_videoResultsFragment_to_swapFaceWithYourVideo"
+            app:destination="@id/swapFaceWithYourVideo" />
+    </fragment>
+    <fragment
+        android:id="@+id/swapFaceWithYourVideo"
+        android:name="com.thinkdiffai.futurelove.view.fragment.SwapFaceWithYourVideo"
+        android:label="SwapFaceWithYourVideo" >
+        <action
+            android:id="@+id/action_swapFaceWithYourVideo_to_listVideoFragment"
+            app:destination="@id/listVideoFragment" />
+        <action
+            android:id="@+id/action_swapFaceWithYourVideo_to_videoResultsFragment"
+            app:destination="@id/videoResultsFragment" />
+    </fragment>
+    <!--    <fragment-->
+<!--        android:id="@+id/swapFaceFragment"-->
+<!--        android:name="com.thinkdiffai.futurelove.view.fragment.SwapFaceFragment"-->
+<!--        android:label="fragment_swap_face"-->
+<!--        tools:layout="@layout/fragment_swap_face" >-->
+
+<!--        <argument android:name="urlVideo"-->
+<!--            app:argType="String"-->
+<!--            />-->
+<!--        <action-->
+<!--            android:id="@+id/action_swapFaceFragment_to_listVideoFragment"-->
+<!--            app:destination="@id/listVideoFragment" />-->
+
+
+<!--    </fragment>-->
 </navigation>

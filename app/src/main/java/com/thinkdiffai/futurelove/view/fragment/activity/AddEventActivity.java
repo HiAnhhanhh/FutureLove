@@ -1,4 +1,4 @@
-package com.thinkdiffai.futurelove.view.activity;
+package com.thinkdiffai.futurelove.view.fragment.activity;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;

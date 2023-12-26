@@ -3,16 +3,141 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_gravity="center"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".view.fragment.ListVideoFragment">
+    tools:context=".view.fragment.ListVideoFragment"
+    android:background="@drawable/bg_non_registered_home_screen">
+
+    <!--    <edmt.dev.videoplayer.VideoPlayerRecyclerView-->
+<!--        android:id="@+id/videoPlayer"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"/>-->
+
+<!--    <VideoView-->
+<!--        android:id="@+id/checkVideo"-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="0dp"-->
+<!--        app:layout_constraintBottom_toTopOf="@+id/bubbleNavigation"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintHeight_percent=".5"-->
+<!--        app:layout_constraintWidth_percent=".5"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent" />-->
+
 
     <androidx.recyclerview.widget.RecyclerView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:id="@+id/pageVideoAdapter"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="5dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/chooseFileBtn"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0"
+        tools:listitem="@layout/tab_item" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/listViewRec"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        app:layout_constraintBottom_toTopOf="@+id/pageVideoAdapter"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:listitem="@layout/list_video_item" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/chooseFileBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/video"
+        android:textColor="@color/purple_200"
+        app:backgroundTint="@color/white"
+        android:layout_marginTop="16dp"
+        app:layout_constraintVertical_bias="1"
+        app:layout_constraintBottom_toBottomOf="@id/pageVideoAdapter"
+        app:layout_constraintEnd_toStartOf="@id/pageVideoAdapter"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/pageVideoAdapter"/>
+
+
+<!--    <com.gauravk.bubblenavigation.BubbleNavigationLinearView-->
+<!--        android:id="@+id/bubbleNavigation"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="0dp"-->
+<!--        android:background="@drawable/background_white_radius_20dp"-->
+<!--        android:orientation="horizontal"-->
+<!--        android:padding="10dp"-->
+<!--        android:layout_margin="5dp"-->
+<!--        android:weightSum="4"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintHeight_percent=".1"-->
+<!--        app:layout_constraintStart_toStartOf="parent">-->
+
+<!--        <com.gauravk.bubblenavigation.BubbleToggleView-->
+<!--            android:id="@+id/homeBubble"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_weight="1"-->
+<!--            app:bt_active="false"-->
+<!--            app:bt_colorActive="@color/white"-->
+<!--            app:bt_colorInactive="@color/black"-->
+<!--            app:bt_iconHeight="30dp"-->
+<!--            app:bt_iconWidth="30dp"-->
+<!--            app:bt_shape="@drawable/background_purple_radius_20dp"-->
+<!--            app:bt_title="Home"-->
+<!--            app:bt_titleSize="16sp" />-->
+
+<!--        <com.gauravk.bubblenavigation.BubbleToggleView-->
+<!--            android:id="@+id/commentBubble"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            app:bt_icon="@drawable/comment_lines_svgrepo_com"-->
+<!--            android:layout_weight="1"-->
+<!--            app:bt_iconHeight="40dp"-->
+<!--            app:bt_iconWidth="40dp"/>-->
+<!--        &lt;!&ndash;            app:bt_colorActive="@color/white"&ndash;&gt;-->
+<!--        &lt;!&ndash;            app:bt_colorInactive="@color/black"&ndash;&gt;-->
+<!--        &lt;!&ndash;            app:bt_icon="@drawable/comment_lines_svgrepo_com"&ndash;&gt;-->
+<!--        &lt;!&ndash;            app:bt_shape="@drawable/background_purple_radius_20dp"&ndash;&gt;-->
+
+<!--        &lt;!&ndash;            app:bt_title="Comment" />&ndash;&gt;-->
+
+<!--        <com.gauravk.bubblenavigation.BubbleToggleView-->
+<!--            android:id="@+id/pairingBubble"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_weight="1"-->
+<!--            app:bt_colorActive="@color/white"-->
+<!--            app:bt_colorInactive="@color/black"-->
+<!--            app:bt_shape="@drawable/background_purple_radius_20dp"-->
+<!--            app:bt_icon="@drawable/baseline_favorite_border_24"-->
+<!--            app:bt_iconHeight="30dp"-->
+<!--            app:bt_iconWidth="30dp"-->
+<!--            app:bt_title="Favorite"-->
+<!--            app:bt_titleSize="16sp"/>-->
+
+<!--        <com.gauravk.bubblenavigation.BubbleToggleView-->
+<!--            android:id="@+id/listVideoBubble"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_weight="1"-->
+<!--            app:bt_colorActive="@color/white"-->
+<!--            app:bt_colorInactive="@color/black"-->
+<!--            app:bt_active="true"-->
+<!--            app:bt_iconHeight="30dp"-->
+<!--            app:bt_iconWidth="30dp"-->
+<!--            app:bt_icon="@drawable/video_frame_play_horizontal_svgrepo_com"-->
+<!--            app:bt_shape="@drawable/background_purple_radius_20dp"-->
+<!--            app:bt_title="Video"-->
+<!--            app:bt_titleSize="16sp" />-->
+<!--    </com.gauravk.bubblenavigation.BubbleNavigationLinearView>-->
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

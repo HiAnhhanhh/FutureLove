@@ -30,7 +30,7 @@ import com.thinkdiffai.futurelove.service.api.ApiService;
 import com.thinkdiffai.futurelove.service.api.QueryValueCallback;
 import com.thinkdiffai.futurelove.service.api.RetrofitClient;
 import com.thinkdiffai.futurelove.service.api.Server;
-import com.thinkdiffai.futurelove.view.activity.SignInSignUpActivity;
+import com.thinkdiffai.futurelove.view.fragment.activity.SignInSignUpActivity;
 import com.thinkdiffai.futurelove.view.fragment.dialog.MyOwnDialogFragment;
 
 import java.util.Objects;

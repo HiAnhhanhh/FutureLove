@@ -41,8 +41,8 @@ import com.thinkdiffai.futurelove.model.comment.UserComment;
 import com.thinkdiffai.futurelove.service.api.ApiService;
 import com.thinkdiffai.futurelove.service.api.RetrofitClient;
 import com.thinkdiffai.futurelove.service.api.Server;
-import com.thinkdiffai.futurelove.view.activity.MainActivity;
-import com.thinkdiffai.futurelove.view.activity.SignInSignUpActivity;
+import com.thinkdiffai.futurelove.view.fragment.activity.MainActivity;
+import com.thinkdiffai.futurelove.view.fragment.activity.SignInSignUpActivity;
 import com.thinkdiffai.futurelove.view.adapter.UserCommentAdapter;
 import com.thinkdiffai.futurelove.view.fragment.dialog.MyOwnDialogFragment;
 
@@ -200,7 +200,7 @@ public class UserDetailFragment extends Fragment {
                     binding.tvUserEventsNumber.setText(String.valueOf(detailUsers.getCount_sukien()));
                     binding.tvUserCommentNumber.setText(String.valueOf(detailUsers.getCount_comment()));
                     binding.tvUserViewNumber.setText(String.valueOf(detailUsers.getCount_view()));
-                    Glide.with(Objects.requireNonNull(getActivity())).load(detailUsers.getLink_avatar()).into(binding.imgUserAvatar);
+                    Glide.with(requireActivity()).load(detailUsers.getLink_avatar()).into(binding.imgUserAvatar);
                 } else {
                     binding.tvUserName.setText("null");
                     binding.tvUserEventsNumber.setText("null");
@@ -337,7 +337,7 @@ public class UserDetailFragment extends Fragment {
 //    }
 
     private void changeLoginState() {
-        sharedPreferences = Objects.requireNonNull(getActivity()).getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
+        sharedPreferences = requireActivity().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putBoolean("LOGIN_STATE", false);
         editor.apply();

@@ -1,5 +1,8 @@
 package com.thinkdiffai.futurelove.service.api;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -14,8 +17,12 @@ import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory;
 
 public class RetrofitClient {
 
+    private String token_au;
+
     private static RetrofitClient instance;
     private static Retrofit retrofit;
+
+
 
 
     private RetrofitClient(String domain) {
@@ -42,8 +49,6 @@ public class RetrofitClient {
                 .client(okBuilder.build())
                 .build();
     }
-
-
     public static synchronized RetrofitClient getInstance(String domain) {
         if (instance == null) {
             instance = new RetrofitClient(domain);

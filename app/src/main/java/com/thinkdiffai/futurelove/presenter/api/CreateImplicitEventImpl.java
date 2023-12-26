@@ -13,7 +13,7 @@ import com.thinkdiffai.futurelove.model.event.UploadingEvent;
 import com.thinkdiffai.futurelove.service.api.ApiService;
 import com.thinkdiffai.futurelove.service.api.RetrofitClient;
 import com.thinkdiffai.futurelove.service.api.Server;
-import com.thinkdiffai.futurelove.view.activity.MainActivity;
+import com.thinkdiffai.futurelove.view.fragment.activity.MainActivity;
 import com.thinkdiffai.futurelove.view.fragment.dialog.MyOwnDialogFragment;
 
 import retrofit2.Call;

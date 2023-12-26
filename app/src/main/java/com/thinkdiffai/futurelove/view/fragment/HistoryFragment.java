@@ -16,7 +16,7 @@ import com.thinkdiffai.futurelove.DbStorage.EventHistoryDb;
 import com.thinkdiffai.futurelove.databinding.FragmentHistoryBinding;
 import com.thinkdiffai.futurelove.model.EventHomeDto;
 
-import com.thinkdiffai.futurelove.view.activity.MainActivity;
+import com.thinkdiffai.futurelove.view.fragment.activity.MainActivity;
 import com.thinkdiffai.futurelove.view.adapter.HistoryAdapter;
 
 import java.util.ArrayList;

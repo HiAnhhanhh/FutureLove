@@ -1,4 +1,4 @@
-package com.thinkdiffai.futurelove.view.activity;
+package com.thinkdiffai.futurelove.view.fragment.activity;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -8,25 +8,18 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
+import androidx.navigation.ui.NavigationUI;
 
-import com.gauravk.bubblenavigation.BubbleNavigationLinearView;
-import com.gauravk.bubblenavigation.listener.BubbleNavigationChangeListener;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.thinkdiffai.futurelove.R;
 import com.thinkdiffai.futurelove.databinding.ActivityMainBinding;
 import com.thinkdiffai.futurelove.view.BroadcastReceiver.InternetReceiver;
-import com.thinkdiffai.futurelove.view.fragment.CommentFragment;
-import com.thinkdiffai.futurelove.view.fragment.HomeFragment;
-import com.thinkdiffai.futurelove.view.fragment.PairingFragment;
-import com.thinkdiffai.futurelove.view.fragment.TimelineFragment;
 
 import io.github.rupinderjeet.kprogresshud.KProgressHUD;
 
@@ -37,6 +30,8 @@ public class MainActivity extends AppCompatActivity {
     public boolean homeToUserDetail = false;
     public boolean commentToUserDetail = false;
     public boolean pairingToUserDetail = false;
+
+    private NavController navController;
     // --------------------------------------------
 
     private SharedPreferences sharedPreferences;
@@ -49,7 +44,6 @@ public class MainActivity extends AppCompatActivity {
     public Bitmap femaleImage;
     public long waitingSwapFaceTime = 0L;
 
-    public NavController navController;
 
     // checking login flag
     private boolean userLoggedIn = false;
@@ -62,17 +56,26 @@ public class MainActivity extends AppCompatActivity {
 
     public int soThuTuSuKien = 0;
 
+    @Nullable
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.transparent));
         activityMainBinding = ActivityMainBinding.inflate(getLayoutInflater());
 
-
-
-
        broadcastReceiver = new InternetReceiver();
        InternetStatus();
+
+//        NavController navController = Navigation.findNavController(MainActivity.this, R.id.activity_main_nav_host_fragment);
+//        navController.navigateUp();
+
+       BottomNavigationView bottomNavigationView = activityMainBinding.activityMainBottomNavigationView;
+       NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.activity_main_nav_host_fragment);
+       navController = navHostFragment.getNavController();
+
+        NavigationUI.setupWithNavController(bottomNavigationView, navController);
 
         // Check LOGIN_STATE
         sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);

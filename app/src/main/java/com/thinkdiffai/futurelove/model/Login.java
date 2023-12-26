@@ -2,7 +2,7 @@ package com.thinkdiffai.futurelove.model;
 
 public class Login {
     private int id_user, count_comment, count_sukien, count_view;
-    private String device_register, email, ip_register, link_avatar, user_name;
+    private String device_register, email, ip_register, link_avatar, user_name, token;
 
     public Login(int id_user, int count_comment, int count_sukien, int count_view, String device_register, String email, String ip_register, String link_avatar, String user_name) {
         this.id_user = id_user;
@@ -14,7 +14,7 @@ public class Login {
         this.ip_register = ip_register;
         this.link_avatar = link_avatar;
         this.user_name = user_name;
-//        this.token = token;
+        this.token = token;
     }
 
     public int getId_user() {
@@ -89,11 +89,11 @@ public class Login {
         this.user_name = user_name;
     }
 
-//    public String getToken() {
-//        return token;
-//    }
-//
-//    public void setToken(String token) {
-//        this.token = token;
-//    }
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
 }

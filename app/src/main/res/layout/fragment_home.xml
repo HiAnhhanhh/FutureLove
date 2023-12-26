@@ -11,7 +11,7 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_constraintBottom_toTopOf="@+id/bubbleNavigation"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -95,7 +95,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:layout_marginBottom="80dp"
                 android:padding="15dp"
                 android:paddingHorizontal="16dp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -167,67 +166,6 @@
 <!--        app:layout_constraintStart_toEndOf="@+id/btn_pairing"-->
 <!--        app:layout_constraintTop_toTopOf="@+id/img_bottom_nav" />-->
 
-    <com.gauravk.bubblenavigation.BubbleNavigationLinearView
-        android:id="@+id/bubbleNavigation"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:background="@drawable/background_white_radius_20dp"
-        android:orientation="horizontal"
-        android:padding="10dp"
-        android:layout_margin="5dp"
-        android:weightSum="3"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHeight_percent=".1"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <com.gauravk.bubblenavigation.BubbleToggleView
-            android:id="@+id/homeBubble"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            app:bt_active="true"
-            app:bt_colorActive="@color/white"
-            app:bt_colorInactive="@color/black"
-            app:bt_iconHeight="30dp"
-            app:bt_iconWidth="30dp"
-            app:bt_shape="@drawable/background_purple_radius_20dp"
-            app:bt_title="Home"
-            app:bt_titleSize="16sp" />
-
-        <com.gauravk.bubblenavigation.BubbleToggleView
-            android:id="@+id/commentBubble"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:bt_icon="@drawable/comment_lines_svgrepo_com"
-            android:layout_weight="1"
-            app:bt_iconHeight="40dp"
-            app:bt_iconWidth="40dp"/>
-<!--            app:bt_colorActive="@color/white"-->
-<!--            app:bt_colorInactive="@color/black"-->
-<!--            app:bt_icon="@drawable/comment_lines_svgrepo_com"-->
-<!--            app:bt_shape="@drawable/background_purple_radius_20dp"-->
-
-<!--            app:bt_title="Comment" />-->
-
-        <com.gauravk.bubblenavigation.BubbleToggleView
-            android:id="@+id/pairingBubble"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            app:bt_colorActive="@color/white"
-            app:bt_colorInactive="@color/black"
-            app:bt_shape="@drawable/background_purple_radius_20dp"
-            app:bt_icon="@drawable/baseline_favorite_border_24"
-            app:bt_iconHeight="30dp"
-            app:bt_iconWidth="30dp"
-            app:bt_title="Favorite"
-            app:bt_titleSize="16sp" />
-
-
-
-
-    </com.gauravk.bubblenavigation.BubbleNavigationLinearView>
 
 
 

@@ -18,10 +18,8 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.gauravk.bubblenavigation.BubbleNavigationLinearView;
-import com.gauravk.bubblenavigation.listener.BubbleNavigationChangeListener;
 import com.thinkdiffai.futurelove.R;
 import com.thinkdiffai.futurelove.databinding.FragmentCommentBinding;
-import com.thinkdiffai.futurelove.model.Comment;
 import com.thinkdiffai.futurelove.model.comment.CommentList;
 import com.thinkdiffai.futurelove.model.comment.CommentPage;
 import com.thinkdiffai.futurelove.model.comment.CommentUser;
@@ -29,7 +27,7 @@ import com.thinkdiffai.futurelove.service.api.ApiService;
 import com.thinkdiffai.futurelove.service.api.RetrofitClient;
 import com.thinkdiffai.futurelove.service.api.Server;
 
-import com.thinkdiffai.futurelove.view.activity.MainActivity;
+import com.thinkdiffai.futurelove.view.fragment.activity.MainActivity;
 import com.thinkdiffai.futurelove.view.adapter.CommentAdapter;
 import com.thinkdiffai.futurelove.view.adapter.PageCommentAdapter;
 
@@ -108,7 +106,6 @@ public class CommentFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        navigateToOtherFragments();
 
     }
 
@@ -154,68 +151,27 @@ public class CommentFragment extends Fragment {
         });
     }
 
-    private void navigateToOtherFragments() {
-        bubbleNavigationLinearView = fragmentCommentBinding.bubbleNavigation;
-
-        bubbleNavigationLinearView.setNavigationChangeListener(new BubbleNavigationChangeListener() {
-            @Override
-            public void onNavigationChanged(View view, int position) {
-                switch (position){
-                    case 0:
-                        fragmentCommentBinding.homeBubble.setVisibility(View.GONE);
-                        fragmentCommentBinding.pairingBubble.setVisibility(View.GONE);
-                        fragmentCommentBinding.commentBubble.setVisibility(View.GONE);
-                        goToHomeFragment();
-                        break;
-                    case 2:
-                        fragmentCommentBinding.homeBubble.setVisibility(View.GONE);
-                        fragmentCommentBinding.pairingBubble.setVisibility(View.GONE);
-                        fragmentCommentBinding.commentBubble.setVisibility(View.GONE);
-                        goToPairingFragment();
-                        break;
-                }
-            }
-        });
-        // Click btn Home
-//        fragmentCommentBinding.homeBubble.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                goToHomeFragment();
-//            }
-//        });
-//        // Click btn Pairing
-//        fragmentCommentBinding.pairingBubble.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                goToPairingFragment();
-//            }
-//        });
-        // Click btn Timeline
-        fragmentCommentBinding.btnUserAccount.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                goToUserDetailFragment();
-            }
-        });
-    }
-
-    private void goToHomeFragment() {
-        NavHostFragment.findNavController(CommentFragment.this).navigate(R.id.action_commentFragment_to_homeFragment);
-    }
-
-    private void goToPairingFragment() {
-        NavHostFragment.findNavController(CommentFragment.this).navigate(R.id.action_commentFragment_to_pairingFragment);
-    }
-    private void goToEventFragment(){
-        NavHostFragment.findNavController(CommentFragment.this).navigate(R.id.action_commentFragment_to_eventsFragment);
-    }
+//    private void goToListVideoFragment() {
+//        NavHostFragment.findNavController(CommentFragment.this).navigate(R.id.action_commentFragment_to_listVideoFragment);
+//    }
+//
+//    private void goToHomeFragment() {
+//        NavHostFragment.findNavController(CommentFragment.this).navigate(R.id.action_commentFragment_to_homeFragment);
+//    }
+//
+//    private void goToPairingFragment() {
+//        NavHostFragment.findNavController(CommentFragment.this).navigate(R.id.action_commentFragment_to_pairingFragment);
+//    }
+//    private void goToEventFragment(){
+//        NavHostFragment.findNavController(CommentFragment.this).navigate(R.id.action_commentFragment_to_eventsFragment);
+//    }
     private void goToTimeLineFragment() {
         NavHostFragment.findNavController(CommentFragment.this).navigate(R.id.action_commentFragment_to_timelineFragment);
     }
-    private void goToUserDetailFragment(){
-        NavHostFragment.findNavController(CommentFragment.this).navigate(R.id.action_commentFragment_to_userDetailFragment);
-        mainActivity.commentToUserDetail = true;
-    }
+//    private void goToUserDetailFragment(){
+//        NavHostFragment.findNavController(CommentFragment.this).navigate(R.id.action_commentFragment_to_userDetailFragment);
+//        mainActivity.commentToUserDetail = true;
+//    }
     private void initListenerCommentNew() {
 
 //        fragmentCommentBinding.rcvComment.addOnScrollListener(new PaginationScrollListener(linearLayoutManager) {

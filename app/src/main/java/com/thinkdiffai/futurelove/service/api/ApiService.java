@@ -2,25 +2,29 @@ package com.thinkdiffai.futurelove.service.api;
 
 import com.thinkdiffai.futurelove.model.DetailEventList;
 import com.thinkdiffai.futurelove.model.DetailEventListParent;
+import com.thinkdiffai.futurelove.model.DetailListVideoModel;
 import com.thinkdiffai.futurelove.model.EventHomeDto;
+import com.thinkdiffai.futurelove.model.GetVideoSwapResponse;
+import com.thinkdiffai.futurelove.model.GetYourVideoSwapModel;
 import com.thinkdiffai.futurelove.model.IpNetworkModel;
 import com.thinkdiffai.futurelove.model.Login;
 import com.thinkdiffai.futurelove.model.comment.CommentList;
-import com.thinkdiffai.futurelove.model.comment.CommentPage;
 import com.thinkdiffai.futurelove.model.comment.DetailUser;
 import com.thinkdiffai.futurelove.model.comment.EventsUser.EventsUser;
 import com.thinkdiffai.futurelove.model.comment.UserComment;
 import com.thinkdiffai.futurelove.model.comment.eacheventcomment.EachEventCommentsList;
-import com.thinkdiffai.futurelove.modelfor4gdomain.NetworkModel;
 
 import java.util.List;
 
+import okhttp3.MultipartBody;
 import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.Part;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
@@ -61,6 +65,9 @@ public interface ApiService {
 //            @Query("ten_nu") String tenNu
 //    );
 
+
+
+
     @GET(Server.URI_PAIRING)
     Call<Object> postEvent(
             @Header(Server.KEY_HEADER1) String imageLink1,
@@ -72,8 +79,8 @@ public interface ApiService {
             @Query("ten_nu") String tenNu
     );
 
-    @GET(Server.GET_VIDEO + "page")
-    Call<Object> getListVideo(
+    @GET(Server.GET_VIDEO + "{page}")
+    Call<DetailListVideoModel> getListVideo(
             @Path("page") int id,
             @Query("category") int id_categories
     );
@@ -85,6 +92,37 @@ public interface ApiService {
             @Query("id_user") long userId,
             @Query("ten_nam") String tenNam,
             @Query("ten_nu") String tenNu
+    );
+
+
+    @GET("https://lhvn.online/getdata/genvideo")
+    Call<GetVideoSwapResponse> getUrlVideoSwap(
+            @Header("Authorization") String authorization,
+            @Query("id_video") int idVideo,
+            @Query("device_them_su_kien") String deviceThemSuKien,
+            @Query("ip_them_su_kien") String ipThemSuKien,
+            @Query("id_user") int idUser,
+            @Query("image") String image,
+            @Query("ten_video") String tenVideo
+    );
+
+    @Multipart
+    @POST(Server.UPLOAD_IMAGE +"{id_user}")
+    Call<String> uploadImage(
+            @Path("id_user") int id_user,
+            @Query("type") String fileType,
+            @Part MultipartBody.Part src_img
+    );
+
+    @Multipart
+    @POST("https://lhvn.online/getdata/genvideo/swap/imagevid")
+    Call<GetYourVideoSwapModel> PostVid (
+            @Header("Authorization") String authorization,
+            @Query("device_them_su_kien") String deviceThemSuKien,
+            @Query("ip_them_su_kien") String ipThemSuKien,
+            @Query("id_user") int id_user,
+            @Query("src_img") String src_img,
+            @Part MultipartBody.Part src_vid
     );
 
     @GET(Server.URI_GET_NETWORK_STATUS)
@@ -112,6 +150,7 @@ public interface ApiService {
     Call<CommentList> getListCommentNew(@Path("id") int id,
                                         @Query("id_user") int id_user);
 
+
     @FormUrlEncoded
     @POST(Server.URI_POST_EVENT_TIMELINE)
     Call<Object> postListEventDetail(@Field("id") String id,
@@ -134,7 +173,6 @@ public interface ApiService {
                                  @Field("so_thu_tu_su_kien") int soThuTuSuKien,
                                  @Field("ipComment") String ip,
                                  @Field("imageattach") String imagEattach);
-
     @FormUrlEncoded
     @POST(Server.URI_LOG_IN)
     Call<Login> login(

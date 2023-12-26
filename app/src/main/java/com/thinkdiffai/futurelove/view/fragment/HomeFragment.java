@@ -2,7 +2,6 @@ package com.thinkdiffai.futurelove.view.fragment;
 
 import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
-import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,18 +18,15 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.gauravk.bubblenavigation.BubbleNavigationLinearView;
-import com.gauravk.bubblenavigation.listener.BubbleNavigationChangeListener;
 import com.thinkdiffai.futurelove.R;
 import com.thinkdiffai.futurelove.databinding.FragmentHomeBinding;
 import com.thinkdiffai.futurelove.model.DetailEventList;
 import com.thinkdiffai.futurelove.model.DetailEventListParent;
-import com.thinkdiffai.futurelove.model.Page;
 import com.thinkdiffai.futurelove.service.api.ApiService;
 import com.thinkdiffai.futurelove.service.api.RetrofitClient;
 import com.thinkdiffai.futurelove.service.api.Server;
 
-import com.thinkdiffai.futurelove.util.PaginationScrollListener;
-import com.thinkdiffai.futurelove.view.activity.MainActivity;
+import com.thinkdiffai.futurelove.view.fragment.activity.MainActivity;
 import com.thinkdiffai.futurelove.view.adapter.EventHomeAdapter;
 import com.thinkdiffai.futurelove.view.adapter.PageEventAdapter;
 
@@ -92,7 +88,7 @@ public class HomeFragment extends Fragment {
             kProgressHUD.show();
         }
         ApiService apiService = RetrofitClient.getInstance(Server.DOMAIN2).getRetrofit().create(ApiService.class);
-        Call<DetailEventListParent> call = apiService.getEventListForHome(5,id_user);
+        Call<DetailEventListParent> call = apiService.getEventListForHome(1,id_user);
         Log.d("check_response", "getData: "+ call.toString());
         call.enqueue(new Callback<DetailEventListParent>() {
             @SuppressLint("NotifyDataSetChanged")
@@ -155,7 +151,6 @@ public class HomeFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        navigateToOtherFragments();
         setOnClickUserDetail();
     }
 
@@ -173,43 +168,11 @@ public class HomeFragment extends Fragment {
         mainActivity.homeToUserDetail = true;
     }
 
-    private void navigateToOtherFragments() {
-        bubbleNavigationLinearView = fragmentHomeBinding.bubbleNavigation;
-        bubbleNavigationLinearView.setNavigationChangeListener(new BubbleNavigationChangeListener() {
-            @Override
-            public void onNavigationChanged(View view, int position) {
-                switch (position){
-                    case 1:
-                        fragmentHomeBinding.homeBubble.setVisibility(View.GONE);
-                        fragmentHomeBinding.pairingBubble.setVisibility(View.GONE);
-                        fragmentHomeBinding.commentBubble.setVisibility(View.GONE);
-                        goToCommentFragment();
-                        break;
-                    case 2:
-                        fragmentHomeBinding.homeBubble.setVisibility(View.GONE);
-                        fragmentHomeBinding.pairingBubble.setVisibility(View.GONE);
-                        fragmentHomeBinding.commentBubble.setVisibility(View.GONE);
-                        goToPairingFragment();
-                        break;
-                }
-            }
-        });
-        // Click btn Comment
-//        fragmentHomeBinding.commentBubble.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                goToCommentFragment();
-//            }
-//        });
-//        // Click btn Pairing
-//        fragmentHomeBinding.pairingBubble.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                goToPairingFragment();
-//            }
-//        });
-        // Click btn Timeline
+
+    private void goToListVideoFragment() {
+        NavHostFragment.findNavController(HomeFragment.this).navigate(R.id.action_homeFragment_to_listVideoFragment);
     }
+
     private void goToPairingFragment() {
         NavHostFragment.findNavController(HomeFragment.this).navigate(R.id.action_homeFragment_to_pairingFragment);
     }

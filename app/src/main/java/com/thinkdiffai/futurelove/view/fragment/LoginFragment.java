@@ -29,11 +29,10 @@ import com.thinkdiffai.futurelove.service.api.ApiService;
 import com.thinkdiffai.futurelove.service.api.QueryValueCallback;
 import com.thinkdiffai.futurelove.service.api.RetrofitClient;
 import com.thinkdiffai.futurelove.service.api.Server;
-import com.thinkdiffai.futurelove.view.activity.MainActivity;
-import com.thinkdiffai.futurelove.view.activity.SignInSignUpActivity;
+import com.thinkdiffai.futurelove.view.fragment.activity.MainActivity;
+import com.thinkdiffai.futurelove.view.fragment.activity.SignInSignUpActivity;
 import com.thinkdiffai.futurelove.view.fragment.dialog.MyOwnDialogFragment;
 
-import java.util.ArrayList;
 import java.util.Objects;
 
 import io.github.rupinderjeet.kprogresshud.KProgressHUD;
@@ -210,7 +209,7 @@ public class LoginFragment extends Fragment {
                     Log.d("PHONG", "queryValue = " + queryValue);
                     navToMainActivity();
                     // Store LOGIN STATE not to login again
-                    sharedPreferences = Objects.requireNonNull(getActivity()).getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
+                    sharedPreferences = requireActivity().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.putBoolean("LOGIN_STATE", true);
                     editor.apply();
@@ -258,7 +257,6 @@ public class LoginFragment extends Fragment {
         if (!kProgressHUD.isShowing()) {
             kProgressHUD.show();
         }
-
         // Call login Api
         ApiService apiService = RetrofitClient.getInstance(Server.DOMAIN2).getRetrofit().create(ApiService.class);
         Call<Login> call = apiService.login(email, password);
@@ -268,19 +266,20 @@ public class LoginFragment extends Fragment {
             public void onResponse(Call<Login> call, Response<Login> response) {
                 Log.d("PHONG", "onResponse:" + response.body());
                 if (response.isSuccessful() && response.body() != null) {
+                    String token = response.body().getToken();
                     Log.d("PHONG", "callback_2: "+ response.body());
                     String user_id = String.valueOf(response.body().getId_user());
                     if(!user_id.equals("0")){
                         queryValueCallback.onQueryValueReceived("Logged in successfully");
                     }else {
                         queryValueCallback.onQueryValueReceived("Invalid Password!!");
-
                     }
-                    Log.d("check_login", "onResponse: "+ user_id);
-                    SharedPreferences sharedPreferences = getActivity().getSharedPreferences("id_user",0);
+                    Log.d("check_login", "onResponse: "+ user_id + token );
+                    SharedPreferences sharedPreferences = requireActivity().getSharedPreferences("id_user",0);
                     SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putString("id_user",user_id);
-                    editor.commit();
+                    editor.putString("id_user_str",user_id);
+                    editor.putString("token", token);
+                    editor.apply();
                     Log.d("id_user_detail", "onResponse: "+ user_id);
                 }
                 if (kProgressHUD.isShowing()) {
@@ -364,6 +363,4 @@ public class LoginFragment extends Fragment {
         NavController nav = NavHostFragment.findNavController(this);
         nav.navigate(R.id.action_loginFragment_to_registerFragment);
     }
-
-
 }

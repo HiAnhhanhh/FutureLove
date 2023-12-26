@@ -6,10 +6,12 @@ public interface Server {
 //
 //
 //    String  DOMAIN3 = "http://127.0.0.1:8888/";
-    String DOMAIN = "https://metatechvn.store/";
-    String DOMAIN1 = "http://192.168.50.146:9090/";
+    String DOMAIN1 = "https://metatechvn.store/";
+    String DOMAIN0 = "http://192.168.50.146:9090/";
     String DOMAIN2 = "https://metatechvn.store/";
+    String DOMAIN3 ="https://lhvn.online/";
 
+    String DOMAIN4 ="https://thinkdiff.us/";
 
     String GET_NETWORK_API_DOMAIN = "http://ip-api.com/";
     String GET_CITY_NAME_FROM_IP = "https://ipinfo.io/";
@@ -17,6 +19,12 @@ public interface Server {
     String GET_VIDEO = "lovehistory/listvideo/";
 
     String URI_PAIRING = "getdata";
+
+    String UPLOAD_IMAGE = "upload-gensk/";
+
+    String GET_URL_VIDEO_SWAP = "getdata/genvideo";
+
+    String POST_URL_VIDEO = "getdata/genvideo/swap/imagevid";
     String URI_CREATE_IMPLICIT_DATA = "getdata/skngam";
     String URI_GET_NETWORK_STATUS = "json";
 
