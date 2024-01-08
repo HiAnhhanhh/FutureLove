@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg_non_registered_home_screen"
+    android:background="@color/white"
     tools:context=".view.fragment.activity.MainActivity">
 
     <com.google.android.material.bottomnavigation.BottomNavigationView

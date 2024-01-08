@@ -43,7 +43,6 @@ import java.util.List;
 
 public class ListVideoAdapter extends RecyclerView.Adapter<ListVideoAdapter.ViewHolder> {
 
-
     private List<ListVideoModel> listVideoModelArrayList ;
     public RecyclerViewClickListener onClickListener;
 
@@ -137,7 +136,7 @@ public class ListVideoAdapter extends RecyclerView.Adapter<ListVideoAdapter.View
             @Override
             public void onClick(View v) {
                 holder.itemView.setVisibility(View.GONE);
-                onClickListener.onItemClick(urlVideo,nameVideo,id_video_int);
+                onClickListener.onItemClick(urlVideo,id_video_int);
             }
         });
     }

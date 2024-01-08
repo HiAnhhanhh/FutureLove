@@ -81,22 +81,17 @@ public class HomeFragment extends Fragment {
 
         return fragmentHomeBinding.getRoot();
     }
-
-
     private void loadData() {
         if (!kProgressHUD.isShowing() && isLoadingMore) {
             kProgressHUD.show();
         }
         ApiService apiService = RetrofitClient.getInstance(Server.DOMAIN2).getRetrofit().create(ApiService.class);
         Call<DetailEventListParent> call = apiService.getEventListForHome(1,id_user);
-        Log.d("check_response", "getData: "+ call.toString());
         call.enqueue(new Callback<DetailEventListParent>() {
             @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onResponse(Call<DetailEventListParent> call, Response<DetailEventListParent> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    Log.d("check_response_1", "onResponse: pke");
-                    Log.d("check_response_1", "onResponse: "+ response.body());
                     DetailEventListParent detailEventListParent = response.body();
                     List<DetailEventList> detailEventLists = detailEventListParent.getListSukien();
                     if (!detailEventLists.isEmpty()){
@@ -170,7 +165,7 @@ public class HomeFragment extends Fragment {
 
 
     private void goToListVideoFragment() {
-        NavHostFragment.findNavController(HomeFragment.this).navigate(R.id.action_homeFragment_to_listVideoFragment);
+        NavHostFragment.findNavController(HomeFragment.this).navigate(R.id.action_videoSwapHomeFragment_to_listVideoFragment);
     }
 
     private void goToPairingFragment() {

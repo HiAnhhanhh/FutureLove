@@ -17,8 +17,6 @@ import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory;
 
 public class RetrofitClient {
 
-    private String token_au;
-
     private static RetrofitClient instance;
     private static Retrofit retrofit;
 

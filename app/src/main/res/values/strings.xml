@@ -39,4 +39,24 @@
     <string name="choose_file">Choose file</string>
     <string name="video_swap">Video Swap</string>
     <string name="ghjkl">TODO</string>
+    <string name="gen_baby">Gen Baby</string>
+    <string name="highlight_videos">Highlight Videos</string>
+    <string name="show_more">Show more</string>
+    <string name="create_your_video">Create Your Video</string>
+    <string name="create_video">create video</string>
+    <string name="library_video">Library Video</string>
+    <string name="back_btn">back_btn</string>
+    <string name="start">Start</string>
+    <string name="image">Image</string>
+    <string name="please_choose_image">Please Choose Image</string>
+    <string name="add">add</string>
+    <string name="before">Before</string>
+    <string name="after">After</string>
+    <string name="use_video">Use Video</string>
+    <string name="swap_image">Swap Image</string>
+    <string name="highlight_images">Highlight Images</string>
+    <string name="gen_image_baby">Gen Image Baby</string>
+    <string name="pick_image_1">Pick Image 1</string>
+    <string name="image_1">Image 1</string>
+    <string name="pick_image_2">Pick Image 2</string>
 </resources>

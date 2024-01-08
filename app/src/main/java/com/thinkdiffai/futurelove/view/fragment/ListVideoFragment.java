@@ -1,22 +1,33 @@
 package com.thinkdiffai.futurelove.view.fragment;
 
-import android.content.Context;
+
+import static android.app.Activity.RESULT_OK;
+
+import android.Manifest;
+import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 
+
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.gauravk.bubblenavigation.BubbleNavigationLinearView;
-import com.google.android.exoplayer2.ExoPlayer;
 import com.thinkdiffai.futurelove.R;
 import com.thinkdiffai.futurelove.databinding.FragmentListVideoBinding;
 import com.thinkdiffai.futurelove.model.DetailListVideoModel;
@@ -30,7 +41,6 @@ import com.thinkdiffai.futurelove.view.adapter.PageVideoAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.github.rupinderjeet.kprogresshud.KProgressHUD;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -38,22 +48,10 @@ import retrofit2.Response;
 
 public class ListVideoFragment extends Fragment implements RecyclerViewClickListener {
 
-    private KProgressHUD kProgressHUD;
-
-    private boolean isShowView = false;
-
-    BubbleNavigationLinearView bubbleNavigationLinearView;
-
-    private Context context;
-    private ExoPlayer exoPlayer;
-
-    private ListVideoAdapter listVideoAdapter;
-
-    private PageVideoAdapter pageVideoAdapter;
+    private static final int PERMISSION_REQUEST_CODE = 2;
 
     private List<ListVideoModel> listVideoModelArrayList;
-
-    private ArrayList<Integer> pageListVideo;
+    Uri selectedVideoUri;
 
     private FragmentListVideoBinding fragmentListVideoBinding;
 
@@ -64,7 +62,7 @@ public class ListVideoFragment extends Fragment implements RecyclerViewClickList
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         fragmentListVideoBinding = FragmentListVideoBinding.inflate(inflater, container, false);
         return fragmentListVideoBinding.getRoot();
@@ -75,26 +73,56 @@ public class ListVideoFragment extends Fragment implements RecyclerViewClickList
         super.onViewCreated(view, savedInstanceState);
         initView();
         initAction();
-//        navigateToOtherFragment();
+
+    }
+
+    private void toChooseVideoFragment(Uri selectedVideoUri) {
+//        Bundle bundle = new Bundle();
+//        bundleputString("url_video", String.valueOf(selectedVideoUri));
+//        NavController navController = Navig.ation.findNavController(requireActivity(),R.id.activity_main_nav_host_fragment);
+//        navController.navigate(R.id.action_listVideoFragment_to_chooseVideoFragment);
+        ListVideoFragmentDirections.ActionListVideoFragmentToChooseVideoFragment action = ListVideoFragmentDirections.actionListVideoFragmentToChooseVideoFragment(String.valueOf(selectedVideoUri));
+        NavHostFragment.findNavController(ListVideoFragment.this).navigate(action);
     }
 
     private void initAction() {
-        fragmentListVideoBinding.chooseFileBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                NavHostFragment.findNavController(ListVideoFragment.this).navigate(R.id.action_listVideoFragment_to_swapFaceWithYourVideo);
+        fragmentListVideoBinding.chooseFileBtn.setOnClickListener(v -> {
+            if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions((Activity) requireContext(), new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE);
+                openStorage();
+            } else {
+                openStorage();
             }
+        });
+        fragmentListVideoBinding.backBtn.setOnClickListener(v ->{
+            requireActivity().onBackPressed();
         });
     }
 
+    private void openStorage() {
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Video.Media.EXTERNAL_CONTENT_URI);
+        launchSomeActivity.launch(intent);
+    }
+
+    ActivityResultLauncher<Intent> launchSomeActivity = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if(result.getResultCode() == RESULT_OK ){
+                    Intent data = result.getData();
+                    if( data!= null){
+                        selectedVideoUri = data.getData();
+                        Log.d("check_pass_data", ":video "+ selectedVideoUri);
+                        toChooseVideoFragment(selectedVideoUri);
+                    }
+                }
+            });
+
     private void initView() {
-        pageListVideo = new ArrayList<>();
+        ArrayList<Integer> pageListVideo = new ArrayList<>();
         for(int i=1; i<=5;i++){
             pageListVideo.add(i);
         }
-        pageVideoAdapter = new PageVideoAdapter(pageListVideo,getActivity(),position -> goToPageVideo(position));
+        PageVideoAdapter pageVideoAdapter = new PageVideoAdapter(pageListVideo, getActivity(), this::goToPageVideo);
         fragmentListVideoBinding.pageVideoAdapter.setAdapter(pageVideoAdapter);
-
         loadSwapFacePage1();
 
     }
@@ -108,51 +136,8 @@ public class ListVideoFragment extends Fragment implements RecyclerViewClickList
     }
 
 
-    //    private void navigateToOtherFragment() {
-//        bubbleNavigationLinearView = fragmentListVideoBinding.bubbleNavigation;
-//        bubbleNavigationLinearView.setNavigationChangeListener(new BubbleNavigationChangeListener() {
-//            @Override
-//            public void onNavigationChanged(View view, int position) {
-//                switch (position){
-//                    case 1:
-//                        fragmentListVideoBinding.homeBubble.setVisibility(View.GONE);
-//                        fragmentListVideoBinding.pairingBubble.setVisibility(View.GONE);
-//                        fragmentListVideoBinding.commentBubble.setVisibility(View.GONE);
-//                        goToCommentFragment();
-//                        break;
-//                    case 2:
-//                        fragmentListVideoBinding.homeBubble.setVisibility(View.GONE);
-//                        fragmentListVideoBinding.pairingBubble.setVisibility(View.GONE);
-//                        fragmentListVideoBinding.commentBubble.setVisibility(View.GONE);
-//                        goToPairingFragment();
-//                        break;
-//                    case 0:
-//                        fragmentListVideoBinding.homeBubble.setVisibility(View.GONE);
-//                        fragmentListVideoBinding.pairingBubble.setVisibility(View.GONE);
-//                        fragmentListVideoBinding.commentBubble.setVisibility(View.GONE);
-//                        goToHomeFragment();
-//                        break;
-//                }
-//            }
-//        });
-//    }
-    private void goToHomeFragment() {
-        NavHostFragment.findNavController(ListVideoFragment.this).navigate(R.id.action_listVideoFragment_to_homeFragment);
-
-    }
-
-    private void goToPairingFragment() {
-        NavHostFragment.findNavController(ListVideoFragment.this).navigate(R.id.action_listVideoFragment_to_pairingFragment);
-
-    }
-
-    private void goToCommentFragment() {
-        NavHostFragment.findNavController(ListVideoFragment.this).navigate(R.id.action_listVideoFragment_to_commentFragment);
-
-    }
-
     private void initViewListVideo(List<ListVideoModel> listVideoModelArrayList) {
-        listVideoAdapter = new ListVideoAdapter(listVideoModelArrayList, this::onItemClick,getContext() );
+        ListVideoAdapter listVideoAdapter = new ListVideoAdapter(listVideoModelArrayList, this, getContext());
         fragmentListVideoBinding.listViewRec.setLayoutManager(new GridLayoutManager(getActivity(),2));
         fragmentListVideoBinding.listViewRec.setAdapter(listVideoAdapter);
     }
@@ -165,56 +150,32 @@ public class ListVideoFragment extends Fragment implements RecyclerViewClickList
         Call<DetailListVideoModel> call = apiService.getListVideo(position,0);
         call.enqueue(new Callback<DetailListVideoModel>() {
             @Override
-            public void onResponse(Call<DetailListVideoModel> call, Response<DetailListVideoModel> response) {
+            public void onResponse(@NonNull Call<DetailListVideoModel> call, @NonNull Response<DetailListVideoModel> response) {
                 if(response.isSuccessful() && response.body()!=null){
                     listVideoModelArrayList = response.body().getListSukienVideo();
                     Log.d("check_list_video", "onResponse: "+ listVideoModelArrayList.get(7).getLink_video());
                     Log.d("check_list_video", "onResponse: "+ listVideoModelArrayList.size());
                     initViewListVideo(listVideoModelArrayList);
-//                    if(!listVideoModelArrayList.isEmpty()) {
-//                        listVideoAdapter.setData(listVideoModelArrayList);
-//                    }
                 }
             }
             @Override
-            public void onFailure(Call<DetailListVideoModel> call, Throwable t) {
+            public void onFailure(@NonNull Call<DetailListVideoModel> call, @NonNull Throwable t) {
 
             }
         });
     }
-    private void initVideo(String urlVideo) {
-//        VideoView videoView = fragmentListVideoBinding.checkVideo;
-//        MediaController mediaController = new MediaController(getActivity());
-//        videoView.setMediaController(mediaController);
-//        mediaController.setAnchorView(videoView);
-//        videoView.setVideoURI(Uri.parse(urlVideo));
-//        videoView.start();
-//        StyledPlayerView styledPlayerView = fragmentListVideoBinding.checkVideo;
-//        exoPlayer = new ExoPlayer.Builder(getActivity()).build();
-//        styledPlayerView.setPlayer(exoPlayer);
-//        MediaItem mediaItem = MediaItem.fromUri(urlVideo);
-//        exoPlayer.addMediaItem(mediaItem);
-//        exoPlayer.prepare();
-//        exoPlayer.play();
-    }
+
 
     @Override
     public void onStop() {
         super.onStop();
-//        exoPlayer.setPlayWhenReady(false);;
-//        exoPlayer.release();
-//        exoPlayer = null;
     }
 
     @Override
-    public void onItemClick(String data1, String data2, int data3) {
-        Log.d("check_data_video", "onItemClick: "+ data1+ data2+ data3);
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("urlVideo",0);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("url_video",data1);
-        editor.putString("name_video", data2);
-        editor.putInt("id_video",data3);
-        editor.commit();
-        NavHostFragment.findNavController(ListVideoFragment.this).navigate(R.id.action_listVideoFragment_to_swapFaceFragment);
+    public void onItemClick(String data1, int id_video_int) {
+        Log.d("check_url_your_video", "onItemClick: "+ data1);
+        ListVideoFragmentDirections.ActionListVideoFragmentToPickImageToSwapFragment action = ListVideoFragmentDirections.actionListVideoFragmentToPickImageToSwapFragment(data1,id_video_int);
+        NavHostFragment.findNavController(ListVideoFragment.this).navigate(action);
+
     }
 }

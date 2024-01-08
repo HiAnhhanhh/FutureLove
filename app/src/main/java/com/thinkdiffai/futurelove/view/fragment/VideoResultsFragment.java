@@ -7,12 +7,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
-import com.bumptech.glide.load.data.ExifOrientationStream;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.ui.StyledPlayerView;
@@ -32,7 +31,7 @@ public class VideoResultsFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         fragmentVideoResultsBinding = FragmentVideoResultsBinding.inflate(inflater, container, false);
@@ -44,40 +43,72 @@ public class VideoResultsFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         initData();
         initView();
-    }
-
-    private void initView() {
-        loadUrlVideo();
-        loadUrlVideo_Goc();
-    }
-
-    private void loadUrlVideo_Goc() {
-        StyledPlayerView styledPlayerView1 = fragmentVideoResultsBinding.videoSwapFace;
-        ExoPlayer exoPlayer1 = new ExoPlayer.Builder(getActivity()).build();
-        styledPlayerView1.setPlayer(exoPlayer1);
-        MediaItem mediaItem1 = MediaItem.fromUri(link_vid_goc);
-        exoPlayer1.addMediaItem(mediaItem1);
-        exoPlayer1.prepare();
-        exoPlayer1.play();
-    }
-
-    private void loadUrlVideo() {
-        StyledPlayerView styledPlayerView = fragmentVideoResultsBinding.videoSwapFaceResults;
-        ExoPlayer exoPlayer = new ExoPlayer.Builder(getActivity()).build();
-        styledPlayerView.setPlayer(exoPlayer);
-        MediaItem mediaItem = MediaItem.fromUri(link_vid_swap);
-        exoPlayer.addMediaItem(mediaItem);
-        exoPlayer.prepare();
-        exoPlayer.play();
+        initAction();
     }
 
     private void initData() {
-        getLinkVide();
+        getLinkVideo();
     }
 
-    private void getLinkVide() {
-        SharedPreferences sharedPreferences = requireActivity().getSharedPreferences("link_video_swap",0);
-        link_vid_swap = sharedPreferences.getString("link_vid_swap","");
-        link_vid_goc = sharedPreferences.getString("link_vid_goc","");
+    private void initAction() {
+        StyledPlayerView styledPlayerView1 = fragmentVideoResultsBinding.videoSwapFaceResults;
+        ExoPlayer exoPlayer1 = new ExoPlayer.Builder(requireActivity()).build();
+        styledPlayerView1.setPlayer(exoPlayer1);
+        StyledPlayerView styledPlayerView = fragmentVideoResultsBinding.videoSwapFace;
+        ExoPlayer exoPlayer = new ExoPlayer.Builder(requireActivity()).build();
+        styledPlayerView.setPlayer(exoPlayer);
+        MediaItem mediaItem = MediaItem.fromUri(link_vid_goc);
+        exoPlayer.addMediaItem(mediaItem);
+
+        exoPlayer.prepare();
+        exoPlayer.play();
+
+        fragmentVideoResultsBinding.beforeBtn.setOnClickListener(v -> {
+            exoPlayer1.stop();
+            exoPlayer.seekTo(0);
+            fragmentVideoResultsBinding.beforeBtn.setBackgroundResource(R.drawable.bg_purple_transparent);
+            fragmentVideoResultsBinding.afterBtn.setBackgroundResource(R.color.transparent);
+            fragmentVideoResultsBinding.afterBtn.setTextSize(16);
+            fragmentVideoResultsBinding.beforeBtn.setTextSize(20);
+            fragmentVideoResultsBinding.videoSwapFace.setVisibility(View.VISIBLE);
+            fragmentVideoResultsBinding.videoSwapFaceResults.setVisibility(View.GONE);
+            MediaItem mediaItem12 = MediaItem.fromUri(link_vid_goc);
+            exoPlayer.addMediaItem(mediaItem12);
+            exoPlayer.prepare();
+            exoPlayer.play();
+        });
+        fragmentVideoResultsBinding.afterBtn.setOnClickListener(v -> {
+            exoPlayer.stop();
+            exoPlayer1.seekTo(0);
+            fragmentVideoResultsBinding.afterBtn.setBackgroundResource(R.drawable.bg_purple_transparent);
+            fragmentVideoResultsBinding.beforeBtn.setBackgroundResource(R.color.transparent);
+            fragmentVideoResultsBinding.beforeBtn.setTextSize(16);
+            fragmentVideoResultsBinding.afterBtn.setTextSize(20);
+            fragmentVideoResultsBinding.videoSwapFace.setVisibility(View.GONE);
+            fragmentVideoResultsBinding.videoSwapFaceResults.setVisibility(View.VISIBLE);
+            MediaItem mediaItem1 = MediaItem.fromUri(link_vid_swap);
+            exoPlayer1.addMediaItem(mediaItem1);
+            exoPlayer1.prepare();
+            exoPlayer1.play();
+        });
+
+        fragmentVideoResultsBinding.backBtn.setOnClickListener(v -> {
+            requireActivity().onBackPressed();
+        });
+    }
+
+    private void initView() {
+    }
+
+    private void getLinkVideo() {
+        Bundle args = getArguments();
+        try {
+            if(args!=null) {
+                link_vid_goc = args.getString("link_video_goc");
+                link_vid_swap = args.getString("link_video_swap");
+            }
+        } catch (Exception e){
+            Toast.makeText(getActivity(), ""+ e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
     }
 }

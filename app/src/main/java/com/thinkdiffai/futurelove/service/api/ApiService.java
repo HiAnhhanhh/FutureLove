@@ -4,9 +4,13 @@ import com.thinkdiffai.futurelove.model.DetailEventList;
 import com.thinkdiffai.futurelove.model.DetailEventListParent;
 import com.thinkdiffai.futurelove.model.DetailListVideoModel;
 import com.thinkdiffai.futurelove.model.EventHomeDto;
+import com.thinkdiffai.futurelove.model.GenBabyModel;
+import com.thinkdiffai.futurelove.model.GenImageModel;
 import com.thinkdiffai.futurelove.model.GetVideoSwapResponse;
 import com.thinkdiffai.futurelove.model.GetYourVideoSwapModel;
 import com.thinkdiffai.futurelove.model.IpNetworkModel;
+import com.thinkdiffai.futurelove.model.ListEventVideo;
+import com.thinkdiffai.futurelove.model.ListImageUploadModel;
 import com.thinkdiffai.futurelove.model.Login;
 import com.thinkdiffai.futurelove.model.comment.CommentList;
 import com.thinkdiffai.futurelove.model.comment.DetailUser;
@@ -67,7 +71,6 @@ public interface ApiService {
 
 
 
-
     @GET(Server.URI_PAIRING)
     Call<Object> postEvent(
             @Header(Server.KEY_HEADER1) String imageLink1,
@@ -104,6 +107,40 @@ public interface ApiService {
             @Query("id_user") int idUser,
             @Query("image") String image,
             @Query("ten_video") String tenVideo
+    );
+
+    @GET("https://thinkdiff.us/getdata/sukien/baby")
+    Call<GenBabyModel> getUrlImageBaby (
+            @Header("Authorization") String authorization,
+            @Header("linknam") String linknam,
+            @Header("linknu") String linknu,
+            @Query("device_them_su_kien") String deviceThemSK,
+            @Query("ip_them_su_kien") String ipThemSK,
+            @Query("id_user") int id_user
+    );
+
+    @GET("https://thinkdiff.us/getdata/swap/2/image")
+    Call<GenImageModel> getUrlImageSwap(
+            @Header("Authorization") String authorization,
+            @Header("link1") String link1,
+            @Header("link2") String link2,
+            @Query("device_them_su_kien") String deviceThemSK,
+            @Query("ip_them_su_kien") String ipThemSK,
+            @Query("id_user") int id_user
+    );
+
+
+
+    @GET(Server.IMAGE_UPLOAD+ "{id_user}")
+    Call<ListImageUploadModel> getImageUpload (
+            @Path("id_user") int id_user,
+            @Query("type") String type
+    );
+
+    @GET(Server.GEN_VIDEO_WITH_USER+"{id_user}")
+    Call<ListEventVideo> GenVideoWithUser (
+            @Path("id_user") int id_user,
+            @Query("trang") int page
     );
 
     @Multipart

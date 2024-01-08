@@ -174,50 +174,6 @@ public class PairingFragment extends Fragment {
 //        navigateToOtherFragments();
     }
 
-//    private void navigateToOtherFragments() {
-//
-//        bubbleNavigationLinearView = fragmentPairingBinding.bubbleNavigation;
-//
-//        bubbleNavigationLinearView.setNavigationChangeListener(new BubbleNavigationChangeListener() {
-//            @Override
-//            public void onNavigationChanged(View view, int position) {
-//                switch (position){
-//                    case 0:
-//                        fragmentPairingBinding.homeBubble.setVisibility(View.GONE);
-//                        fragmentPairingBinding.commentBubble.setVisibility(View.GONE);
-//                        fragmentPairingBinding.pairingBubble.setVisibility(View.GONE);
-//                        fragmentPairingBinding.listVideoBubble.setVisibility(View.GONE);
-//                        NavHostFragment.findNavController(PairingFragment.this).navigate(R.id.action_pairingFragment_to_homeFragment);
-//                        break;
-//                    case 1:
-//                        fragmentPairingBinding.homeBubble.setVisibility(View.GONE);
-//                        fragmentPairingBinding.commentBubble.setVisibility(View.GONE);
-//                        fragmentPairingBinding.pairingBubble.setVisibility(View.GONE);
-//                        fragmentPairingBinding.listVideoBubble.setVisibility(View.GONE);
-//                        NavHostFragment.findNavController(PairingFragment.this).navigate(R.id.action_pairingFragment_to_commentFragment);
-//                        break;
-//                    case 3:
-//                        fragmentPairingBinding.homeBubble.setVisibility(View.GONE);
-//                        fragmentPairingBinding.commentBubble.setVisibility(View.GONE);
-//                        fragmentPairingBinding.pairingBubble.setVisibility(View.GONE);
-//                        fragmentPairingBinding.listVideoBubble.setVisibility(View.GONE);
-//                        NavHostFragment.findNavController(PairingFragment.this).navigate(R.id.action_pairingFragment_to_listVideoFragment );
-//                        break;
-//                }
-//            }
-//        });
-//        // Click btn Home
-//        // Click btn Comment
-//        // Click btn Timeline
-//        // Click User Detail Button
-//        fragmentPairingBinding.btnUserAccount.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                NavHostFragment.findNavController(PairingFragment.this).navigate(R.id.action_pairingFragment_to_userDetailFragment);
-//                mainActivity.pairingToUserDetail = true;
-//            }
-//        });
-//    }
     private void initListener() {
 
         fragmentPairingBinding.btnSelectPersonFemale.setOnClickListener(new View.OnClickListener() {
@@ -288,6 +244,12 @@ public class PairingFragment extends Fragment {
                 }
             }
         });
+        fragmentPairingBinding.genBabyBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                NavHostFragment.findNavController(PairingFragment.this).navigate(R.id.action_pairingFragment_to_genBabyFragment);
+            }
+        });
     }
 
     private long startCountingTime() {
@@ -348,7 +310,6 @@ public class PairingFragment extends Fragment {
                         requireContext(),
                         uploadingEvent
                 );
-
             }
 
             @Override

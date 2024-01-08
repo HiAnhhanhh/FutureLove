@@ -352,7 +352,7 @@ public class RegisterFragment extends Fragment {
     private void closeKeyboard() {
         View view = requireActivity().getCurrentFocus();
         if (view != null) {
-            InputMethodManager imm = (InputMethodManager) Objects.requireNonNull(getActivity()).getSystemService(Context.INPUT_METHOD_SERVICE);
+            InputMethodManager imm = (InputMethodManager) requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
     }

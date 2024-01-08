@@ -1,57 +1,172 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="5dp"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@drawable/bg_non_registered_home_screen"
+    android:background="@color/white"
     tools:context=".view.fragment.VideoResultsFragment">
 
-
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cardView"
+    <View
+        android:id="@+id/view2"
         android:layout_width="0dp"
-        app:layout_constraintWidth_percent=".49"
-        android:layout_height="340dp"
-        android:elevation="10dp"
-        android:padding="10dp"
-        app:cardBackgroundColor="@color/black"
-        app:cardCornerRadius="10dp"
+        android:layout_height="0dp"
+        android:background="@drawable/bg_comment"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-
-        <com.google.android.exoplayer2.ui.StyledPlayerView
-            android:id="@+id/videoSwapFace"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="10dp"
-            app:hide_on_touch="true"
-            app:show_timeout="1000"
-            app:use_controller="true" />
-
-    </androidx.cardview.widget.CardView>
-
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cardView_results"
-        android:layout_width="0dp"
-        android:layout_height="340dp"
-        android:elevation="10dp"
-        android:padding="10dp"
-        app:cardBackgroundColor="@color/black"
-        app:cardCornerRadius="10dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent=".11"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintWidth_percent=".49">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0" />
 
-        <com.google.android.exoplayer2.ui.StyledPlayerView
-            android:id="@+id/videoSwapFace_results"
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-black"
+        android:text="@string/create_your_video"
+        android:textColor="@color/white"
+        android:textSize="22sp"
+        app:layout_constraintBottom_toBottomOf="@+id/view2"
+        app:layout_constraintEnd_toEndOf="@+id/view2"
+        app:layout_constraintStart_toStartOf="@+id/view2"
+        app:layout_constraintTop_toTopOf="@+id/view2"
+        app:layout_constraintVertical_bias=".8" />
+
+    <ImageView
+        android:id="@+id/back_btn"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="@drawable/chevron_left"
+        android:backgroundTint="@color/white"
+        android:contentDescription="@string/back_btn"
+        app:layout_constraintBottom_toBottomOf="@+id/view2"
+        app:layout_constraintEnd_toStartOf="@+id/textView"
+        app:layout_constraintHorizontal_bias=".1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/textView" />
+
+
+<!--    <androidx.cardview.widget.CardView-->
+<!--        android:id="@+id/cardView"-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="340dp"-->
+<!--        android:elevation="10dp"-->
+<!--        android:padding="10dp"-->
+<!--        android:visibility="gone"-->
+<!--        app:cardBackgroundColor="@color/black"-->
+<!--        app:cardCornerRadius="10dp"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintWidth_percent=".49">-->
+
+<!--        <com.google.android.exoplayer2.ui.StyledPlayerView-->
+<!--            android:id="@+id/videoSwapFace"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:layout_margin="10dp"-->
+<!--            app:hide_on_touch="true"-->
+<!--            app:show_timeout="1000"-->
+<!--            app:use_controller="true" />-->
+
+<!--    </androidx.cardview.widget.CardView>-->
+
+<!--    <androidx.cardview.widget.CardView-->
+<!--        android:id="@+id/cardView_results"-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="340dp"-->
+<!--        android:elevation="10dp"-->
+<!--        android:padding="10dp"-->
+<!--        android:visibility="gone"-->
+<!--        app:cardBackgroundColor="@color/black"-->
+<!--        app:cardCornerRadius="10dp"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintWidth_percent=".49">-->
+
+<!--        <com.google.android.exoplayer2.ui.StyledPlayerView-->
+<!--            android:id="@+id/videoSwapFace_results"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:layout_margin="10dp"-->
+<!--            app:hide_on_touch="true"-->
+<!--            app:show_timeout="1000"-->
+<!--            app:use_controller="true" />-->
+<!--    </androidx.cardview.widget.CardView>-->
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView2"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:cardElevation="8dp"
+        android:layout_marginTop="20dp"
+        android:backgroundTint="@color/black"
+        app:layout_constraintHeight_percent=".6"
+        app:cardCornerRadius="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/view2"
+        app:layout_constraintWidth_percent=".9">
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="10dp"
-            app:hide_on_touch="true"
-            app:show_timeout="1000"
-            app:use_controller="true" />
+            android:orientation="vertical">
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@color/white"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/before_btn"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:textAllCaps="false"
+                    android:background="@drawable/bg_purple_transparent"
+                    android:fontFamily="sans-serif-black"
+                    android:text="@string/before"
+                    android:textColor="@color/black"
+                    android:textSize="18sp" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/after_btn"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:textAllCaps="false"
+                    android:background="@color/transparent"
+                    android:textColor="@color/black"
+                    android:fontFamily="sans-serif-black"
+                    android:text="@string/after"
+                    android:textSize="16sp" />
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <com.google.android.exoplayer2.ui.StyledPlayerView
+                android:id="@+id/videoSwapFace_results"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="10dp"
+                app:hide_on_touch="true"
+                android:visibility="gone"
+                android:layout_gravity="center"
+                app:show_timeout="1000"
+                app:use_controller="true" />
+
+            <com.google.android.exoplayer2.ui.StyledPlayerView
+                android:id="@+id/videoSwapFace"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                app:hide_on_touch="true"
+                app:show_timeout="1000"
+                app:use_controller="true" />
+        </LinearLayout>
+
 
     </androidx.cardview.widget.CardView>
 

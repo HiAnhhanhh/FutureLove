@@ -6,6 +6,7 @@
     </style>
     <style name="ShapeAppearanceOverlay.MyApp.FloatingActionButton" parent="">
         <item name="cornerFamily">rounded</item>
+        <item name="color">@color/transparent</item>
         <item name="cornerSize">50%</item> <!-- Điều chỉnh giá trị tùy ý -->
     </style>
 </resources>

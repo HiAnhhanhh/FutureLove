@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="50dp"
     android:layout_height="50dp"
-    android:background="@drawable/background_white_radius_10dp"
+    android:background="@color/transparent"
     android:layout_marginEnd="5dp">
 
     <TextView
@@ -12,7 +12,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/_1"
-        android:textColor="@color/orange"
+        android:textStyle="bold"
+        android:textColor="@color/purple"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
