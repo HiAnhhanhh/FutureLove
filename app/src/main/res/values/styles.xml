@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="MenuTitleStyle">
+        <item name="android:textSize">28sp</item> <!-- Set your desired text size -->
+    </style>
+</resources>

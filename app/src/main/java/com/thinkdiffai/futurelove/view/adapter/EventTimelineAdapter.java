@@ -74,7 +74,7 @@ public class EventTimelineAdapter extends RecyclerView.Adapter<EventTimelineAdap
         holder.itemTimelineEventBinding.btnAddEvnt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                iOnClickAddEvent.onClickAddEvent(event.getId());
+                iOnClickAddEvent.onClickAddEvent(event.getIdToanBoSuKien());
             }
         });
 

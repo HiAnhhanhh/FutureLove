@@ -60,7 +60,7 @@ public class LoginFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        initAction();
+//        initAction();
 
         // Set up TextWatcher to see that edit texts are valid or not and will show alerts or nothing
         setUpTextWatcher();
@@ -77,27 +77,6 @@ public class LoginFragment extends Fragment {
         // When users want to see their password clearly
         showPasswordClearly();
 
-    }
-
-    private void initAction() {
-        binding.skipLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                navToMainActivitySkipLogin();
-            }
-        });
-    }
-
-    private void navToMainActivitySkipLogin() {
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("id_user",0);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("id_user","0");
-        editor.commit();
-
-        boolean isLoginSuccess = true;
-        Intent i = new Intent(getActivity(), MainActivity.class);
-        i.putExtra("LOGIN_SUCCESS", isLoginSuccess);
-        startActivity(i);
     }
 
     private void setUpTextWatcher() {
@@ -120,7 +99,6 @@ public class LoginFragment extends Fragment {
         binding.edtPassword.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
             }
 
             @Override
@@ -164,11 +142,11 @@ public class LoginFragment extends Fragment {
         if (edtPassword.getTransformationMethod() instanceof PasswordTransformationMethod) {
             // Show password
             edtPassword.setTransformationMethod(null);
-            binding.icShowPassword.setImageResource(R.drawable.hide_password_icon); // Change to an icon for hiding the password
+            binding.icShowPassword.setImageResource(R.drawable.hide_password_black); // Change to an icon for hiding the password
         } else {
             // Hide password
             edtPassword.setTransformationMethod(new PasswordTransformationMethod());
-            binding.icShowPassword.setImageResource(R.drawable.eye_password_icon); // Change to an icon for showing the password
+            binding.icShowPassword.setImageResource(R.drawable.show_password_black); // Change to an icon for showing the password
         }
         // Move the cursor to the end of the text to ensure it stays visible
         edtPassword.setSelection(edtPassword.getText().length());
@@ -203,7 +181,6 @@ public class LoginFragment extends Fragment {
         callLoginApi(new QueryValueCallback() {
             @Override
             public void onQueryValueReceived(String queryValue) {
-//                if (queryValue.contains("{ketqua="))
 
                 if(queryValue.contains("Logged in successfully")){
                     Log.d("PHONG", "queryValue = " + queryValue);
@@ -286,7 +263,6 @@ public class LoginFragment extends Fragment {
                     kProgressHUD.dismiss();
                 }
             }
-
             @Override
             public void onFailure(Call<Login> call, Throwable t) {
                 if (kProgressHUD.isShowing()) {
@@ -295,15 +271,12 @@ public class LoginFragment extends Fragment {
             }
         });
     }
-
 //    private void passDataToHomeFragment(String user_id) {
 //        Bundle bundle = new Bundle();
 //        bundle.putString("user_id",user_id);
 //        HomeFragment fragment = new HomeFragment();
 //        fragment.setArguments(bundle);
 //    }
-
-
     private boolean isCompletedInformation(String email, String password) {
 
         if (isValidEmail(email) && isValidPassword(password)) {

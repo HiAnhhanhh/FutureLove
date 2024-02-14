@@ -1,15 +1,24 @@
 package com.thinkdiffai.futurelove.model;
 
 public class ListVideoModel {
-    int id, id_categories, age_video;
-    String name_categories, detail, chung_toc, gioi_tinh,link_video,mau_da,noi_dung,thumbnail;
+    public String id;
+    public int id_categories;
+    public String name_categories;
+    public String detail;
+    public String age_video;
+    public String chung_toc;
+    public String gioi_tinh;
+    public String link_video;
+    public String mau_da;
+    public String noi_dung;
+    public String thumbnail;
 
-    public ListVideoModel(int id, int id_categories, int age_video, String name_categories, String detail, String chung_toc, String gioi_tinh, String link_video, String mau_da, String noi_dung, String thumbnail) {
+    public ListVideoModel(String id, int id_categories, String name_categories, String detail, String age_video, String chung_toc, String gioi_tinh, String link_video, String mau_da, String noi_dung, String thumbnail) {
         this.id = id;
         this.id_categories = id_categories;
-        this.age_video = age_video;
         this.name_categories = name_categories;
         this.detail = detail;
+        this.age_video = age_video;
         this.chung_toc = chung_toc;
         this.gioi_tinh = gioi_tinh;
         this.link_video = link_video;
@@ -18,11 +27,11 @@ public class ListVideoModel {
         this.thumbnail = thumbnail;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -32,14 +41,6 @@ public class ListVideoModel {
 
     public void setId_categories(int id_categories) {
         this.id_categories = id_categories;
-    }
-
-    public int getAge_video() {
-        return age_video;
-    }
-
-    public void setAge_video(int age_video) {
-        this.age_video = age_video;
     }
 
     public String getName_categories() {
@@ -56,6 +57,14 @@ public class ListVideoModel {
 
     public void setDetail(String detail) {
         this.detail = detail;
+    }
+
+    public String getAge_video() {
+        return age_video;
+    }
+
+    public void setAge_video(String age_video) {
+        this.age_video = age_video;
     }
 
     public String getChung_toc() {

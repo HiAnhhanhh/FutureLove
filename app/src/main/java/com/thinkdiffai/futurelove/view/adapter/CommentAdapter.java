@@ -56,12 +56,6 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
         this.urlImgFemale = urlImgFemale;
     }
 
-//    public CommentAdapter(Context context, List<Comment> comments, IOnClickItemListener iOnClickItem, String city) {
-//        this.context = context;
-//        this.comments = comments;
-//        this.city = city;
-//        this.iOnClickItem = iOnClickItem;
-//    }
 
     public CommentAdapter(Context context, List<CommentPage> comments, IOnClickItemListener iOnClickItem) {
         this.context = context;

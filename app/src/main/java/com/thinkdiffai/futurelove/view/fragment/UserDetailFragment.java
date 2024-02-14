@@ -126,7 +126,6 @@ public class UserDetailFragment extends Fragment {
         }
     }
 
-
     private void initializeRecyclerView() {
         linearLayoutManager = new LinearLayoutManager(getActivity(), GridLayoutManager.VERTICAL, false);
         binding.rcvPersonalComments.setLayoutManager(linearLayoutManager);
@@ -309,7 +308,6 @@ public class UserDetailFragment extends Fragment {
     private void navigateToCommentFragment() {
         NavHostFragment.findNavController(UserDetailFragment.this).navigate(R.id.action_userDetailFragment_to_commentFragment);
     }
-
 //    private void clickLogout() {
 //        binding.btnLogout.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -335,7 +333,6 @@ public class UserDetailFragment extends Fragment {
 //            }
 //        });
 //    }
-
     private void changeLoginState() {
         sharedPreferences = requireActivity().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -373,18 +370,7 @@ public class UserDetailFragment extends Fragment {
             }
         });
     }
-//    private void changeLoginState() {
-//        sharedPreferences = Objects.requireNonNull(getActivity()).getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
-//        SharedPreferences.Editor editor = sharedPreferences.edit();
-//        editor.putBoolean("LOGIN_STATE", false);
-//        editor.apply();
-//    }
-//
-//    private void NavigateToLoginAndSignOutActivity() {
-//        Intent i = new Intent(getActivity(), SignInSignUpActivity.class);
-//        startActivity(i);
-//    }
-    // xu ly menu tu chon
+
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_user_detail    , menu);
@@ -442,8 +428,6 @@ public class UserDetailFragment extends Fragment {
                 pw1=newPassWord1.getText().toString();
                 if(pw.contains(pw1)){
                     if(isValidPassword(newPassWord.getText().toString())){
-
-                        ChangePassWordAPi(20,binding.tvUserName.getText().toString(),oldPassWord.getText().toString(),newPassWord.getText().toString());
                         dialog.dismiss();
                         Toast.makeText(mainActivity, "Change Password Successfully!", Toast.LENGTH_SHORT).show();
                     }else {
@@ -457,27 +441,27 @@ public class UserDetailFragment extends Fragment {
         //
         dialog.show();
     }
-    private  void ChangePassWordAPi(long id,String name,String oldpassword,String newpassword){
-        // Call login Api
-        ApiService apiService = RetrofitClient.getInstance(Server.DOMAIN2).getRetrofit().create(ApiService.class);
-        Call<Object> call = apiService.Change_Password(id,oldpassword,newpassword);
-        call.enqueue(new Callback<Object>() {
-            @Override
-            public void onResponse(Call<Object> call, Response<Object> response) {
-                if (response.isSuccessful()) {
-                    Log.d("check_password", "onResponse: oke");
-                } else {
-                    Toast.makeText(getContext(), ""+response.body().toString(), Toast.LENGTH_SHORT).show();
-                    // Xử lý lỗi khi API trả về mã lỗi
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Object> call, Throwable t) {
-                Toast.makeText(getContext(), ""+t.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
+//    private  void ChangePassWordAPi(long id,String name,String oldpassword,String newpassword){
+//        // Call login Api
+//        ApiService apiService = RetrofitClient.getInstance(Server.DOMAIN2).getRetrofit().create(ApiService.class);
+//        Call<Object> call = apiService.Change_Password(id,oldpassword,newpassword);
+//        call.enqueue(new Callback<Object>() {
+//            @Override
+//            public void onResponse(Call<Object> call, Response<Object> response) {
+//                if (response.isSuccessful()) {
+//                    Log.d("check_password", "onResponse: oke");
+//                } else {
+//                    Toast.makeText(getContext(), ""+response.body().toString(), Toast.LENGTH_SHORT).show();
+//                    // Xử lý lỗi khi API trả về mã lỗi
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<Object> call, Throwable t) {
+//                Toast.makeText(getContext(), ""+t.getMessage(), Toast.LENGTH_SHORT).show();
+//            }
+//        });
+//    }
     // check password
     private boolean isValidPassword(String password) {
         return password.length() >= 8 && !containSpecialCharacters(password);

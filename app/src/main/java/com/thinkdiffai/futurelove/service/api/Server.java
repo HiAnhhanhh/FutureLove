@@ -12,6 +12,8 @@ public interface Server {
 
     String DOMAIN4 ="https://thinkdiff.us/";
 
+    String EVENT_CREATE_BY_USER = "lovehistory/user/";
+
     String IMAGE_UPLOAD = "images/";
     String GET_NETWORK_API_DOMAIN = "http://ip-api.com/";
     String GET_CITY_NAME_FROM_IP = "https://ipinfo.io/";

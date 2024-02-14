@@ -244,12 +244,12 @@ public class PairingFragment extends Fragment {
                 }
             }
         });
-        fragmentPairingBinding.genBabyBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                NavHostFragment.findNavController(PairingFragment.this).navigate(R.id.action_pairingFragment_to_genBabyFragment);
-            }
-        });
+//        fragmentPairingBinding.genBabyBtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                NavHostFragment.findNavController(PairingFragment.this).navigate(R.id.action_pairingFragment_to_genBabyFragment);
+//            }
+//        });
     }
 
     private long startCountingTime() {
@@ -272,6 +272,14 @@ public class PairingFragment extends Fragment {
                 femaleName
         );
 
+        Log.d("Anh_check", "postData: "+imageUrl1+
+                imageUrl2+
+                uploadingEvent.getDevice_them_su_kien()+
+                uploadingEvent.getIp_them_su_kien()+
+                uploadingEvent.getId_user()+
+                uploadingEvent.getTen_nam()+
+                uploadingEvent.getTen_nu());
+
         ApiService apiService = RetrofitClient.getInstance(Server.DOMAIN2).getRetrofit().create(ApiService.class);
         Call<Object> call = apiService.postEvent(
                 imageUrl1,
@@ -285,8 +293,7 @@ public class PairingFragment extends Fragment {
             @Override
             public void onResponse(Call<Object> call, retrofit2.Response<Object> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    Log.d("PhongNN", "Post Image Success");
-                    Log.d("PhongNN", "Name: " + response.body().toString());
+                    Log.d("Anh_check", "Name: " + response.body().toString());
 
                     MyOwnDialogFragment myOwnDialogFragment = new MyOwnDialogFragment("Success!",
                             "Couple Pairing Successfully",

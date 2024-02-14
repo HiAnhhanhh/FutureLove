@@ -22,6 +22,9 @@ import com.thinkdiffai.futurelove.databinding.FragmentChooseVideoBinding;
 public class ChooseVideoFragment extends Fragment {
 
     String receivedData;
+
+    ExoPlayer exoPlayer;
+    StyledPlayerView styledPlayerView;
     FragmentChooseVideoBinding fragmentChooseVideoBinding;
 
     @Override
@@ -68,8 +71,8 @@ public class ChooseVideoFragment extends Fragment {
     }
 
     private void loadUrlVideo(String receivedData) {
-        StyledPlayerView styledPlayerView = fragmentChooseVideoBinding.videoSwapFace;
-        ExoPlayer exoPlayer = new ExoPlayer.Builder(requireActivity()).build();
+        styledPlayerView = fragmentChooseVideoBinding.videoSwapFace;
+        exoPlayer = new ExoPlayer.Builder(requireActivity()).build();
         styledPlayerView.setPlayer(exoPlayer);
         MediaItem mediaItem = MediaItem.fromUri(receivedData);
         exoPlayer.addMediaItem(mediaItem);
@@ -94,5 +97,11 @@ public class ChooseVideoFragment extends Fragment {
         }else{
             Log.d("check_pass_data", "initData: NO NO NO");
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        exoPlayer.release();
     }
 }

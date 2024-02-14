@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.thinkdiffai.futurelove.R;
@@ -42,14 +43,10 @@ public class PageVideoAdapter extends RecyclerView.Adapter<PageVideoAdapter.View
 
     @Override
     public void onBindViewHolder(@NonNull PageVideoAdapter.ViewHolder holder, int position) {
-        if(position == 0){
-            holder.itemView.setBackgroundResource(R.color.green_light);
-        }else{
-            holder.itemView.setBackgroundResource(R.color.white);
-        }
         Integer pageEvent = pageVideoArrayList.get(position);
         int position_adapter = position;
         holder.tabItemBinding.pageEvent.setText(pageEvent.toString());
+
 
         holder.tabItemBinding.pageEvent.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -60,10 +57,15 @@ public class PageVideoAdapter extends RecyclerView.Adapter<PageVideoAdapter.View
             }
         });
 
-        if(row_index == position_adapter){
-            holder.itemView.setBackgroundResource(R.color.green_light);
+        if(position == 0&& row_index == -1){
+            holder.itemView.setBackgroundResource(R.drawable.bg_circle);
+            holder.tabItemBinding.pageEvent.setTextColor(ContextCompat.getColor(holder.itemView.getContext(),R.color.white));
+        } else if (row_index == position_adapter){
+            holder.itemView.setBackgroundResource(R.drawable.bg_circle);
+            holder.tabItemBinding.pageEvent.setTextColor(ContextCompat.getColor(holder.itemView.getContext(),R.color.white));
         }else{
-            holder.itemView.setBackgroundResource(R.color.white);
+            holder.itemView.setBackgroundResource(R.color.transparent);
+            holder.tabItemBinding.pageEvent.setTextColor(ContextCompat.getColor(holder.itemView.getContext(),R.color.black));
         }
     }
 

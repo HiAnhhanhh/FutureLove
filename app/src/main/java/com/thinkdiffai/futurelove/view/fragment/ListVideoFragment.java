@@ -73,14 +73,10 @@ public class ListVideoFragment extends Fragment implements RecyclerViewClickList
         super.onViewCreated(view, savedInstanceState);
         initView();
         initAction();
-
     }
 
     private void toChooseVideoFragment(Uri selectedVideoUri) {
-//        Bundle bundle = new Bundle();
-//        bundleputString("url_video", String.valueOf(selectedVideoUri));
-//        NavController navController = Navig.ation.findNavController(requireActivity(),R.id.activity_main_nav_host_fragment);
-//        navController.navigate(R.id.action_listVideoFragment_to_chooseVideoFragment);
+
         ListVideoFragmentDirections.ActionListVideoFragmentToChooseVideoFragment action = ListVideoFragmentDirections.actionListVideoFragmentToChooseVideoFragment(String.valueOf(selectedVideoUri));
         NavHostFragment.findNavController(ListVideoFragment.this).navigate(action);
     }
@@ -153,19 +149,16 @@ public class ListVideoFragment extends Fragment implements RecyclerViewClickList
             public void onResponse(@NonNull Call<DetailListVideoModel> call, @NonNull Response<DetailListVideoModel> response) {
                 if(response.isSuccessful() && response.body()!=null){
                     listVideoModelArrayList = response.body().getListSukienVideo();
-                    Log.d("check_list_video", "onResponse: "+ listVideoModelArrayList.get(7).getLink_video());
+//                    Log.d("check_list_video", "onResponse: "+ listVideoModelArrayList.get(7).getLink_video());
                     Log.d("check_list_video", "onResponse: "+ listVideoModelArrayList.size());
                     initViewListVideo(listVideoModelArrayList);
                 }
             }
             @Override
             public void onFailure(@NonNull Call<DetailListVideoModel> call, @NonNull Throwable t) {
-
             }
         });
     }
-
-
     @Override
     public void onStop() {
         super.onStop();
@@ -176,6 +169,5 @@ public class ListVideoFragment extends Fragment implements RecyclerViewClickList
         Log.d("check_url_your_video", "onItemClick: "+ data1);
         ListVideoFragmentDirections.ActionListVideoFragmentToPickImageToSwapFragment action = ListVideoFragmentDirections.actionListVideoFragmentToPickImageToSwapFragment(data1,id_video_int);
         NavHostFragment.findNavController(ListVideoFragment.this).navigate(action);
-
     }
 }

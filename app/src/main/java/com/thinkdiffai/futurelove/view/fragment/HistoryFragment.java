@@ -36,23 +36,14 @@ public class HistoryFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
         fragmentHistoryBinding = FragmentHistoryBinding.inflate(inflater, container, false);
-
         mainActivity = (MainActivity) getActivity();
         kProgressHUD = mainActivity.createHud();
-
-
-//        try {
         initUi();
         getEventHomeDtos();
         initListener();
 
-//        } catch (Exception e) {
-//            Log.e("ExceptionRuntime", e.toString());
-//        }
         return fragmentHistoryBinding.getRoot();
-
     }
 
     private void initListener() {
@@ -74,9 +65,7 @@ public class HistoryFragment extends Fragment {
             @Override
             public void onClickItem(int id) {
                 mainActivity.eventSummaryCurrentId = id;
-//                mainActivity.setCurrentPage(3);
             }
-
             @Override
             public void onClickDelete(int id) {
                 deleteStorageDb(id);
@@ -84,16 +73,11 @@ public class HistoryFragment extends Fragment {
         });
         fragmentHistoryBinding.rcvHistory.setAdapter(historyAdapter);
     }
-
-
-
     private void deleteStorageDb(int numberOder_id) {
-
         EventHomeDto event = EventHistoryDb.getInstance(getActivity()).eventHistoryDao().getEventByOrderNumber_id(numberOder_id);
         if (event == null)
             return;
         EventHistoryDb.getInstance(getActivity()).eventHistoryDao().delete(numberOder_id);
         getEventHomeDtos();
-
     }
 }

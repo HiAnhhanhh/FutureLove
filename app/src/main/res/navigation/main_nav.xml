@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_nav"
-    app:startDestination="@id/homeFragment">
+    app:startDestination="@id/homeScreenFragment">
 
     <fragment
         android:id="@+id/homeFragment"
@@ -88,9 +88,6 @@
             android:id="@+id/action_pairingFragment_to_userDetailFragment"
             app:destination="@id/userDetailFragment" />
 
-        <action
-            android:id="@+id/action_pairingFragment_to_genBabyFragment"
-            app:destination="@id/genBabyFragment" />
     </fragment>
     <fragment
         android:id="@+id/timelineFragment"
@@ -219,6 +216,8 @@
 
             <argument android:name="id_video"
                 app:argType="integer"/>
+
+
         </action>
 
         <action
@@ -244,6 +243,14 @@
         <action
             android:id="@+id/action_videoResultsFragment_to_pickImageToSwapFragment"
             app:destination="@id/pickImageToSwapFragment" />
+        <action
+            android:id="@+id/action_videoResultsFragment_to_videoFullScreenFragment"
+            app:destination="@id/videoFullScreenFragment" >
+
+            <argument android:name="url_video_full"
+                app:argType="string"/>
+
+        </action>
     </fragment>
 <!--    <fragment-->
 <!--        android:id="@+id/swapFaceWithYourVideo"-->
@@ -256,14 +263,14 @@
 <!--            android:id="@+id/action_swapFaceWithYourVideo_to_videoResultsFragment"-->
 <!--            app:destination="@id/videoResultsFragment" />-->
 <!--    </fragment>-->
-    <fragment
-        android:id="@+id/genBabyFragment"
-        android:name="com.thinkdiffai.futurelove.view.fragment.GenBabyFragment"
-        android:label="GenBabyFragment" >
-        <action
-            android:id="@+id/action_genBabyFragment_to_pairingFragment"
-            app:destination="@id/pairingFragment" />
-    </fragment>
+<!--    <fragment-->
+<!--        android:id="@+id/genBabyFragment"-->
+<!--        android:name="com.thinkdiffai.futurelove.view.fragment.GenBabyFragment"-->
+<!--        android:label="GenBabyFragment" >-->
+<!--        <action-->
+<!--            android:id="@+id/action_genBabyFragment_to_pairingFragment"-->
+<!--            app:destination="@id/pairingFragment" />-->
+<!--    </fragment>-->
     <fragment
         android:id="@+id/videoSwapHomeFragment"
         android:name="com.thinkdiffai.futurelove.view.fragment.VideoSwapHomeFragment"
@@ -325,44 +332,129 @@
         android:label="fragment_home_swap_image"
         tools:layout="@layout/fragment_home_swap_image" >
         <action
-            android:id="@+id/action_homeSwapImageFragment_to_swapGenBabyFragment"
-            app:destination="@id/swapGenBabyFragment" >
-
-            <argument
-                android:name="genSuKien"
-                app:argType="string"/>
-
-        </action>
-
-    </fragment>
-    <fragment
-        android:id="@+id/swapGenBabyFragment"
-        android:name="com.thinkdiffai.futurelove.view.fragment.SwapGenImageFragment"
-        android:label="fragment_swap_gen_baby"
-        tools:layout="@layout/fragment_swap_gen_image" >
+            android:id="@+id/action_homeSwapImageFragment_to_swapGenImageFragment"
+            app:destination="@id/swapGenImageFragment" />
         <action
-            android:id="@+id/action_swapGenBabyFragment_to_homeSwapImageFragment"
-            app:destination="@id/homeSwapImageFragment" />
-        <action
-            android:id="@+id/action_swapGenBabyFragment_to_genBabyResultFragment"
-            app:destination="@id/genBabyResultFragment" >
-
-            <argument android:name="uri_genBaby"
-                app:argType="string"/>
-
-        </action>
+            android:id="@+id/action_homeSwapImageFragment_to_videoFullScreenFragment"
+            app:destination="@id/videoFullScreenFragment" />
     </fragment>
     <fragment
         android:id="@+id/genBabyResultFragment"
-        android:name="com.thinkdiffai.futurelove.view.fragment.GenBabyResultFragment"
+        android:name="com.thinkdiffai.futurelove.view.fragment.GenImageSwapResultFragment"
         android:label="fragment_gen_baby_result"
         tools:layout="@layout/fragment_gen_baby_result" >
+
         <action
-            android:id="@+id/action_genBabyResultFragment_to_swapGenBabyFragment"
-            app:destination="@id/swapGenBabyFragment" />
-
-
+            android:id="@+id/action_genBabyResultFragment_to_swapGenImageFragment"
+            app:destination="@id/swapGenImageFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/homeScreenFragment"
+        android:name="com.thinkdiffai.futurelove.view.fragment.HomeScreenFragment"
+        android:label="fragment_home_screen"
+        tools:layout="@layout/fragment_home_screen" >
+        <action
+            android:id="@+id/action_homeScreenFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+        <action
+            android:id="@+id/action_homeScreenFragment_to_swapGenImageFragment"
+            app:destination="@id/swapGenImageFragment" >
+
+            <argument android:name="swap_two_image"
+                app:argType="string"/>
+
+        </action>
+        <action
+            android:id="@+id/action_homeScreenFragment_to_changePasswordFragment"
+            app:destination="@id/changePasswordFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/swapGenImageFragment"
+        android:name="com.thinkdiffai.futurelove.view.fragment.SwapGenImageFragment"
+        android:label="fragment_swap_gen_image"
+        tools:layout="@layout/fragment_swap_gen_image" >
+        <action
+            android:id="@+id/action_swapGenImageFragment_to_genBabyResultFragment"
+            app:destination="@id/genBabyResultFragment" >
+<!--            <argument android:name="uri_genBaby"-->
+<!--                app:argType="string"/>-->
+
+            <argument android:name="response_image"
+                app:argType="com.thinkdiffai.futurelove.model.GenImageModel"/>
+
+            <argument android:name="response_genBaby"
+                app:argType="com.thinkdiffai.futurelove.model.GenBabyModel"/>
+        </action>
+        <action
+            android:id="@+id/action_swapGenImageFragment_to_homeSwapImageFragment"
+            app:destination="@id/homeSwapImageFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/profileUserFragment"
+        android:name="com.thinkdiffai.futurelove.view.fragment.ProfileUserFragment"
+        android:label="fragment_profile_user"
+        tools:layout="@layout/fragment_profile_user" >
+        <action
+            android:id="@+id/action_profileUserFragment_to_fullScreenImageFragment"
+            app:destination="@id/fullScreenImageFragment" >
+            <argument android:name="url_image_swap"
+                app:argType="string"/>
+        </action>
+        <action
+            android:id="@+id/action_profileUserFragment_to_eventDetailFragment"
+            app:destination="@id/eventDetailFragment" >
+        </action>
+
+
+        <argument android:name="id_toan_bo_su_kien"
+            app:argType="string"/>
+
+        <argument android:name="so_thu_tu_su_kien"
+            app:argType="string"/>
+    </fragment>
+    <fragment
+        android:id="@+id/videoFullScreenFragment"
+        android:name="com.thinkdiffai.futurelove.view.fragment.VideoFullScreenFragment"
+        android:label="fragment_video_full_screen"
+        tools:layout="@layout/fragment_video_full_screen" />
+    <fragment
+        android:id="@+id/changePasswordFragment"
+        android:name="com.thinkdiffai.futurelove.view.fragment.ChangePasswordFragment"
+        android:label="fragment_change_password"
+        tools:layout="@layout/fragment_change_password" >
+    </fragment>
+    <fragment
+        android:id="@+id/fullScreenImageFragment"
+        android:name="com.thinkdiffai.futurelove.view.fragment.FullScreenImageFragment"
+        android:label="fragment_full_screen_image"
+        tools:layout="@layout/fragment_full_screen_image" >
+
+        <action
+            android:id="@+id/action_fullScreenImageFragment_to_profileUserFragment"
+            app:destination="@id/profileUserFragment" />
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/eventDetailFragment"
+        android:name="com.thinkdiffai.futurelove.view.fragment.EventDetailFragment"
+        android:label="fragment_event_detail"
+        tools:layout="@layout/fragment_event_detail" >
+        <action
+            android:id="@+id/action_eventDetailFragment_to_commentEventDetalFragment"
+            app:destination="@id/commentEventDetalFragment" />
+
+        <argument android:name="s_t_t_s_k"
+            app:argType="string"/>
+
+        <argument android:name="id_t_b_s_k"
+            app:argType="string"/>
+    </fragment>
+    <fragment
+        android:id="@+id/commentEventDetalFragment"
+        android:name="com.thinkdiffai.futurelove.view.fragment.CommentEventDetailFragment"
+        android:label="fragment_comment_event_detal"
+        tools:layout="@layout/fragment_comment_event_detail" />
 
 
 </navigation>

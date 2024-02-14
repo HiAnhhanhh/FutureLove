@@ -1,12 +1,14 @@
 package com.thinkdiffai.futurelove.view.fragment;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,12 +19,13 @@ import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.ui.StyledPlayerView;
 import com.thinkdiffai.futurelove.R;
 import com.thinkdiffai.futurelove.databinding.FragmentVideoResultsBinding;
+import com.thinkdiffai.futurelove.view.Downloader;
 
 public class VideoResultsFragment extends Fragment {
 
     private FragmentVideoResultsBinding fragmentVideoResultsBinding;
 
-
+    OnBackPressedCallback callback;
     private String link_vid_swap,link_vid_goc;
 
     @Override
@@ -59,11 +62,12 @@ public class VideoResultsFragment extends Fragment {
         styledPlayerView.setPlayer(exoPlayer);
         MediaItem mediaItem = MediaItem.fromUri(link_vid_goc);
         exoPlayer.addMediaItem(mediaItem);
-
         exoPlayer.prepare();
         exoPlayer.play();
 
         fragmentVideoResultsBinding.beforeBtn.setOnClickListener(v -> {
+            fragmentVideoResultsBinding.textView6.setVisibility(View.GONE);
+            fragmentVideoResultsBinding.downloadVideoBtn.setVisibility(View.GONE);
             exoPlayer1.stop();
             exoPlayer.seekTo(0);
             fragmentVideoResultsBinding.beforeBtn.setBackgroundResource(R.drawable.bg_purple_transparent);
@@ -78,6 +82,8 @@ public class VideoResultsFragment extends Fragment {
             exoPlayer.play();
         });
         fragmentVideoResultsBinding.afterBtn.setOnClickListener(v -> {
+            fragmentVideoResultsBinding.textView6.setVisibility(View.VISIBLE);
+            fragmentVideoResultsBinding.downloadVideoBtn.setVisibility(View.VISIBLE);
             exoPlayer.stop();
             exoPlayer1.seekTo(0);
             fragmentVideoResultsBinding.afterBtn.setBackgroundResource(R.drawable.bg_purple_transparent);
@@ -95,6 +101,25 @@ public class VideoResultsFragment extends Fragment {
         fragmentVideoResultsBinding.backBtn.setOnClickListener(v -> {
             requireActivity().onBackPressed();
         });
+
+        fragmentVideoResultsBinding.videoSwapFace.setOnClickListener(v -> {
+            VideoResultsFragmentDirections.ActionVideoResultsFragmentToVideoFullScreenFragment action_video_goc = VideoResultsFragmentDirections.actionVideoResultsFragmentToVideoFullScreenFragment(link_vid_goc);
+            NavHostFragment.findNavController(this).navigate(action_video_goc);
+        });
+
+        fragmentVideoResultsBinding.videoSwapFaceResults.setOnClickListener(v -> {
+            VideoResultsFragmentDirections.ActionVideoResultsFragmentToVideoFullScreenFragment action_video_swap = VideoResultsFragmentDirections.actionVideoResultsFragmentToVideoFullScreenFragment(link_vid_swap);
+            NavHostFragment.findNavController(this).navigate(action_video_swap);
+        });
+
+        fragmentVideoResultsBinding.downloadVideoBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("check_download", "onClick: "+ link_vid_swap);
+                Downloader.downloadVideo(requireActivity(),link_vid_swap,"mp4");
+            }
+        });
+
     }
 
     private void initView() {
@@ -111,4 +136,6 @@ public class VideoResultsFragment extends Fragment {
             Toast.makeText(getActivity(), ""+ e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
+
+
 }

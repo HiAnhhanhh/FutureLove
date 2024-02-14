@@ -8,18 +8,29 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
+import android.view.MenuItem;
+import android.widget.Toast;
+import android.widget.Toolbar;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationView;
 import com.thinkdiffai.futurelove.R;
 import com.thinkdiffai.futurelove.databinding.ActivityMainBinding;
 import com.thinkdiffai.futurelove.view.BroadcastReceiver.InternetReceiver;
+
+import java.util.Objects;
 
 import io.github.rupinderjeet.kprogresshud.KProgressHUD;
 
@@ -56,6 +67,9 @@ public class MainActivity extends AppCompatActivity {
 
     public int soThuTuSuKien = 0;
 
+    private DrawerLayout drawerLayout;
+    private ActionBarDrawerToggle actionBarDrawerToggle;
+
     @Nullable
 
 
@@ -64,18 +78,49 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.transparent));
         activityMainBinding = ActivityMainBinding.inflate(getLayoutInflater());
-
        broadcastReceiver = new InternetReceiver();
        InternetStatus();
 
+
+//        actionBarDrawerToggle = new ActionBarDrawerToggle(
+//                this,
+//                activityMainBinding.drawerView,
+//                R.string.open,
+//                R.string.close
+//        );
+//
+//        activityMainBinding.drawerView.addDrawerListener(actionBarDrawerToggle);
+//        actionBarDrawerToggle.syncState();
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+//        activityMainBinding.clickBtn.setOnClickListener(v ->{
+//            activityMainBinding.drawerView.openDrawer(activityMainBinding.navView);
+//        });
+//        activityMainBinding.navView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+//            @Override
+//            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+//                switch (item.getItemId()) {
+//                    case R.id.home:
+//                        Toast.makeText(MainActivity.this, "Item 1 Clicked", Toast.LENGTH_SHORT).show();
+//                        break;
+//                    case R.id.videoSwap:
+//                        Toast.makeText(MainActivity.this, "Item 2 Clicked", Toast.LENGTH_SHORT).show();
+//                        break;
+//                    // Add more cases for other items as needed
+//                }
+//
+//                return true;
+//            }
+//        });
+
 //        NavController navController = Navigation.findNavController(MainActivity.this, R.id.activity_main_nav_host_fragment);
-//        navController.navigateUp();
+////        navController.navigateUp();
+//        NavigationUI.setupWithNavController(activityMainBinding.navView,navController);
 
-       BottomNavigationView bottomNavigationView = activityMainBinding.activityMainBottomNavigationView;
-       NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.activity_main_nav_host_fragment);
-       navController = navHostFragment.getNavController();
-
-        NavigationUI.setupWithNavController(bottomNavigationView, navController);
+//       BottomNavigationView bottomNavigationView = activityMainBinding.activityMainBottomNavigationView;
+//       NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.activity_main_nav_host_fragment);
+//       navController = navHostFragment.getNavController();
+//       NavigationUI.setupWithNavController(bottomNavigationView, navController);
 
         // Check LOGIN_STATE
         sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
@@ -92,9 +137,6 @@ public class MainActivity extends AppCompatActivity {
         }
         setContentView(activityMainBinding.getRoot());
     }
-
-
-
     public KProgressHUD createHud() {
         return kProgressHUD = KProgressHUD.create(this)
                 .setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
@@ -104,7 +146,6 @@ public class MainActivity extends AppCompatActivity {
                 .setAnimationSpeed(2)
                 .setDimAmount(0.5f);
     }
-
     public void InternetStatus(){
         registerReceiver(broadcastReceiver,new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
     }

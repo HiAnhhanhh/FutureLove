@@ -1,18 +1,16 @@
 package com.thinkdiffai.futurelove.view.adapter;
 
 import android.content.Context;
-import android.media.MediaPlayer;
-import android.media.session.MediaController;
-import android.net.Uri;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.exoplayer2.ExoPlayer;
+import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.google.android.exoplayer2.ui.PlayerView;
 import com.thinkdiffai.futurelove.databinding.TabVideoItemBinding;
 import com.thinkdiffai.futurelove.model.EventVideoModel;
 import com.thinkdiffai.futurelove.model.ListVideoHighlightsModel;
@@ -22,6 +20,7 @@ import java.util.List;
 
 public class VideoHighLightsAdapter extends RecyclerView.Adapter<VideoHighLightsAdapter.ViewHolder> {
     Context context;
+
 
     private final List<EventVideoModel> videoUrls; // Danh sách đường dẫn video
 
@@ -48,37 +47,33 @@ public class VideoHighLightsAdapter extends RecyclerView.Adapter<VideoHighLights
         return videoUrls.size();
     }
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        private TabVideoItemBinding tabVideoItemBinding;
+        TabVideoItemBinding tabVideoItemBinding;
+
+        PlayerView playerView;
+        SimpleExoPlayer player;
 
         public ViewHolder(@NonNull TabVideoItemBinding tabVideoItemBinding) {
             super(tabVideoItemBinding.getRoot());
             this.tabVideoItemBinding = tabVideoItemBinding;
+            playerView = tabVideoItemBinding.playerView1;
+            playerView.setUseController(false);
+            playerView.hideController();
+            initializePlayer();
+
+        }
+
+        private void initializePlayer() {
+            player = new SimpleExoPlayer.Builder(itemView.getContext()).build();
+            playerView.setPlayer(player);
         }
 
         public void binData(String urlVideo) {
-            try {
-                tabVideoItemBinding.playerView.setVideoURI(Uri.parse(urlVideo));
-                tabVideoItemBinding.playerView.setOnPreparedListener(mp -> {
-                    mp.setVolume(0f,0f);
-                    mp.setLooping(true);
-                });
-                tabVideoItemBinding.playerView.setOnInfoListener((mp, what, extra) -> {
-                    if (MediaPlayer.MEDIA_INFO_VIDEO_RENDERING_START == what) {
-                         tabVideoItemBinding.progressBar.setVisibility(View.GONE);
-                    }
-                    if (MediaPlayer.MEDIA_INFO_BUFFERING_START == what) {
-                        tabVideoItemBinding.progressBar.setVisibility(View.VISIBLE);
-                    }
-                    if (MediaPlayer.MEDIA_INFO_BUFFERING_END == what) {
-                        tabVideoItemBinding.progressBar.setVisibility(View.VISIBLE);
-                    }
-                    return false;
-                });
-                tabVideoItemBinding.playerView.start();
-
-            }catch(Exception e){
-                Log.e("TAG", "Error : " + e.getMessage());
-            }
+            MediaItem mediaItem = MediaItem.fromUri(urlVideo);
+            player.setMediaItem(mediaItem);
+            player.setVolume(0f);
+            player.setPlayWhenReady(true);
+            player.prepare();
+            player.play();
         }
     }
 }

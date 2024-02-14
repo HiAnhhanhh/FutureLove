@@ -2,9 +2,10 @@ package com.thinkdiffai.futurelove.model;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class GenBabyModel {
+public class GenBabyModel implements Serializable{
 
     @SerializedName("sukien_baby")
     private List<DetailGenBabyModel> genBabyModel;
@@ -21,7 +22,7 @@ public class GenBabyModel {
         this.genBabyModel = genBabyModel;
     }
 
-    public static class DetailGenBabyModel{
+    public static class DetailGenBabyModel {
 
         @SerializedName("id")
         private String id_image;

@@ -47,63 +47,16 @@
         app:layout_constraintTop_toTopOf="@+id/textView" />
 
 
-<!--    <androidx.cardview.widget.CardView-->
-<!--        android:id="@+id/cardView"-->
-<!--        android:layout_width="0dp"-->
-<!--        android:layout_height="340dp"-->
-<!--        android:elevation="10dp"-->
-<!--        android:padding="10dp"-->
-<!--        android:visibility="gone"-->
-<!--        app:cardBackgroundColor="@color/black"-->
-<!--        app:cardCornerRadius="10dp"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintWidth_percent=".49">-->
-
-<!--        <com.google.android.exoplayer2.ui.StyledPlayerView-->
-<!--            android:id="@+id/videoSwapFace"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="match_parent"-->
-<!--            android:layout_margin="10dp"-->
-<!--            app:hide_on_touch="true"-->
-<!--            app:show_timeout="1000"-->
-<!--            app:use_controller="true" />-->
-
-<!--    </androidx.cardview.widget.CardView>-->
-
-<!--    <androidx.cardview.widget.CardView-->
-<!--        android:id="@+id/cardView_results"-->
-<!--        android:layout_width="0dp"-->
-<!--        android:layout_height="340dp"-->
-<!--        android:elevation="10dp"-->
-<!--        android:padding="10dp"-->
-<!--        android:visibility="gone"-->
-<!--        app:cardBackgroundColor="@color/black"-->
-<!--        app:cardCornerRadius="10dp"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintWidth_percent=".49">-->
-
-<!--        <com.google.android.exoplayer2.ui.StyledPlayerView-->
-<!--            android:id="@+id/videoSwapFace_results"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="match_parent"-->
-<!--            android:layout_margin="10dp"-->
-<!--            app:hide_on_touch="true"-->
-<!--            app:show_timeout="1000"-->
-<!--            app:use_controller="true" />-->
-<!--    </androidx.cardview.widget.CardView>-->
-
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView2"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:cardElevation="8dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="40dp"
         android:backgroundTint="@color/black"
-        app:layout_constraintHeight_percent=".6"
         app:cardCornerRadius="10dp"
+        app:cardElevation="8dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent=".6"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/view2"
         app:layout_constraintWidth_percent=".9">
@@ -114,6 +67,7 @@
             android:orientation="vertical">
 
             <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/linear_layout"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:background="@color/white"
@@ -125,10 +79,10 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:textAllCaps="false"
                     android:background="@drawable/bg_purple_transparent"
                     android:fontFamily="sans-serif-black"
                     android:text="@string/before"
+                    android:textAllCaps="false"
                     android:textColor="@color/black"
                     android:textSize="18sp" />
 
@@ -137,11 +91,11 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:textAllCaps="false"
                     android:background="@color/transparent"
-                    android:textColor="@color/black"
                     android:fontFamily="sans-serif-black"
                     android:text="@string/after"
+                    android:textAllCaps="false"
+                    android:textColor="@color/black"
                     android:textSize="16sp" />
 
             </androidx.appcompat.widget.LinearLayoutCompat>
@@ -150,10 +104,10 @@
                 android:id="@+id/videoSwapFace_results"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_margin="10dp"
-                app:hide_on_touch="true"
-                android:visibility="gone"
                 android:layout_gravity="center"
+                android:layout_margin="10dp"
+                android:visibility="gone"
+                app:hide_on_touch="true"
                 app:show_timeout="1000"
                 app:use_controller="true" />
 
@@ -169,6 +123,34 @@
 
 
     </androidx.cardview.widget.CardView>
+
+    <ImageButton
+        android:id="@+id/download_video_btn"
+        android:layout_width="160dp"
+        android:layout_height="0dp"
+        android:background="@drawable/background_purple_radius_20dp"
+        android:contentDescription="@string/create_video"
+        android:padding="40dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent=".08"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cardView2" />
+
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-black"
+        android:text="@string/download"
+        android:visibility="gone"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="@+id/download_video_btn"
+        app:layout_constraintEnd_toEndOf="@+id/download_video_btn"
+        app:layout_constraintStart_toStartOf="@+id/download_video_btn"
+        app:layout_constraintTop_toTopOf="@+id/download_video_btn" />
 
 
 

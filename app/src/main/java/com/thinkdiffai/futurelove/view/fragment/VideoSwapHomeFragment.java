@@ -34,12 +34,7 @@ public class VideoSwapHomeFragment extends Fragment {
 
     int id_user;
 
-    LinearLayoutManager linearLayoutManager;
-
-
     private FragmentVideoSwapHomeBinding fragmentVideoSwapHomeBinding;
-
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -53,29 +48,27 @@ public class VideoSwapHomeFragment extends Fragment {
         fragmentVideoSwapHomeBinding = FragmentVideoSwapHomeBinding.inflate(inflater,container,false);
         return fragmentVideoSwapHomeBinding.getRoot();
     }
-
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initData();
         initAction();
     }
-
     private void initView(List<EventVideoModel> eventVideoModelList) {
        VideoHighLightsAdapter videoHighLightsAdapter = new VideoHighLightsAdapter(getContext(),eventVideoModelList);
        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,false);
        fragmentVideoSwapHomeBinding.highlightsVideoRec.setLayoutManager(linearLayoutManager);
        fragmentVideoSwapHomeBinding.highlightsVideoRec.setAdapter(videoHighLightsAdapter);
     }
-
     private void initAction() {
         fragmentVideoSwapHomeBinding.createVideoBtn.setOnClickListener(v -> navigateToListVideoFragment());
+        fragmentVideoSwapHomeBinding.backBtn.setOnClickListener(v -> {
+            requireActivity().onBackPressed();
+        });
     }
-
     private void navigateToListVideoFragment() {
         NavHostFragment.findNavController(VideoSwapHomeFragment.this).navigate(R.id.action_videoSwapHomeFragment_to_listVideoFragment);
     }
-
     private void initData() {
         loadIdUser();
         genVideoWithUser();
@@ -86,8 +79,9 @@ public class VideoSwapHomeFragment extends Fragment {
         id_user = Integer.parseInt(id_user_str);
     }
     private void genVideoWithUser() {
-        ApiService apiService = RetrofitClient.getInstance(Server.DOMAIN2).getRetrofit().create(ApiService.class);
-        Call<ListEventVideo> call = apiService.GenVideoWithUser(50,1);
+        ApiService apiService = RetrofitClient.getInstance("").getRetrofit().create(ApiService.class);
+        Log.d("check_response", "genVideoWithUser: "+ id_user);
+        Call<ListEventVideo> call = apiService.GenVideoWithUser(id_user,1);
         call.enqueue(new Callback<ListEventVideo>() {
             @Override
             public void onResponse(@NonNull Call<ListEventVideo> call, @NonNull Response<ListEventVideo> response) {
@@ -103,7 +97,7 @@ public class VideoSwapHomeFragment extends Fragment {
             }
             @Override
             public void onFailure(@NonNull Call<ListEventVideo> call, @NonNull Throwable t) {
-
+                Log.d("check_response", "onFailure: "+ t.getMessage());
             }
         });
     }

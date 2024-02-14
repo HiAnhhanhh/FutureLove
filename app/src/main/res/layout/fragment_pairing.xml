@@ -446,17 +446,17 @@
         app:layout_constraintWidth_percent=".45" />
 
 
-    <Button
-        android:id="@+id/genBaby_Btn"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:text="@string/gen_baby"
-        android:backgroundTint="@color/purple"
-        app:layout_constraintBottom_toBottomOf="@+id/img_wave_2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintHeight_percent=".1"
-        android:textSize="18sp"
-        app:layout_constraintWidth_percent=".4"/>
+<!--    <Button-->
+<!--        android:id="@+id/genBaby_Btn"-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="0dp"-->
+<!--        android:text="@string/gen_baby"-->
+<!--        android:backgroundTint="@color/purple"-->
+<!--        app:layout_constraintBottom_toBottomOf="@+id/img_wave_2"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintHeight_percent=".1"-->
+<!--        android:textSize="18sp"-->
+<!--        app:layout_constraintWidth_percent=".4"/>-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

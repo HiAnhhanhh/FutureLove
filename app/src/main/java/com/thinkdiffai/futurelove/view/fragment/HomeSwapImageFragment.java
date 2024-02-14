@@ -35,14 +35,14 @@ public class HomeSwapImageFragment extends Fragment {
     private void initAction() {
         fragmentHomeSwapImageBinding.genBaby.setOnClickListener(v ->{
             check_type = "GenBaby";
-            HomeSwapImageFragmentDirections.ActionHomeSwapImageFragmentToSwapGenBabyFragment action = HomeSwapImageFragmentDirections.actionHomeSwapImageFragmentToSwapGenBabyFragment(check_type);
-            NavHostFragment.findNavController(HomeSwapImageFragment.this).navigate(action);
+//            HomeSwapImageFragmentDirections action = HomeSwapImageFragmentDirections.actionHomeSwapImageFragmentToSwapGenBabyFragment(check_type);
+//            NavHostFragment.findNavController(HomeSwapImageFragment.this).navigate(action);
         });
 
         fragmentHomeSwapImageBinding.swapImage.setOnClickListener(v->{
             check_type="Gen_2_Image";
-            HomeSwapImageFragmentDirections.ActionHomeSwapImageFragmentToSwapGenBabyFragment action = HomeSwapImageFragmentDirections.actionHomeSwapImageFragmentToSwapGenBabyFragment(check_type);
-            NavHostFragment.findNavController(HomeSwapImageFragment.this).navigate(action);
+//            HomeSwapImageFragmentDirections.ActionHomeSwapImageFragmentToSwapGenBabyFragment action = HomeSwapImageFragmentDirections.actionHomeSwapImageFragmentToSwapGenBabyFragment(check_type);
+//            NavHostFragment.findNavController(HomeSwapImageFragment.this).navigate(action);
         });
     }
 }

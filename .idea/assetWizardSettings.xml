@@ -23,7 +23,7 @@
                                 <PersistentState>
                                   <option name="values">
                                     <map>
-                                      <entry key="url" value="file:/$USER_HOME$/AppData/Local/Android/Sdk/icons/material/materialicons/home/baseline_home_24.xml" />
+                                      <entry key="url" value="file:/$USER_HOME$/AppData/Local/Android/Sdk/icons/material/materialicons/arrow_back/baseline_arrow_back_24.xml" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -35,8 +35,8 @@
                           <map>
                             <entry key="assetSourceType" value="FILE" />
                             <entry key="color" value="ffffff" />
-                            <entry key="outputName" value="swap_svgrepo_com" />
-                            <entry key="sourceFile" value="D:\image_png\swap-svgrepo-com.svg" />
+                            <entry key="outputName" value="change_password_icon" />
+                            <entry key="sourceFile" value="D:\image_png\change-password-icon.svg" />
                           </map>
                         </option>
                       </PersistentState>

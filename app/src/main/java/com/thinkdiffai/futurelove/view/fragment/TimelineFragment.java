@@ -96,8 +96,6 @@ public class TimelineFragment extends Fragment {
     private String imgBase64Female = "";
     private String urlImgFemale;
     private String urlImgMale;
-
-    // Store a local device ip address
     private String networkIp;
     private List<EventHomeDto> eventListDto;
 
@@ -140,59 +138,6 @@ public class TimelineFragment extends Fragment {
             id_user = Integer.parseInt(id_user_str);
         }
     }
-
-//    private void navigateToOtherFragments() {
-//        bubbleNavigationLinearView = fragmentTimelineBinding.bubbleNavigation;
-//        bubbleNavigationLinearView.setNavigationChangeListener(new BubbleNavigationChangeListener() {
-//            @Override
-//            public void onNavigationChanged(View view, int position) {
-//                switch (position){
-//                    case 0:
-//                        fragmentTimelineBinding.homeBubble.setVisibility(View.GONE);
-//                        fragmentTimelineBinding.pairingBubble.setVisibility(View.GONE);
-//                        fragmentTimelineBinding.commentBubble.setVisibility(View.GONE);
-//                        NavHostFragment.findNavController(TimelineFragment.this).navigate(R.id.action_timelineFragment_to_homeFragment);
-//                        break;
-//                    case 1:
-//                        fragmentTimelineBinding.homeBubble.setVisibility(View.GONE);
-//                        fragmentTimelineBinding.pairingBubble.setVisibility(View.GONE);
-//                        fragmentTimelineBinding.commentBubble.setVisibility(View.GONE);
-//                        NavHostFragment.findNavController(TimelineFragment.this).navigate(R.id.action_timelineFragment_to_commentFragment);
-//                        break;
-//                    case 2:
-//                        fragmentTimelineBinding.homeBubble.setVisibility(View.GONE);
-//                        fragmentTimelineBinding.pairingBubble.setVisibility(View.GONE);
-//                        fragmentTimelineBinding.commentBubble.setVisibility(View.GONE);
-//                        NavHostFragment.findNavController(TimelineFragment.this).navigate(R.id.action_timelineFragment_to_pairingFragment);
-//                        break;
-//                }
-//            }
-//        });
-//
-//
-//        // Click btn Home
-//        fragmentTimelineBinding.homeBubble.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                NavHostFragment.findNavController(TimelineFragment.this).navigate(R.id.action_timelineFragment_to_homeFragment);
-//            }
-//        });
-////        // Click btn Pairing
-////        fragmentTimelineBinding.pairingBubble.setOnClickListener(new View.OnClickListener() {
-////            @Override
-////            public void onClick(View v) {
-////                NavHostFragment.findNavController(TimelineFragment.this).navigate(R.id.action_timelineFragment_to_pairingFragment);
-////            }
-////        });
-////        // Click btn Comment
-////        fragmentTimelineBinding.commentBubble.setOnClickListener(new View.OnClickListener() {
-////            @Override
-////            public void onClick(View v) {
-////                NavHostFragment.findNavController(TimelineFragment.this).navigate(R.id.action_timelineFragment_to_commentFragment);
-////            }
-////        });
-//    }
-
     private void initListener() {
 
         fragmentTimelineBinding.viewpagerTimeline.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
@@ -211,13 +156,10 @@ public class TimelineFragment extends Fragment {
         });
 
         fragmentTimelineBinding.btnSend.setOnClickListener(new View.OnClickListener() {
-
             @SuppressLint("StaticFieldLeak")
             @Override
             public void onClick(View view) {
-
                 Log.d("check_post_comment", "onClick: ");
-                // Get a returned ip from api
                 callDeviceIpAddress(new QueryValueCallback() {
                     @Override
                     public void onQueryValueReceived(String queryValue) {
@@ -236,7 +178,6 @@ public class TimelineFragment extends Fragment {
                                         urlImageComment = Util.uploadImage2(imgBase64Female, getActivity());
                                         return null;
                                     }
-
                                     @SuppressLint("StaticFieldLeak")
                                     @Override
                                     protected void onPostExecute(Void result) {
@@ -250,7 +191,6 @@ public class TimelineFragment extends Fragment {
                                         closeKeyboard();
                                         if (kProgressHUD.isShowing())
                                             kProgressHUD.dismiss();
-
                                     }
                                 }.execute();
 
@@ -262,13 +202,10 @@ public class TimelineFragment extends Fragment {
                                 closeKeyboard();
                                 if (kProgressHUD.isShowing())
                                     kProgressHUD.dismiss();
-
                             }
 //                            saveEventToStorage();
                         }
-                    }
-
-                    @Override
+                    }                    @Override
                     public void onApiCallFailed(Throwable t) {
                         Log.d("check_post_comment", "onApiCallFailed: "+ t);
                     }
@@ -301,7 +238,6 @@ public class TimelineFragment extends Fragment {
             @Override
             public void onScrollChange(@NonNull NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
                 int dy = scrollY - previousScrollY;
-
                 if (dy > 20) {
                     fragmentTimelineBinding.btnFloating.hide();
                 } else if (dy < 0) {
@@ -320,12 +256,6 @@ public class TimelineFragment extends Fragment {
             }
         });
     }
-
-//    private void saveEventToStorage() {
-//        int number = new Random().nextInt(3) + 2;
-//
-//        EventHistoryDb.getInstance(getActivity()).eventHistoryDao().insert(eventListDto.get(number));
-//    }
 
     private void openStorage() {
         if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
@@ -391,7 +321,7 @@ public class TimelineFragment extends Fragment {
         }
         String deviceName = Build.MANUFACTURER + Build.MODEL;
         CommentPage comment = new CommentPage(
-                1,
+                50,
                 content,
                 deviceName,
                 mainActivity.eventSummaryCurrentId,
@@ -400,23 +330,14 @@ public class TimelineFragment extends Fragment {
                 urlImageComment
         );
 
-//        Map<String, String> headers = new HashMap<>();
-//        headers.put("noi_dung_cmt", comment.getNoi_dung_cmt());
-//        headers.put("device_cmt", comment.getDevice_cmt());
-//        headers.put("id_toan_bo_su_kien", String.valueOf(comment.getId_toan_bo_su_kien()));
-//        headers.put("ipComment", comment.getDia_chi_ip());
-//        headers.put("imageattach", comment.getImageattach());
-/*
-        @Field("id_user") int idUser,
-        @Field("noi_dung_cmt") String content,
-        @Field("device_cmt") String device,
-        @Field("id_toan_bo_su_kien") String idSummary,
-        @Field("so_thu_tu_su_kien") int soThuTuSuKien,
-        @Field("ipComment") String ip,
-        @Field("imageattach") String imagEattach)
-
-        */
         ApiService apiService = RetrofitClient.getInstance(Server.DOMAIN2).getRetrofit().create(ApiService.class);
+        Log.d("check_comment", "postComment: "+comment.getIdUser()+
+                comment.getNoiDungCmt()+
+                comment.getDeviceCmt()+
+                String.valueOf(comment.getIdToanBoSuKien())+
+                comment.getSoThuTuSuKien()+
+                comment.getDiaChiIp()+
+                comment.getImageattach());
         Call<Object> call = apiService.postDataComment(
                 comment.getIdUser(),
                 comment.getNoiDungCmt(),
@@ -430,7 +351,8 @@ public class TimelineFragment extends Fragment {
             @Override
             public void onResponse(Call<Object> call, retrofit2.Response<Object> response) {
                 if (response.isSuccessful() && response.body() != null) {
-//                    xu ly sau khi comment
+
+                    Log.d("check_comment", "onResponse: "+ response.body());
                     getDataComment(mainActivity.soThuTuSuKien, mainActivity.eventSummaryCurrentId);
                 }
                 if (kProgressHUD.isShowing()) {
@@ -452,25 +374,19 @@ public class TimelineFragment extends Fragment {
     }
 
     private void initUi() {
-//        fragmentTimelineBinding.edtComment.setImeOptions(EditorInfo.IME_ACTION_DONE);
         fragmentTimelineBinding.edtComment.setInputType(InputType.TYPE_TEXT_FLAG_AUTO_COMPLETE);
-
-
         if (mainActivity.eventSummaryCurrentId < 0) {
             mainActivity.eventSummaryCurrentId = new Random().nextInt(10);
         }
-//        initViewpagerEvent
         detailEventList = new ArrayList<>();
         eventTimelineAdapter = new EventTimelineAdapter(detailEventList, id_event -> iOnClickAddEvent(id_event), this::iOnScrollEventList, getContext());
         fragmentTimelineBinding.viewpagerTimeline.setAdapter(eventTimelineAdapter);
 
-//        initRcvComment
         commentsForAdapter = new ArrayList<>();
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(), GridLayoutManager.VERTICAL, false);
         fragmentTimelineBinding.rcvComment.setLayoutManager(linearLayoutManager);
         commentAdapter = new CommentAdapter(requireContext(), commentsForAdapter, this::iOnClickItemComment);
         fragmentTimelineBinding.rcvComment.setAdapter(commentAdapter);
-
     }
 
     private void iOnScrollEventList(int soThuTuSuKien) {
@@ -479,19 +395,14 @@ public class TimelineFragment extends Fragment {
 
     private void iOnClickAddEvent(long id_event) {
         Intent intent = new Intent(getActivity(), AddEventActivity.class);
-        // intent.putExtra("id_summary_event", id_summary_event);
-        // intent.putExtra("id_event", id_event);
-        //   startActivity(intent);
-
         Bundle bundle = new Bundle();
-        //bundle.putLong("id_summary_event", id_summary_event);
         bundle.putLong("id_event",  id_event);
         intent.putExtra("send_id", bundle);
         startActivity(intent);
-
     }
 
     private void iOnClickItemComment(long idToanBoSuKien, double soThuTuSuKienCon) {
+
     }
 
     private void getDataEvent() {

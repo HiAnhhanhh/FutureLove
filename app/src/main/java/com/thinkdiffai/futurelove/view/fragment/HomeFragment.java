@@ -159,11 +159,9 @@ public class HomeFragment extends Fragment {
     }
 
     private void navigateToUserDetailFragment() {
-        NavHostFragment.findNavController(HomeFragment.this).navigate(R.id.action_homeFragment_to_userDetailFragment);
+        NavHostFragment.findNavController(HomeFragment.this).navigate(R.id.profileUserFragment);
         mainActivity.homeToUserDetail = true;
     }
-
-
     private void goToListVideoFragment() {
         NavHostFragment.findNavController(HomeFragment.this).navigate(R.id.action_videoSwapHomeFragment_to_listVideoFragment);
     }
@@ -171,56 +169,19 @@ public class HomeFragment extends Fragment {
     private void goToPairingFragment() {
         NavHostFragment.findNavController(HomeFragment.this).navigate(R.id.action_homeFragment_to_pairingFragment);
     }
-
     private void goToTimeLineFragment() {
         NavHostFragment.findNavController(HomeFragment.this).navigate(R.id.action_homeFragment_to_timelineFragment);
     }
-
     private void goToCommentFragment() {
         NavHostFragment.findNavController(HomeFragment.this).navigate(R.id.action_homeFragment_to_commentFragment);
     }
-
-//    private void initListener() {
-//        fragmentHomeBinding.rcvHome.addOnScrollListener(new PaginationScrollListener(linearLayoutManager) {
-//            @Override
-//            public void loadMoreItem() {
-//                // It help the kud not loading many times
-//                isLoadingMore = false;
-//                isLoading = true;
-//                currentPage++;
-//                loadNextPage();
-//            }
-//            @Override
-//            public boolean isLoading() {
-//                return isLoading;
-//            }
-//
-//            @Override
-//            public boolean isLagePage() {
-//                return isLastPage;
-//            }
-//
-//            @Override
-//            public void ReloadItem() {
-//                // It help the kud not loading many times
-//                isLoadingMore = false;
-//                currentPage = 1;
-//                getData(currentPage);
-//            }
-//        });
-//    }
-
-//    private void loadNextPage() {
-//        getData(currentPage);
-//    }
-
     private void initUi() {
         // Set isLoadingMore = true in order to set kud loading in the first api calling time
         isLoadingMore = true;
-
         //Reset all events
         mainActivity.soThuTuSuKien = 0;
         eventList = new ArrayList<>();
+//        fragmentHomeBinding.rcvHome.setNestedScrollingEnabled(false);
         linearLayoutManager = new LinearLayoutManager(getActivity(), GridLayoutManager.VERTICAL, false);
         fragmentHomeBinding.rcvHome.setLayoutManager(linearLayoutManager);
         // It automatically get the id of all events in EventHomeAdapter and assign into this::goToEventDetail
@@ -236,11 +197,9 @@ public class HomeFragment extends Fragment {
         fragmentHomeBinding.tabItem.setAdapter(pageEventAdapter);
     }
 
-    // Current page is 4 because it is Timeline Fragment
     private void goToEventDetail(long idToanBoSuKien) {
         mainActivity.eventSummaryCurrentId = idToanBoSuKien;
         goToTimeLineFragment();
-//        mainActivity.setCurrentPage(4);
     }
 
     private void goToPageEvent(int position){
@@ -252,16 +211,15 @@ public class HomeFragment extends Fragment {
             kProgressHUD.show();
         }
         ApiService apiService = RetrofitClient.getInstance(Server.DOMAIN2).getRetrofit().create(ApiService.class);
-        Call<DetailEventListParent> call = apiService.getEventListForHome(position,id_user);
+        Call<DetailEventListParent> call = apiService.getEventListForHome(position+1,id_user);
         Log.d("check_response", "getData: "+ call.toString());
         call.enqueue(new Callback<DetailEventListParent>() {
             @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onResponse(Call<DetailEventListParent> call, Response<DetailEventListParent> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    Log.d("check_response", "onResponse: "+ response.body());
+                    Log.d("c", "onResponse: "+ response.body());
                     DetailEventListParent detailEventListParent = response.body();
-
                     List<DetailEventList> detailEventLists = detailEventListParent.getListSukien();
                     if (!detailEventLists.isEmpty()){
                         eventHomeAdapter.setData(detailEventLists);
@@ -286,44 +244,7 @@ public class HomeFragment extends Fragment {
         });
     }
 
-//    private void getData() {
-//        if (!kProgressHUD.isShowing() && isLoadingMore) {
-//            kProgressHUD.show();
-//        }
-//        ApiService apiService = RetrofitClient.getInstance(Server.DOMAIN2).getRetrofit().create(ApiService.class);
-//        Call<DetailEventListParent> call = apiService.getEventListForHome(1);
-//        Log.d("check_response", "getData: "+ call.toString());
-//        call.enqueue(new Callback<DetailEventListParent>() {
-//            @SuppressLint("NotifyDataSetChanged")
-//            @Override
-//            public void onResponse(Call<DetailEventListParent> call, Response<DetailEventListParent> response) {
-//                if (response.isSuccessful() && response.body() != null) {
-//                    Log.d("check_response", "onResponse: pke");
-//                    Log.d("check_response", "onResponse: "+ response.body().getListSukien().size());
-//                    DetailEventListParent detailEventListParent = response.body();
-//                    List<DetailEventList> detailEventLists = detailEventListParent.getListSukien();
-//                    if (!detailEventLists.isEmpty()){
-//                        eventHomeAdapter.setData(detailEventLists);
-//                        eventHomeAdapter.notifyDataSetChanged();
-//                    }
-//                }
-//                if (kProgressHUD.isShowing()) {
-//                    kProgressHUD.dismiss();
-//                }
-//                isLoading = false;
-//            }
-//
-//            @Override
-//            public void onFailure(Call<DetailEventListParent> call, Throwable t) {
-//                Toast.makeText(getActivity(), t.getMessage() + "", Toast.LENGTH_SHORT).show();
-//                if (kProgressHUD.isShowing()) {
-//                    kProgressHUD.dismiss();
-//                    Log.e("MainActivityLog", t.getMessage().toString());
-//                }
-//                isLoading = false;
-//            }
-//        });
-//    }
+
     private void performSearch() {
         fragmentHomeBinding.edtSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override

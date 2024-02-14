@@ -3,12 +3,14 @@ package com.thinkdiffai.futurelove.service.api;
 import com.thinkdiffai.futurelove.model.DetailEventList;
 import com.thinkdiffai.futurelove.model.DetailEventListParent;
 import com.thinkdiffai.futurelove.model.DetailListVideoModel;
+import com.thinkdiffai.futurelove.model.EventCreateByUser;
 import com.thinkdiffai.futurelove.model.EventHomeDto;
 import com.thinkdiffai.futurelove.model.GenBabyModel;
 import com.thinkdiffai.futurelove.model.GenImageModel;
 import com.thinkdiffai.futurelove.model.GetVideoSwapResponse;
 import com.thinkdiffai.futurelove.model.GetYourVideoSwapModel;
 import com.thinkdiffai.futurelove.model.IpNetworkModel;
+import com.thinkdiffai.futurelove.model.ListEventDetailModel;
 import com.thinkdiffai.futurelove.model.ListEventVideo;
 import com.thinkdiffai.futurelove.model.ListImageUploadModel;
 import com.thinkdiffai.futurelove.model.Login;
@@ -69,8 +71,6 @@ public interface ApiService {
 //            @Query("ten_nu") String tenNu
 //    );
 
-
-
     @GET(Server.URI_PAIRING)
     Call<Object> postEvent(
             @Header(Server.KEY_HEADER1) String imageLink1,
@@ -129,15 +129,18 @@ public interface ApiService {
             @Query("id_user") int id_user
     );
 
-
-
     @GET(Server.IMAGE_UPLOAD+ "{id_user}")
     Call<ListImageUploadModel> getImageUpload (
             @Path("id_user") int id_user,
             @Query("type") String type
     );
 
-    @GET(Server.GEN_VIDEO_WITH_USER+"{id_user}")
+    @GET(Server.EVENT_CREATE_BY_USER+"{id_user}")
+    Call<EventCreateByUser> getEventCreateByUser (
+            @Path("id_user") int id_user
+    );
+
+    @GET("https://metatechvn.store/lovehistory/user/video/"+ "{id_user}")
     Call<ListEventVideo> GenVideoWithUser (
             @Path("id_user") int id_user,
             @Query("trang") int page
@@ -174,6 +177,9 @@ public interface ApiService {
 
     @GET(Server.URI_LIST_EVENT_TIMELINE + "{id}")
     Call<DetailEventList> getListEventDetail(@Path("id") long id);
+
+    @GET(Server.URI_LIST_EVENT_TIMELINE + "{id_toan_bo_sk}")
+    Call<ListEventDetailModel> getListEventDetailUser(@Path("id_toan_bo_sk") long id);
 
     // Get all comments of each event
     @GET(Server.URI_LIST_COMMENT_BY_EVENT_ID + "{so_thu_tu_su_kien}")
@@ -227,8 +233,8 @@ public interface ApiService {
             @Field("ip_register") String registerIp
     );
     // get detail user
-    @GET(Server.URI_PROFILE_USER + "{page}")
-    Call<DetailUser> getProfileUser(@Path("page") long id);
+    @GET(Server.URI_PROFILE_USER + "{id_user}")
+    Call<DetailUser> getProfileUser(@Path("id_user") int id_user);
 
     // GET comments user
     @GET(Server.URI_COMMENTS_USER + "{page}")
@@ -243,12 +249,13 @@ public interface ApiService {
 
     // CHANGE PASSWORD
     @FormUrlEncoded
-    @POST(Server.URI_CHANGE_PASSWORD+"{page}")
+    @POST(Server.URI_CHANGE_PASSWORD+"{id_user}")
     Call<Object> Change_Password(
-            @Path("page")long id,
+           @Path("id_user") int id_user,
+            @Header("Authorization") String auth,
 //            @Field("email_or_username") String email,
-            @Field("oldPassword") String oldpassword,
-            @Field("newPassword") String newpassword
+            @Field("old_password") String oldPassword,
+            @Field("new_password") String newPassword
     );
 
 }

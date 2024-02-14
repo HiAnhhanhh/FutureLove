@@ -6,6 +6,8 @@
     <color name="teal_200">#FF03DAC5</color>
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
+    <color name="black_transparent">#72000000</color>
+
     <color name="white">#FFFFFF</color>
 
 
@@ -17,10 +19,10 @@
 
     <color name="textColorSecondary">#6D6E70</color>
     <color name="textColorAccent">#A7A9AB</color>
-    <color name="gray_white">#66DBD9D9</color>
-    <color name="gray_white_1">#90DBD9D9</color>
+    <color name="gray_white">#99DBD9D9</color>
+    <color name="gray_white_1">#F4F2F2</color>
     <color name="dividerColor">#BDBDBD</color>
-    <color name="transparent">#00000000</color>
+    <color name="transparent">#00FFFFFF</color>
     <color name="purple">#9C27B0</color>
     <color name="green">#4CAF50</color>
     <color name="green_light">#95F698</color>
@@ -44,5 +46,11 @@
 
     <color name="bgToolbar">#1E1E1E</color>
     <color name="gray">#AFAFAF</color>
+
+    <color name="login_bg">#FFDB8C</color>
+
+    <color name="login_btn">#BC6008</color>
+
+    <color name="bg_btn">#E189BB</color>
 
 </resources>

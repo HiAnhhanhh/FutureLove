@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:id="@+id/group_1" >
+
+        <item android:id="@+id/home"
+            android:icon="@drawable/btn_menu_home_black"
+            android:title= "@string/home" />
+<!--        <item-->
+<!--            android:id="@+id/notification"-->
+<!--            android:icon="@drawable/notification"-->
+<!--            android:title="@string/notification" />-->
+        <item
+            android:id="@+id/gen_baby"
+            android:icon="@drawable/icon_park_outline_baby"
+            android:title="@string/gen_baby" />
+
+        <item
+            android:id="@+id/swap_Image"
+            android:icon="@drawable/nimbus_user_group"
+            android:title="@string/swap_image" />
+
+        <item
+            android:id="@+id/videoSwapHomeFragment"
+            android:icon="@drawable/video_frame_play_horizontal_svgrepo_com"
+            android:title="@string/video" />
+
+<!--        <item android:id="@+id/event"-->
+<!--            android:title="@string/event"-->
+<!--            android:icon="@drawable/mdi_events_check"/>-->
+
+<!--        <item android:id="@+id/setting"-->
+<!--            android:title="@string/setting"-->
+<!--            android:icon="@drawable/uil_setting"/>-->
+
+
+
+    </group>
+
+    <item android:id="@+id/logout"
+        android:title="@string/logout"
+        android:icon="@drawable/material_symbols_login" />
+
+    <item android:id="@+id/change_password"
+        android:title="@string/change_password"
+        android:icon="@drawable/change_password_icon" />
+
+</menu>
