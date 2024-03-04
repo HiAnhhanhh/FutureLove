@@ -16,12 +16,12 @@ import java.util.ArrayList;
 public class EventUserAdapter extends RecyclerView.Adapter<EventUserAdapter.ViewHolder> {
 
     private final Context context;
-    private final ArrayList<EventCreateByUser.EventDetailModel> eventDetailModels;
+    private final ArrayList<EventCreateByUser.EventDetail> eventDetailModels;
 
     private final ItemClickListener itemClickListener;
 
 
-    public EventUserAdapter(Context context, ArrayList<EventCreateByUser.EventDetailModel> eventDetailModels, ItemClickListener itemClickListener) {
+    public EventUserAdapter(Context context, ArrayList<EventCreateByUser.EventDetail> eventDetailModels, ItemClickListener itemClickListener) {
         this.context = context;
         this.eventDetailModels = eventDetailModels;
         this.itemClickListener = itemClickListener;
@@ -36,13 +36,15 @@ public class EventUserAdapter extends RecyclerView.Adapter<EventUserAdapter.View
 
     @Override
     public void onBindViewHolder(@NonNull EventUserAdapter.ViewHolder holder, int position) {
-        EventCreateByUser.EventDetailModel eventDetailModel = eventDetailModels.get(position);
+        EventCreateByUser.EventDetailModel eventDetailModel = eventDetailModels.get(position).getEventDetailModels().get(0);
         Glide.with(context).load(eventDetailModel.link_da_swap).into(holder.itemRcvEvent1Binding.imgContent);
         Glide.with(context).load(eventDetailModel.link_nam_goc).into(holder.itemRcvEvent1Binding.imgPerson1);
         Glide.with(context).load(eventDetailModel.link_nu_goc).into(holder.itemRcvEvent1Binding.imgPerson2);
         holder.itemRcvEvent1Binding.tvEventDetail.setText(eventDetailModel.noi_dung_su_kien);
         holder.itemRcvEvent1Binding.tvContent.setText(eventDetailModel.ten_su_kien);
         holder.itemRcvEvent1Binding.tvDate.setText(eventDetailModel.real_time);
+        holder.itemRcvEvent1Binding.tvCommentNumber.setText(String.valueOf(eventDetailModel.count_comment));
+        holder.itemRcvEvent1Binding.tvViewNumber.setText(String.valueOf(eventDetailModel.count_view));
         holder.itemView.setOnClickListener(v -> {
             itemClickListener.onClick(eventDetailModel.id_toan_bo_su_kien,eventDetailModel.so_thu_tu_su_kien);
         });

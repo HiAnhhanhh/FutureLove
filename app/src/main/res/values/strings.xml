@@ -108,6 +108,11 @@
     <string name="dateoftime">dateOfTime</string>
     <string name="mm_dd_yy">mm/dd/yy</string>
     <string name="todo_1">TODO</string>
-    <string name="event_detail_1">Event Detail</string>
+    <string name="event_detail_1">Event Detail User</string>
     <string name="enter">Enter Comment ...</string>
+    <string name="delete">Delete</string>
+    <string name="all_comment">All Comment</string>
+    <string name="highlights_video">Highlights Video</string>
+    <string name="add_event">Add Event</string>
+    <string name="upload">Upload</string>
 </resources>

@@ -1,5 +1,7 @@
 package com.thinkdiffai.futurelove.service.api;
 
+import androidx.room.Delete;
+
 import com.thinkdiffai.futurelove.model.DetailEventList;
 import com.thinkdiffai.futurelove.model.DetailEventListParent;
 import com.thinkdiffai.futurelove.model.DetailListVideoModel;
@@ -15,6 +17,7 @@ import com.thinkdiffai.futurelove.model.ListEventVideo;
 import com.thinkdiffai.futurelove.model.ListImageUploadModel;
 import com.thinkdiffai.futurelove.model.Login;
 import com.thinkdiffai.futurelove.model.comment.CommentList;
+import com.thinkdiffai.futurelove.model.comment.CommentPage;
 import com.thinkdiffai.futurelove.model.comment.DetailUser;
 import com.thinkdiffai.futurelove.model.comment.EventsUser.EventsUser;
 import com.thinkdiffai.futurelove.model.comment.UserComment;
@@ -24,6 +27,7 @@ import java.util.List;
 
 import okhttp3.MultipartBody;
 import retrofit2.Call;
+import retrofit2.http.DELETE;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -71,15 +75,16 @@ public interface ApiService {
 //            @Query("ten_nu") String tenNu
 //    );
 
-    @GET(Server.URI_PAIRING)
+    @GET("https://thinkdiff.us/getdata")
     Call<Object> postEvent(
-            @Header(Server.KEY_HEADER1) String imageLink1,
-            @Header(Server.KEY_HEADER2) String imageLink2,
-            @Query("device_them_su_kien") String deviceThemSuKien,
-            @Query("ip_them_su_kien") String ipThemSuKien,
-            @Query("id_user") long userId,
-            @Query("ten_nam") String tenNam,
-            @Query("ten_nu") String tenNu
+            @Header("linknam") String linknam,
+            @Header("linknu") String linknu,
+            @Header("Authorization") String authorization,
+            @Query("device_them_su_kien") String device,
+            @Query("ip_them_su_kien") String ip,
+            @Query("id_user") String userId,
+            @Query("ten_nam") String nam,
+            @Query("ten_nu") String nu
     );
 
     @GET(Server.GET_VIDEO + "{page}")
@@ -98,7 +103,7 @@ public interface ApiService {
     );
 
 
-    @GET("https://lhvn.online/getdata/genvideo")
+    @GET("https://videoswap.mangasocial.online/getdata/genvideo")
     Call<GetVideoSwapResponse> getUrlVideoSwap(
             @Header("Authorization") String authorization,
             @Query("id_video") int idVideo,
@@ -129,6 +134,8 @@ public interface ApiService {
             @Query("id_user") int id_user
     );
 
+
+
     @GET(Server.IMAGE_UPLOAD+ "{id_user}")
     Call<ListImageUploadModel> getImageUpload (
             @Path("id_user") int id_user,
@@ -140,7 +147,7 @@ public interface ApiService {
             @Path("id_user") int id_user
     );
 
-    @GET("https://metatechvn.store/lovehistory/user/video/"+ "{id_user}")
+    @GET("https://databaseswap.mangasocial.online/lovehistory/user/video/"+ "{id_user}")
     Call<ListEventVideo> GenVideoWithUser (
             @Path("id_user") int id_user,
             @Query("trang") int page
@@ -155,7 +162,7 @@ public interface ApiService {
     );
 
     @Multipart
-    @POST("https://lhvn.online/getdata/genvideo/swap/imagevid")
+    @POST("https://videoswap.mangasocial.online/getdata/genvideo/swap/imagevid")
     Call<GetYourVideoSwapModel> PostVid (
             @Header("Authorization") String authorization,
             @Query("device_them_su_kien") String deviceThemSuKien,
@@ -194,19 +201,40 @@ public interface ApiService {
                                         @Query("id_user") int id_user);
 
 
+
     @FormUrlEncoded
-    @POST(Server.URI_POST_EVENT_TIMELINE)
-    Call<Object> postListEventDetail(@Field("id") String id,
-                                     @Field("link_da_swap") String linkdaswap,
-                                     @Field("link_nam_chua_swap") String linknamchuaswap,
-                                     @Field("link_nam_goc") String linknamgoc,
-                                     @Field("link_nu_chua_swap") String linknuchuaswap,
-                                     @Field("link_nu_goc") String link_nu_goc,
-                                     @Field("noi_dung_su_kien") String noidungsukien,
-                                     @Field("real_time") String realtime,
-                                     @Field("so_thu_tu_su_kien") String sothutusukien,
+    @POST("https://databaseswap.mangasocial.online/lovehistory/add/"+"{id_toan_bo_sk}")
+    Call<Object> postListEventDetail(
+                                    @Path("id_toan_bo_sk") String id_toan_bo_sk,
+                                     @Header("link1") String link1,
+                                     @Header("link2") String link2,
+                                     @Header("Authorization") String auth,
+                                     @Field("id_user") int id,
+                                     @Field("link_img") String link_img,
+                                     @Field("ten_nam") String ten_nam,
+                                     @Field("ten_nu") String ten_nu,
+                                     @Field("noidung_su_kien") String noidung_su_kien,
+                                     @Field("device_them_su_kien") String device_them_su_kien,
+                                     @Field("ip_them_su_kien") String ip_them_su_kien,
                                      @Field("ten_su_kien") String tensukien,
-                                     @Field("tom_Luoc_Text") String tom_Luoc_Text);
+                                     @Field("id_template") int id_template,
+                                     @Field("link_video") String link_video);
+
+    @FormUrlEncoded
+    @POST("https://databaseswap.mangasocial.online/lovehistory/comment")
+    Call<CommentPage> postComment (@Field("id_user") int id_user,
+                                   @Field("noi_dung_cmt") String noi_dung_comment,
+                                   @Field("device_cmt") String device_cmt,
+                                   @Field("id_toan_bo_su_kien") String id_toan_bo_su_kien,
+                                   @Field("so_thu_tu_su_kien") int so_thu_tu_su_kien,
+                                   @Field("ipComment") String ipComment,
+                                   @Field("imageattach")String imageattach,
+                                   @Field("id_user_cmt") int id_user_cmt,
+                                   @Field("location") String location,
+                                   @Field("link_imagesk") String link_imagesk);
+
+
+
     @FormUrlEncoded
     @POST(Server.URI_POST_COMMENT)
     Call<Object> postDataComment(@Field("id_user") int idUser,
@@ -256,6 +284,12 @@ public interface ApiService {
 //            @Field("email_or_username") String email,
             @Field("old_password") String oldPassword,
             @Field("new_password") String newPassword
+    );
+
+    @DELETE("https://databaseswap.mangasocial.online/lovehistory/delete/"+ "{id_comment}")
+    Call<Object> deleteComment (
+            @Path("id_comment") int id_comment,
+            @Header("Authorization") String authorization
     );
 
 }

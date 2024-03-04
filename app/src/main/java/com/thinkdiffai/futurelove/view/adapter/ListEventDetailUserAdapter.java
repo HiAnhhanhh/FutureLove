@@ -25,6 +25,12 @@ public class ListEventDetailUserAdapter extends RecyclerView.Adapter<ListEventDe
         this.context = context;
         this.recyclerViewClickListener = recyclerViewClickListener;
     }
+
+    public ListEventDetailUserAdapter(ArrayList<ListEventDetailModel.EventDetailModel> listEventDetail, Context context) {
+        this.listEventDetail = listEventDetail;
+        this.context = context;
+    }
+
     @NonNull
     @Override
     public ListEventDetailUserAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -38,9 +44,9 @@ public class ListEventDetailUserAdapter extends RecyclerView.Adapter<ListEventDe
         holder.itemDetailEventBinding.content.setText(eventDetailModel.noi_dung_su_kien);
         holder.itemDetailEventBinding.dateOfTime.setText(eventDetailModel.real_time);
         Glide.with(context).load(eventDetailModel.link_da_swap).into(holder.itemDetailEventBinding.imageSwap);
-        holder.itemView.setOnClickListener(v -> {
-            recyclerViewClickListener.onItemClickImage(eventDetailModel.id ,String.valueOf(eventDetailModel.so_thu_tu_su_kien));
-        });
+//        holder.itemView.setOnClickListener(v -> {
+//            recyclerViewClickListener.onItemClickImage(eventDetailModel.id ,String.valueOf(eventDetailModel.so_thu_tu_su_kien));
+//        });
     }
     @Override
     public int getItemCount() {

@@ -32,9 +32,6 @@ import retrofit2.Response;
 public class CommentEventDetailFragment extends Fragment {
     String so_thu_tu_su_kien, id_toan_bo_su_kien;
     String token_auth;
-    String urlImgMale,urlImgFemale;
-    private CommentAdapter commentAdapter;
-
 
     ArrayList<CommentPage> eachEventCommentsListList;
     int id_user;
@@ -83,6 +80,7 @@ public class CommentEventDetailFragment extends Fragment {
                     if (response.body().getEachEventCommentList().size()!=0) {
                         eachEventCommentsListList = new ArrayList<>();
                         eachEventCommentsListList.addAll(response.body().getEachEventCommentList());
+                        Log.d("check_list_comment", "onResponse: "+ eachEventCommentsListList);
                     }
                 }
             }
@@ -92,7 +90,6 @@ public class CommentEventDetailFragment extends Fragment {
             }
         });
     }
-
     private void loadIdUser() {
         SharedPreferences sharedPreferences = requireActivity().getSharedPreferences("id_user",0);
         String id_user_str = sharedPreferences.getString("id_user_str","");
@@ -104,7 +101,6 @@ public class CommentEventDetailFragment extends Fragment {
             id_user = Integer.parseInt(id_user_str);
         }
     }
-
     private void loadData() {
         Bundle bundle = getArguments();
         so_thu_tu_su_kien = bundle != null ? bundle.getString("s_t_t_s_k") : null;

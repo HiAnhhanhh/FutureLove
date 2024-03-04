@@ -96,7 +96,7 @@ public class ProfileUserFragment extends Fragment {
 
     int id_user;
 
-    private ArrayList<EventCreateByUser.EventDetailModel> eventDetailModelArrayList;
+    private ArrayList<EventCreateByUser.EventDetail> eventDetailModelArrayList;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -159,6 +159,9 @@ public class ProfileUserFragment extends Fragment {
         NavHostFragment.findNavController(ProfileUserFragment.this).navigate(R.id.action_profileUserFragment_to_eventDetailFragment,bundle);
     }
     private void initAction() {
+
+
+
         fragmentProfileUserBinding.backBtn.setOnClickListener(v -> {
             requireActivity().onBackPressed();
         });
@@ -423,8 +426,8 @@ public class ProfileUserFragment extends Fragment {
             public void onResponse(Call<EventCreateByUser> call, Response<EventCreateByUser> response) {
                 if(response.isSuccessful()){
                     eventDetailModelArrayList = new ArrayList<>();
-                    eventDetailModelArrayList.addAll(response.body().getEventDetails().get(0).getEventDetailModels());
-                    Log.d("check_resposne_profile", "onResponse: "+ response.body().getEventDetails().get(0).getEventDetailModels().get(0).id_toan_bo_su_kien);
+                    eventDetailModelArrayList.addAll(response.body().getEventDetails());
+                    Log.d("check_resposne_profile", "onResponse: "+ response.body());
                     fragmentProfileUserBinding.layoutProgressBar.setVisibility(View.GONE);
                     fragmentProfileUserBinding.recEventCreateByUser.setVisibility(View.VISIBLE);
                     initViewRec();

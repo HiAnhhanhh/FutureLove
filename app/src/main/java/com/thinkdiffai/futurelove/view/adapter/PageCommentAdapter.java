@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.thinkdiffai.futurelove.R;
@@ -54,10 +55,15 @@ public class PageCommentAdapter extends RecyclerView.Adapter<PageCommentAdapter.
 //                holder.itemView.setBackgroundColor(R.drawable.color_bg_rcv);
             }
         });
-        if(row_index == position){
-            holder.itemView.setBackgroundResource(R.color.green_light);
+        if(position == 0&& row_index == -1){
+            holder.itemView.setBackgroundResource(R.drawable.bg_circle_white);
+            holder.tabItemBinding.pageEvent.setTextColor(ContextCompat.getColor(holder.itemView.getContext(),R.color.black));
+        } else if (row_index == position){
+            holder.itemView.setBackgroundResource(R.drawable.bg_circle_white);
+            holder.tabItemBinding.pageEvent.setTextColor(ContextCompat.getColor(holder.itemView.getContext(),R.color.black));
         }else{
-            holder.itemView.setBackgroundResource(R.color.white);
+            holder.itemView.setBackgroundResource(R.color.transparent);
+            holder.tabItemBinding.pageEvent.setTextColor(ContextCompat.getColor(holder.itemView.getContext(),R.color.white));
         }
     }
 

@@ -10,19 +10,24 @@ import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.ui.StyledPlayerView;
 import com.thinkdiffai.futurelove.databinding.FragmentVideoFullScreenBinding;
+import com.thinkdiffai.futurelove.view.Downloader;
 
 public class VideoFullScreenFragment extends Fragment {
 
     private FragmentVideoFullScreenBinding fragmentVideoFullScreenBinding;
     StyledPlayerView playerView;
     SimpleExoPlayer player;
-    String link_video;
+    String link_video,link_video_2;
     Handler handler;
+
+    int check_id = 0;
+
 
 
     @Override
@@ -61,14 +66,23 @@ public class VideoFullScreenFragment extends Fragment {
         fragmentVideoFullScreenBinding.backBtn.setOnClickListener(v -> {
             requireActivity().onBackPressed();
         });
+
+        fragmentVideoFullScreenBinding.downloadBtn.setOnClickListener(v -> {
+            Toast.makeText(requireContext(), "Start Download", Toast.LENGTH_SHORT).show();
+            Downloader.downloadVideo(requireActivity(),link_video,"video_swap_future_love");
+            Toast.makeText(requireContext(), "Downloaded successfully", Toast.LENGTH_SHORT).show();
+
+        });
     }
 
     private void hideButton() {
         fragmentVideoFullScreenBinding.backBtn.setVisibility(View.GONE);
+        fragmentVideoFullScreenBinding.downloadBtn.setVisibility(View.GONE);
     }
 
     private void showButton() {
         fragmentVideoFullScreenBinding.backBtn.setVisibility(View.VISIBLE);
+        fragmentVideoFullScreenBinding.downloadBtn.setVisibility(View.VISIBLE);
     }
 
     private void initData() {
@@ -76,6 +90,8 @@ public class VideoFullScreenFragment extends Fragment {
         loadUrlVideo();
         displayVideo();
     }
+
+
     private void displayVideo() {
         MediaItem mediaItem = MediaItem.fromUri(link_video);
         player.setMediaItem(mediaItem);
@@ -85,6 +101,7 @@ public class VideoFullScreenFragment extends Fragment {
     private void loadUrlVideo() {
         Bundle bundle = getArguments();
         link_video = bundle.getString("url_video_full");
+
     }
     private void loadVideo() {
         playerView = fragmentVideoFullScreenBinding.videoSwapFace;

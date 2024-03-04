@@ -24,7 +24,6 @@ public class RetrofitClient {
 
 
     private RetrofitClient(String domain) {
-//        interceptor.setLevel(Interceptor.Level.BODY);
         Interceptor interceptor = chain -> {
             Request request = chain.request();
             Request.Builder builder = request.newBuilder();

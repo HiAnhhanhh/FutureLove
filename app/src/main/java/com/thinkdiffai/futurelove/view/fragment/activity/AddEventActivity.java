@@ -7,29 +7,46 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.app.Dialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.thinkdiffai.futurelove.R;
 import com.thinkdiffai.futurelove.databinding.ActivityAddEventBinding;
+import com.thinkdiffai.futurelove.databinding.CustomDialogLoadingBinding;
+import com.thinkdiffai.futurelove.databinding.CustomDialogLoadingImageBinding;
 import com.thinkdiffai.futurelove.model.Comon;
+import com.thinkdiffai.futurelove.model.ErrorModel;
 import com.thinkdiffai.futurelove.model.EventHomeDto;
+import com.thinkdiffai.futurelove.model.IpNetworkModel;
 import com.thinkdiffai.futurelove.service.api.ApiService;
 import com.thinkdiffai.futurelove.service.api.RetrofitClient;
+import com.thinkdiffai.futurelove.service.api.RetrofitIp;
 import com.thinkdiffai.futurelove.service.api.Server;
 import com.thinkdiffai.futurelove.util.Util;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
 import io.github.rupinderjeet.kprogresshud.KProgressHUD;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -37,6 +54,16 @@ import retrofit2.Response;
 public class AddEventActivity extends AppCompatActivity {
     private ActivityAddEventBinding activityAddEventBinding;
     Bitmap bitmap;
+
+    String ip_them_su_kien,deviceName;
+    String token_auth;
+    int id_user;
+    String uriResponse;
+    Call<String> call_image_upload;
+    CustomDialogLoadingImageBinding customDialogLoadingImageBinding;
+    Dialog dialog_image;
+    String UriResponseReplace;
+
     final int GALERY_REQUEST = 456;
     String imgBase64Female= "";
     String urlImageComment= "";
@@ -63,6 +90,9 @@ public class AddEventActivity extends AppCompatActivity {
         Bundle bundle=getIntent().getBundleExtra("send_id");
          id_event=bundle.getInt("id_event");
 
+         openDialog();
+         initData();
+
        // String Content = activityAddEventBinding.btnSelectImage.getText().toString().trim();
 
         activityAddEventBinding.btnSelectImage.setOnClickListener(new View.OnClickListener() {
@@ -80,11 +110,63 @@ public class AddEventActivity extends AppCompatActivity {
         activityAddEventBinding.addEvnt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-             //   postEventDetail();
-
+                postEventDetail();
             }
         });
 
+    }
+
+    private void initData() {
+        loadIdUser();
+        callApiAddress();
+        deviceName = getDeviceName();
+    }
+
+    private String getDeviceName() {
+        String manufacturer = Build.MANUFACTURER;
+        String model = Build.MODEL;
+
+        if (model.startsWith(manufacturer)) {
+            return capitalize(model);
+        } else {
+            return capitalize(manufacturer) + " " + model;
+        }
+    }
+
+    private String capitalize(String s) {
+        if (s == null || s.length() == 0) {
+            return "";
+        }
+        char first = s.charAt(0);
+        if (Character.isUpperCase(first)) {
+            return s;
+        } else {
+            return Character.toUpperCase(first) + s.substring(1);
+        }
+    }
+
+    private void callApiAddress() {
+        ApiService apiService = RetrofitIp.getInstance(Server.GET_CITY_NAME_FROM_IP).getRetrofit().create(ApiService.class);
+        Call<IpNetworkModel> call = apiService.getIpApiResponse();
+        call.enqueue(new Callback<IpNetworkModel>() {
+            @Override
+            public void onResponse(Call<IpNetworkModel> call, Response<IpNetworkModel> response) {
+                if (response.body() != null && response.isSuccessful()) {
+                    Log.d("check_ip", "onResponse: " + response.body().getIp());
+                    ip_them_su_kien = response.body().getIp();
+                }
+            }
+            @Override
+            public void onFailure(Call<IpNetworkModel> call, Throwable t) {
+                Toast.makeText(AddEventActivity.this, "" + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void openDialog() {
+        customDialogLoadingImageBinding = CustomDialogLoadingImageBinding.inflate(LayoutInflater.from(AddEventActivity.this));
+        dialog_image = new Dialog(AddEventActivity.this);
+        dialog_image.setContentView(customDialogLoadingImageBinding.getRoot());
     }
 
     @Override
@@ -107,6 +189,8 @@ public class AddEventActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == GALERY_REQUEST && resultCode == RESULT_OK && data!=null) {
             Uri uri =data.getData();
+            postImageFile(uri);
+            Log.d("check_uri_image", "onActivityResult: "+ uri);
             try {
                   bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
 //                bitmap = rotaImageHadlee(selectedMediaUri);
@@ -114,30 +198,6 @@ public class AddEventActivity extends AppCompatActivity {
                         InputStream inputStream = getContentResolver().openInputStream(uri);
                 //     bitmap = BitmapFactory.decodeStream(inputStream);
                  imgBase64Female = Util.convertBitmapToBase64(bitmap);
-
-              /*  new AsyncTask<Void, Void, Void>() {
-                    @SuppressLint("StaticFieldLeak")
-                    @Override
-                    protected Void doInBackground(Void... params) {
-                        urlImageComment = Util.uploadImage2(imgBase64Female, AddEventActivity.this);
-                        Toast.makeText(AddEventActivity.this,  urlImageComment, Toast.LENGTH_SHORT).show();
-                        return null;
-                    }
-
-                    @SuppressLint("StaticFieldLeak")
-                    @Override
-                    protected void onPostExecute(Void result) {
-
-
-                    }
-                }.execute();*/
-
-
-                //   urlImageComment = Util.uploadImage2(imgBase64Female, AddEventActivity.this);
-
-                        /* if (imgBase64Female != null && !imgBase64Female.trim().isEmpty() ) {
-                            urlImageComment = Util.uploadImage2(imgBase64Female, AddEventActivity.this);
-                       } */
                         activityAddEventBinding.btnSelectImage.setImageBitmap(bitmap);
                 //  }
             } catch (IOException e) {
@@ -146,49 +206,95 @@ public class AddEventActivity extends AppCompatActivity {
             }
         }
     }
+    private void loadIdUser() {
+        SharedPreferences sharedPreferences = AddEventActivity.this.getSharedPreferences("id_user",0);
+        String id_user_str = sharedPreferences.getString("id_user_str","");
+        token_auth = sharedPreferences.getString("token","");
+        Log.d("check_share_id", "loadIdUser: "+ id_user_str +"_" +token_auth);
+        if(id_user_str.equals("")){
+            id_user = 0;
+        }else{
+            id_user = Integer.parseInt(id_user_str);
+        }
+    }
+    private void postImageFile(Uri uri) {
+        dialog_image.show();
+        String filePath = getRealPathFromURI(AddEventActivity.this, uri);
+        File imageFile = new File(filePath);
+        RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), imageFile);
+        MultipartBody.Part imagePart = MultipartBody.Part.createFormData("src_img", imageFile.getName(), requestBody);
+        ApiService apiService = RetrofitClient.getInstance(Server.DOMAIN4).getRetrofit().create(ApiService.class);
+        call_image_upload = apiService.uploadImage(id_user, "src_nam", imagePart);
+        call_image_upload.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                if (response.isSuccessful()) {
+                    uriResponse = response.body();
+                    UriResponseReplace = uriResponse.replace("/var/www/build_futurelove","https://futurelove.online");
+                    dialog_image.dismiss();
+                    Log.d("check_upload_image_your_video", "onResponse: " + uriResponse);
+                }
+            }
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                Log.d("check_upload_image_your_video", "onFailure: " + t.getMessage());
+            }
+        });
+    }
+
+    public static String getRealPathFromURI(Context context, Uri contentUri) {
+        String[] projection = {MediaStore.Images.Media.DATA};
+        Cursor cursor = context.getContentResolver().query(contentUri, projection, null, null, null);
+        if (cursor != null) {
+            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            cursor.moveToFirst();
+            String filePath = cursor.getString(column_index);
+            cursor.close();
+            return filePath;
+        }
+        return null;
+    }
 
     private void postEventDetail() {
-
         String NumberOrder = activityAddEventBinding.tvNumberOrder.getText().toString().trim();
         float numberOrder =Float.parseFloat(NumberOrder);
         String Date = activityAddEventBinding.tvDate.getText().toString().trim();
         String Title = activityAddEventBinding.tvTitle.getText().toString().trim();
         String Content = activityAddEventBinding.tvContent.getText().toString().trim();
         if(!Content.isEmpty()&&!Title.isEmpty()&&!Date.isEmpty()&&!NumberOrder.isEmpty()) {
-
-
-            Toast.makeText(AddEventActivity.this,  Content, Toast.LENGTH_SHORT).show();
             if (!kProgressHUD.isShowing()) {
                 kProgressHUD.show();
             }
+            Log.d("PairingFragmentPostRequest", UriResponseReplace + token_auth + id_event  );
 
-        EventHomeDto eventHomeDto = new EventHomeDto(id_event,  urlImage, Comon.link_nam_chua_swap, Comon.link_nam_goc, Comon.link_nu_chua_swap, Comon.link_nu_goc, Content, Date, numberOrder, Title, Comon.tom_Luoc_Text);
+            EventHomeDto eventHomeDto = new EventHomeDto(id_event,  UriResponseReplace, Comon.link_nam_chua_swap, Comon.link_nam_goc, Comon.link_nu_chua_swap, Comon.link_nu_goc, Content, Date, numberOrder, Title, Comon.tom_Luoc_Text);
             Toast.makeText(AddEventActivity.this,  id_event+"", Toast.LENGTH_SHORT).show();
-//        Map<String, String> headers = new HashMap<>();
-//        headers.put("noi_dung_cmt", comment.getNoi_dung_cmt());
-//        headers.put("device_cmt", comment.getDevice_cmt());
-//        headers.put("id_toan_bo_su_kien", String.valueOf(comment.getId_toan_bo_su_kien()));
-//        headers.put("ipComment", comment.getDia_chi_ip());
-//        headers.put("imageattach", comment.getImageattach());
 
-        ApiService apiService = RetrofitClient.getInstance(Server.DOMAIN2).getRetrofit().create(ApiService.class);
-        Call<Object> call = apiService.postListEventDetail(String.valueOf(eventHomeDto.getId()), eventHomeDto.getLink_da_swap(),
-                (eventHomeDto.getLink_nam_chua_swap()), eventHomeDto.getLink_nam_goc(), eventHomeDto.getLink_nu_chua_swap(),eventHomeDto.getLink_nu_goc(), eventHomeDto.getNoi_dung_su_kien(), eventHomeDto.getReal_time(),String.valueOf( eventHomeDto.getSo_thu_tu_su_kien()), eventHomeDto.getTen_su_kien(), eventHomeDto.getTom_Luoc_Text());
+        ApiService apiService = RetrofitClient.getInstance("").getRetrofit().create(ApiService.class);
+        Call<Object> call = apiService.postListEventDetail(String.valueOf(id_event),eventHomeDto.getLink_nam_chua_swap(),eventHomeDto.getLink_nu_chua_swap(),"Bearer "+ token_auth,id_user,urlImage,"male","female",Content,deviceName,ip_them_su_kien,Title,1,"");
         call.enqueue(new Callback<Object>() {
             @Override
             public void onResponse(Call<Object> call, Response<Object> response) {
-                if (response.isSuccessful() && response.body() != null) {
-//                    xu ly sau khi commrnt
-                    //  getDataComment();
+                if (response.isSuccessful()) {
                     Log.d("PairingFragmentPostRequest","thành công" );
                     Toast.makeText(AddEventActivity.this,  "thành công", Toast.LENGTH_SHORT).show();
-                    finish();
+                }else{
+                    try {
+                        // Parse the error response body
+                        String errorBodyString = response.errorBody().source().readUtf8();
+                        Gson gson = new Gson(); // Tạo một đối tượng Gson để phân tích chuỗi JSON
+                        ErrorModel errorModel = gson.fromJson(errorBodyString, ErrorModel.class);
+                        // Now you can access the error message
+                        String errorMessage = errorModel.getMessage();
+                        Log.d("PairingFragmentPostRequest", "onResponse: "+ response.code() + " "+ errorMessage);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
                 if (kProgressHUD.isShowing()) {
                     kProgressHUD.dismiss();
                 }
             }
-
             @Override
             public void onFailure(Call<Object> call, Throwable t) {
                 Toast.makeText(AddEventActivity.this, t.toString() + "thất bại", Toast.LENGTH_SHORT).show();
@@ -199,7 +305,5 @@ public class AddEventActivity extends AppCompatActivity {
             }
         });
         }
-
-
     }
 }

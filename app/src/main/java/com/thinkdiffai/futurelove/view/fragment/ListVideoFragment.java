@@ -138,8 +138,6 @@ public class ListVideoFragment extends Fragment implements RecyclerViewClickList
         fragmentListVideoBinding.listViewRec.setAdapter(listVideoAdapter);
     }
 
-
-
     private void getData(int position) {
         Log.d("check_list_video", "getData: "+ position);
         ApiService apiService = RetrofitClient.getInstance(Server.DOMAIN2).getRetrofit().create(ApiService.class);

@@ -121,11 +121,10 @@ public class PickImageFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        initData();
+        initDData();
         initAction();
         createDialog();
     }
-
     private void createDialog() {
         customDialogLoadingBinding = CustomDialogLoadingBinding.inflate(LayoutInflater.from(requireActivity()));
         dialog = new Dialog(requireActivity());
@@ -307,10 +306,8 @@ public class PickImageFragment extends Fragment {
 
     private void startCamera() throws FileNotFoundException {
         File cacheDir = requireActivity().getApplicationContext().getCacheDir();
-        // start default camera
         Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
         if (cameraIntent.resolveActivity(getActivity().getPackageManager()) != null) {
-            // Create the File where the photo should go
             String folderPath = cacheDir.getPath() + "/image/";
             File photoFile = new File(folderPath);
             if (!photoFile.exists()) {
@@ -368,6 +365,7 @@ public class PickImageFragment extends Fragment {
             dialog_image.dismiss();
         });
     }
+
     private void postImageFile(Uri selectedImageUri) {
         String filePath = getRealPathFromURI(requireContext(), selectedImageUri);
         File imageFile = new File(filePath);
@@ -441,7 +439,7 @@ public class PickImageFragment extends Fragment {
         });
     }
 
-    private void initData() {
+    private void initDData() {
         loadIdUser();
         callApiAddress();
         deviceName = getDeviceName();

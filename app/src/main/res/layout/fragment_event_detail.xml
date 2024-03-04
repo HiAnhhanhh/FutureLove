@@ -49,16 +49,76 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/textView" />
 
+        <ImageView
+            android:id="@+id/add_Event"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/plus_icon_uia"
+            app:layout_constraintBottom_toBottomOf="@+id/view2"
+            app:layout_constraintEnd_toEndOf="@+id/view2"
+            app:layout_constraintHorizontal_bias=".9"
+            app:layout_constraintStart_toEndOf="@+id/textView"
+            app:layout_constraintTop_toTopOf="@+id/textView" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rcv_comment"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_height="500dp"
+            android:orientation="horizontal"
+            android:padding="10dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/view2"
             tools:listitem="@layout/item_detail_event" />
+
+        <EditText
+            android:id="@+id/comment_et"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:autofillHints="name"
+            android:background="@drawable/bg_enter_comment"
+            android:hint="@string/enter"
+            android:layout_marginStart="10dp"
+            android:paddingStart="20dp"
+            android:textColorHint="@color/black"
+            android:backgroundTint="@color/white"
+            android:textStyle="bold"
+            app:layout_constraintTop_toBottomOf="@id/rcv_comment"
+            app:layout_constraintEnd_toStartOf="@+id/submit_comment"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:ignore="RtlSymmetry" />
+
+        <ImageButton
+            android:id="@+id/submit_comment"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@color/transparent"
+            android:backgroundTint="@color/white"
+            android:padding="10dp"
+            android:src="@drawable/send_icon"
+            app:layout_constraintBottom_toBottomOf="@+id/comment_et"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/rcv_comment" />
+
+
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="5dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:padding="10dp"
+            app:layout_constraintTop_toBottomOf="@id/comment_et">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/commentAdapter"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        tools:listitem="@layout/item_comment"/>
+
+        </androidx.core.widget.NestedScrollView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

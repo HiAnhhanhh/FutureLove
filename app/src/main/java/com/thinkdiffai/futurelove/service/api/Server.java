@@ -7,7 +7,7 @@ public interface Server {
 
     String DOMAIN1 = "https://metatechvn.store/";
     String DOMAIN0 = "http://192.168.50.146:9090/";
-    String DOMAIN2 = "https://metatechvn.store/";
+    String DOMAIN2 = "https://databaseswap.mangasocial.online/";
     String DOMAIN3 ="https://lhvn.online/";
 
     String DOMAIN4 ="https://thinkdiff.us/";

@@ -1,9 +1,14 @@
 package com.thinkdiffai.futurelove.view;
 
+import android.app.Dialog;
 import android.app.DownloadManager;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Environment;
+
+import com.thinkdiffai.futurelove.databinding.CustomDialogLoadingBinding;
+
+import java.io.DataInput;
 
 public class Downloader {
     public static void downloadVideo(Context context,String urlVideo,String fileName){

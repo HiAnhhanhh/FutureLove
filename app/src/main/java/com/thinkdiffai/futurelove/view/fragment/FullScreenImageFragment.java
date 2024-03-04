@@ -17,7 +17,6 @@ import com.thinkdiffai.futurelove.databinding.FragmentVideoFullScreenBinding;
 
 
 public class FullScreenImageFragment extends Fragment {
-
     FragmentFullScreenImageBinding binding;
 
     @Override

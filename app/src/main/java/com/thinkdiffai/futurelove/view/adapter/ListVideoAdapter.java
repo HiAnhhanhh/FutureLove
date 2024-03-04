@@ -55,7 +55,6 @@ public class ListVideoAdapter extends RecyclerView.Adapter<ListVideoAdapter.View
         notifyDataSetChanged();
     }
 
-
     public ListVideoAdapter(List<ListVideoModel> listVideoModelArrayList, RecyclerViewClickListener onClickListener, Context context) {
         this.listVideoModelArrayList = listVideoModelArrayList;
         this.onClickListener = onClickListener;

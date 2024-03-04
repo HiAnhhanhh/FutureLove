@@ -41,7 +41,6 @@ public class HomeScreenFragment extends Fragment {
     String email,nameUser;
     boolean check_state = true ;
     TextView headerView,headerEmail;
-
     CustomMyOwnDialogFragmentBinding customMyOwnDialogFragmentBinding;
     Dialog dialog_log_out;
     ImageView headerImageView;
@@ -56,7 +55,6 @@ public class HomeScreenFragment extends Fragment {
         fragmentHomeScreenBinding = FragmentHomeScreenBinding.inflate(inflater,container, false);
         return fragmentHomeScreenBinding.getRoot();
     }
-
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -64,7 +62,6 @@ public class HomeScreenFragment extends Fragment {
         initView();
         initAction();
     }
-
     private void initAction() {
 
         fragmentHomeScreenBinding.swapImageVideoBtn.setOnClickListener(v -> {
@@ -72,7 +69,6 @@ public class HomeScreenFragment extends Fragment {
         });
 
         fragmentHomeScreenBinding.genImageFutureBtn.setOnClickListener(v -> {
-
             NavHostFragment.findNavController(HomeScreenFragment.this).navigate(R.id.pairingFragment);
         });
 
@@ -184,12 +180,21 @@ public class HomeScreenFragment extends Fragment {
                         NavHostFragment.findNavController(HomeScreenFragment.this).navigate(R.id.changePasswordFragment);
                         fragmentHomeScreenBinding.drawerView.closeDrawer(fragmentHomeScreenBinding.navView);
                         return true;
+
+                    case R.id.comment:
+                        NavHostFragment.findNavController(HomeScreenFragment.this).navigate(R.id.commentFragment);
+                        fragmentHomeScreenBinding.drawerView.closeDrawer(fragmentHomeScreenBinding.navView);
+                        return true;
+
+                    case R.id.pairingFragment:
+                        NavHostFragment.findNavController(HomeScreenFragment.this).navigate(R.id.pairingFragment);
+                        fragmentHomeScreenBinding.drawerView.closeDrawer(fragmentHomeScreenBinding.navView);
+                        return true;
                }
                 return false;
             }
         });
     }
-
     private void loadHeader() {
         SharedPreferences sharedPreferences = requireActivity().getSharedPreferences("image_profile",0);
         String email = sharedPreferences.getString("email","");
@@ -235,14 +240,12 @@ public class HomeScreenFragment extends Fragment {
             }
         });
     }
-
     private void changeLoginState() {
         SharedPreferences sharedPreferences = requireActivity().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putBoolean("LOGIN_STATE", false);
         editor.apply();
     }
-
     private void NavigateToLoginAndSignOutActivity() {
         Intent i = new Intent(getActivity(), SignInSignUpActivity.class);
         dialog_log_out.dismiss();

@@ -301,11 +301,8 @@ public class TimelineFragment extends Fragment {
                 kProgressHUD.dismiss();
 
             }
-
         }
-
     }
-
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -321,7 +318,7 @@ public class TimelineFragment extends Fragment {
         }
         String deviceName = Build.MANUFACTURER + Build.MODEL;
         CommentPage comment = new CommentPage(
-                50,
+                id_user,
                 content,
                 deviceName,
                 mainActivity.eventSummaryCurrentId,

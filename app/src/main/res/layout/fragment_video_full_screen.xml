@@ -13,12 +13,12 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_gravity="center"
-        app:hide_on_touch="true"
+        app:hide_on_touch="false"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:show_timeout="3000"
+        app:show_timeout="2000"
         app:use_controller="true" />
 
     <ImageView
@@ -26,14 +26,30 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:padding="10dp"
-        android:visibility="gone"
         android:src="@drawable/baseline_arrow_back_24"
         android:background="@drawable/bg_back_video"
+        android:visibility="gone"
         app:layout_constraintHorizontal_bias="0.02"
         app:layout_constraintVertical_bias="0.04"
         app:layout_constraintBottom_toBottomOf="@+id/videoSwapFace"
         app:layout_constraintEnd_toEndOf="@+id/videoSwapFace"
         app:layout_constraintStart_toStartOf="@+id/videoSwapFace"
         app:layout_constraintTop_toTopOf="@+id/videoSwapFace" />
+
+    <ImageView
+        android:id="@+id/download_btn"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@drawable/bg_back_video"
+        android:padding="10dp"
+        android:visibility="gone"
+        app:layout_constraintHorizontal_bias="0.98"
+        app:layout_constraintVertical_bias="0.04"
+        android:src="@drawable/baseline_arrow_downward_24"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+       />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

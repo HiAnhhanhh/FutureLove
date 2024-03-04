@@ -455,6 +455,11 @@
         android:name="com.thinkdiffai.futurelove.view.fragment.CommentEventDetailFragment"
         android:label="fragment_comment_event_detal"
         tools:layout="@layout/fragment_comment_event_detail" />
+    <fragment
+        android:id="@+id/showMoreHighlightsFragment"
+        android:name="com.thinkdiffai.futurelove.view.fragment.ShowMoreHighlightsFragment"
+        android:label="fragment_show_more_highlights"
+        tools:layout="@layout/fragment_show_more_highlights" />
 
 
 </navigation>

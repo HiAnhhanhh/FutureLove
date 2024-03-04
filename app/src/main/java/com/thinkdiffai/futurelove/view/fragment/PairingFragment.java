@@ -4,7 +4,9 @@ import static android.app.Activity.RESULT_OK;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -16,6 +18,7 @@ import android.graphics.Rect;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
@@ -30,6 +33,8 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatEditText;
@@ -39,6 +44,7 @@ import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
+import com.bumptech.glide.Glide;
 import com.gauravk.bubblenavigation.BubbleNavigationLinearView;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
@@ -49,12 +55,15 @@ import com.google.mlkit.vision.face.FaceDetector;
 import com.google.mlkit.vision.face.FaceDetectorOptions;
 import com.google.mlkit.vision.face.FaceLandmark;
 import com.thinkdiffai.futurelove.R;
+import com.thinkdiffai.futurelove.databinding.CustomDialogLoadingBinding;
 import com.thinkdiffai.futurelove.databinding.DialogBottomSheetSelectedHomeBinding;
 import com.thinkdiffai.futurelove.databinding.FragmentPairingBinding;
+import com.thinkdiffai.futurelove.model.IpNetworkModel;
 import com.thinkdiffai.futurelove.model.event.UploadingEvent;
 import com.thinkdiffai.futurelove.presenter.api.CreateImplicitEventImpl;
 import com.thinkdiffai.futurelove.service.api.ApiService;
 import com.thinkdiffai.futurelove.service.api.RetrofitClient;
+import com.thinkdiffai.futurelove.service.api.RetrofitIp;
 import com.thinkdiffai.futurelove.service.api.Server;
 import com.thinkdiffai.futurelove.util.MyDialog;
 import com.thinkdiffai.futurelove.util.Util;
@@ -71,10 +80,24 @@ import java.util.List;
 import java.util.Objects;
 
 import io.github.rupinderjeet.kprogresshud.KProgressHUD;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
+import retrofit2.Response;
 
 public class PairingFragment extends Fragment {
+
+    Call<String> call_image_upload;
+
+    Call<Object> callPostEvent;
+    String uriResponse;
+
+    CustomDialogLoadingBinding customDialogLoadingBinding;
+    Dialog dialog;
+    String selectedImageMale, selectedImageFemale;
+    Uri selectedImageUri;
     private static final String NO_FACE_DETECTED = "No faces detected";
     private static final String MORE_THAN_ONE_FACE = "More than one face is recognized";
     private FragmentPairingBinding fragmentPairingBinding;
@@ -89,8 +112,11 @@ public class PairingFragment extends Fragment {
     private static final String TAG1 = MainActivity.class.getName();
     private static final int REQUEST_CODE_PERMISSIONS = 100;
     private static final int REQUEST_CODE_PERMISSIONS_STORAGE = 101;
-    private boolean checkClickSetImageMale;
+    private boolean checkClickSetImageMale= true;
     private boolean isCheckSetImageFemale = false;
+
+    private int checkCLickImage = 0;
+    String token_auth,deviceName,ip_them_su_kien;
     private boolean isCheckSetImageMale = false;
     private File imageFile;
     private KProgressHUD kProgressHUD;
@@ -123,6 +149,7 @@ public class PairingFragment extends Fragment {
         mainActivity = (MainActivity) getActivity();
         kProgressHUD = mainActivity.createHud();
         try {
+            initDialog();
             initUi();
             initListener();
             initData();
@@ -132,20 +159,52 @@ public class PairingFragment extends Fragment {
         return fragmentPairingBinding.getRoot();
     }
 
+    private void initDialog() {
+        dialog = new Dialog(requireActivity());
+        customDialogLoadingBinding = CustomDialogLoadingBinding.inflate(getLayoutInflater());
+        dialog.setContentView(customDialogLoadingBinding.getRoot());
+        customDialogLoadingBinding.titleDialog.setText("Initialization is in progress, Please Wait ...");
+    }
+
     private void initData() {
+        deviceName = getDeviceName();
         loadIdUser();
+        callApiAddress();
+    }
+
+    private String getDeviceName() {
+        String manufacturer = Build.MANUFACTURER;
+        String model = Build.MODEL;
+
+        if (model.startsWith(manufacturer)) {
+            return capitalize(model);
+        } else {
+            return capitalize(manufacturer) + " " + model;
+        }
+    }
+
+    private String capitalize(String s) {
+        if (s == null || s.length() == 0) {
+            return "";
+        }
+        char first = s.charAt(0);
+        if (Character.isUpperCase(first)) {
+            return s;
+        } else {
+            return Character.toUpperCase(first) + s.substring(1);
+        }
     }
 
     private void loadIdUser() {
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("id_user",0);
-        String id_user_str = sharedPreferences.getString("id_user", "");
-        Log.d("check_user_id", "loadIdUser: "+ id_user_str);
-        if (id_user_str == "") {
+        SharedPreferences sharedPreferences = requireActivity().getSharedPreferences("id_user",0);
+        String id_user_str = sharedPreferences.getString("id_user_str","");
+        token_auth = sharedPreferences.getString("token","");
+        Log.d("check_share_id", "loadIdUser: "+ id_user_str +"_" +token_auth);
+        if(id_user_str.equals("")){
             id_user = 0;
         }else{
             id_user = Integer.parseInt(id_user_str);
         }
-
     }
 
     private void initUi() {
@@ -175,11 +234,17 @@ public class PairingFragment extends Fragment {
     }
 
     private void initListener() {
-
-        fragmentPairingBinding.btnSelectPersonFemale.setOnClickListener(new View.OnClickListener() {
+        fragmentPairingBinding.btnUserAccount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                NavHostFragment.findNavController(PairingFragment.this).navigate(R.id.profileUserFragment);
+            }
+        });
+        fragmentPairingBinding.shapeAbleImageViewMale.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                checkClickSetImageMale = false;
+//                checkClickSetImageMale = false;
+                checkCLickImage =1;
                 femaleName = String.valueOf(fragmentPairingBinding.edtEnterFemaleName.getText());
                 setUpTextWatcher((AppCompatEditText) fragmentPairingBinding.edtEnterFemaleName);
                 isNameFilled = true ;
@@ -187,10 +252,11 @@ public class PairingFragment extends Fragment {
             }
         });
 
-        fragmentPairingBinding.btnSelectPersonMale.setOnClickListener(new View.OnClickListener() {
+        fragmentPairingBinding.shapeAbleImageViewFemale.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                checkClickSetImageMale = true;
+//                checkClickSetImageMale = true;
+                checkCLickImage =2;
                 maleName = String.valueOf(fragmentPairingBinding.edtEnterMaleName.getText());
                 setUpTextWatcher((AppCompatEditText) fragmentPairingBinding.edtEnterMaleName);
                 isNameFilled = true;
@@ -201,47 +267,54 @@ public class PairingFragment extends Fragment {
         fragmentPairingBinding.btnSubmit.setOnClickListener(new View.OnClickListener() {
             @SuppressLint("StaticFieldLeak")
             @Override
+
+
             public void onClick(View view) {
 
-                if (!isCheckSetImageFemale || !isCheckSetImageMale) {
-                    myDialog = getDialog();
-                    myDialog.setTitle("Can not Face recognition");
-                    myDialog.setContent("Not enough faces have been identified");
-                    myDialog.setContentButton("Ok");
-                    myDialog.show();
-                } else {
-                    Toast.makeText(getActivity(), "Please waiting a time!", Toast.LENGTH_SHORT).show();
-                    // Lock all buttons when running
-                    lockBtnSelectImage();
-                    // Start counting time
-                    startPairingTimeStamp = startCountingTime();
-                    mainActivity.waitingSwapFaceTime = startPairingTimeStamp;
-                    // Compare timestamps and set on view
-                    getTimeIncreaseAndShow(Util.getTimeStampNow(), startPairingTimeStamp);
+                initDialog();
+                openDialogLoading();
 
-                    new AsyncTask<Void, Void, Void>() {
-                        @SuppressLint("StaticFieldLeak")
-                        @Override
-                        protected Void doInBackground(Void... params) {
-
-                            urlImageMale = Util.uploadImage2(imgBase64Male, getActivity());
-                            urlImageFemale = Util.uploadImage2(imgBase64Female, getActivity());
-
-                            Log.d("PhongNN", "Male Image URL: " + urlImageMale + "\nFemale Image URL: " + urlImageFemale);
-                            return null;
-                        }
-                        @SuppressLint("StaticFieldLeak")
-                        @Override
-                        protected void onPostExecute(Void result) {
-//                            Picasso.get().load(urlImageMale).error(R.drawable.img_heart).into(fragmentPairingBinding.img1);
-//                            Picasso.get().load(urlImageFemale).error(R.drawable.img_heart).into(fragmentPairingBinding.img2);
-                            Handler handler = new Handler();
-                            handler.postDelayed(() -> {
-                                postData(urlImageMale, urlImageFemale);
-                            }, 4000);
-                        }
-                    }.execute();
-                }
+                postData(selectedImageMale,selectedImageFemale);
+//
+//                if (!isCheckSetImageFemale || !isCheckSetImageMale) {
+//                    myDialog = getDialog();
+//                    myDialog.setTitle("Can not Face recognition");
+//                    myDialog.setContent("Not enough faces have been identified");
+//                    myDialog.setContentButton("Ok");
+//                    myDialog.show();
+//                } else {
+//                    Toast.makeText(getActivity(), "Please waiting a time!", Toast.LENGTH_SHORT).show();
+//                    // Lock all buttons when running
+//                    lockBtnSelectImage();
+//                    // Start counting time
+//                    startPairingTimeStamp = startCountingTime();
+//                    mainActivity.waitingSwapFaceTime = startPairingTimeStamp;
+//                    // Compare timestamps and set on view
+//                    getTimeIncreaseAndShow(Util.getTimeStampNow(), startPairingTimeStamp);
+//
+//                    new AsyncTask<Void, Void, Void>() {
+//                        @SuppressLint("StaticFieldLeak")
+//                        @Override
+//                        protected Void doInBackground(Void... params) {
+//
+//                            urlImageMale = Util.uploadImage2(imgBase64Male, getActivity());
+//                            urlImageFemale = Util.uploadImage2(imgBase64Female, getActivity());
+//
+//                            Log.d("PhongNN", "Male Image URL: " + urlImageMale + "\nFemale Image URL: " + urlImageFemale);
+//                            return null;
+//                        }
+//                        @SuppressLint("StaticFieldLeak")
+//                        @Override
+//                        protected void onPostExecute(Void result) {
+////                            Picasso.get().load(urlImageMale).error(R.drawable.img_heart).into(fragmentPairingBinding.img1);
+////                            Picasso.get().load(urlImageFemale).error(R.drawable.img_heart).into(fragmentPairingBinding.img2);
+//                            Handler handler = new Handler();
+//                            handler.postDelayed(() -> {
+//                                postData(urlImageMale, urlImageFemale);
+//                            }, 4000);
+//                        }
+//                    }.execute();
+//                }
             }
         });
 //        fragmentPairingBinding.genBabyBtn.setOnClickListener(new View.OnClickListener() {
@@ -258,80 +331,133 @@ public class PairingFragment extends Fragment {
         return currentTimestamp;
     }
 
-    private void postData(String imageUrl1, String imageUrl2) {
-
-        String deviceThemSuKien = "Iphone 14 Pro mux";
-        String ipThemSuKien = "3.3.3.3";
-        int idUser = 1;
-
-        UploadingEvent uploadingEvent = new UploadingEvent(
-                deviceThemSuKien,
-                ipThemSuKien,
-                idUser,
-                maleName,
-                femaleName
-        );
-
-        Log.d("Anh_check", "postData: "+imageUrl1+
-                imageUrl2+
-                uploadingEvent.getDevice_them_su_kien()+
-                uploadingEvent.getIp_them_su_kien()+
-                uploadingEvent.getId_user()+
-                uploadingEvent.getTen_nam()+
-                uploadingEvent.getTen_nu());
-
-        ApiService apiService = RetrofitClient.getInstance(Server.DOMAIN2).getRetrofit().create(ApiService.class);
-        Call<Object> call = apiService.postEvent(
-                imageUrl1,
-                imageUrl2,
-                uploadingEvent.getDevice_them_su_kien(),
-                uploadingEvent.getIp_them_su_kien(),
-                uploadingEvent.getId_user(),
-                uploadingEvent.getTen_nam(),
-                uploadingEvent.getTen_nu());
-        call.enqueue(new Callback<Object>() {
+    private void openDialogLoading() {
+        dialog.show();
+        dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
             @Override
-            public void onResponse(Call<Object> call, retrofit2.Response<Object> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    Log.d("Anh_check", "Name: " + response.body().toString());
-
-                    MyOwnDialogFragment myOwnDialogFragment = new MyOwnDialogFragment("Success!",
-                            "Couple Pairing Successfully",
-                            R.drawable.register_success, new MyOwnDialogFragment.MyOwnDialogListener() {
-                        @Override
-                        public void onConfirm() {
-                            // Nav to home fragment
-//                            mainActivity.navController.navigate(R.id.fragment_home);
-                            Intent intent = new Intent(getActivity(), MainActivity.class);
-                            startActivity(intent);
-                        }
-                    });
-                    myOwnDialogFragment.show(getActivity().getSupportFragmentManager(), "pairing_dialog");
-                    // Stop timer when finish merging
-                    stopTimer();
-                }
-                resetDetect();
-
-                // Create some implicit events
-                CreateImplicitEventImpl.getInstance().generateImplicitEvent(
-                        requireContext(),
-                        uploadingEvent
-                );
-            }
-
-            @Override
-            public void onFailure(Call<Object> call, Throwable t) {
-                resetDetect();
-                if (!isCheckSetImageFemale || !isCheckSetImageMale) {
-                    myDialog = getDialog();
-                    myDialog.setTitle("internet connection error");
-                    myDialog.setContent("Make sure internet connection and try again!");
-                    myDialog.setContentButton("OK");
-                    myDialog.show();
-                }
-                stopTimer();
+            public void onCancel(DialogInterface dialog) {
+                    callPostEvent.cancel();
             }
         });
+        customDialogLoadingBinding.buttonStop.setOnClickListener(v -> {
+            callPostEvent.cancel();
+            dialog.dismiss();
+        });
+    }
+
+    private void callApiAddress() {
+        ApiService apiService = RetrofitIp.getInstance(Server.GET_CITY_NAME_FROM_IP).getRetrofit().create(ApiService.class);
+        Call<IpNetworkModel> call = apiService.getIpApiResponse();
+        call.enqueue(new Callback<IpNetworkModel>() {
+            @Override
+            public void onResponse(Call<IpNetworkModel> call, Response<IpNetworkModel> response) {
+                if (response.body() != null && response.isSuccessful()) {
+                    Log.d("check_ip", "onResponse: " + response.body().getIp());
+                    ip_them_su_kien = response.body().getIp();
+                }
+            }
+            @Override
+            public void onFailure(Call<IpNetworkModel> call, Throwable t) {
+                Toast.makeText(getActivity(), "" + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void postData(String imageUrl1, String imageUrl2) {
+        String nameMale = fragmentPairingBinding.edtEnterMaleName.getText().toString();
+        String nameFemale = fragmentPairingBinding.edtEnterFemaleName.getText().toString();
+        ApiService apiService = RetrofitClient.getInstance("").getRetrofit().create(ApiService.class);
+        Log.d("check_token", "postData: "+ token_auth);
+
+        callPostEvent = apiService.postEvent(imageUrl1,imageUrl2,"Bearer "+token_auth,deviceName,ip_them_su_kien,String.valueOf(id_user) ,nameMale,nameFemale);
+        callPostEvent.enqueue(new Callback<Object>() {
+            @Override
+            public void onResponse(Call<Object> call, Response<Object> response) {
+                if(response.isSuccessful()){
+                    dialog.dismiss();
+                    NavHostFragment.findNavController(PairingFragment.this).navigate(R.id.profileUserFragment);
+                }else{
+                    Toast.makeText(mainActivity, "Error :"+ response.code(), Toast.LENGTH_SHORT).show();
+                }
+            }
+            @Override
+            public void onFailure(Call<Object> call, Throwable t) {
+                Toast.makeText(mainActivity, "Error :"+t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+//        UploadingEvent uploadingEvent = new UploadingEvent(
+//                deviceName,
+//                ip_them_su_kien,
+//                id_user,
+//                maleName,
+//                femaleName
+//        );
+//
+//        Log.d("Anh_check", "postData: "+token_auth+imageUrl1+
+//                imageUrl2+
+//                uploadingEvent.getDevice_them_su_kien()+
+//                uploadingEvent.getIp_them_su_kien()+
+//                uploadingEvent.getId_user()+
+//                uploadingEvent.getTen_nam()+
+//                uploadingEvent.getTen_nu());
+//
+//        ApiService apiService = RetrofitClient.getInstance("").getRetrofit().create(ApiService.class);
+//        Call<Object> call = apiService.postEvent(
+//                "Bearer "+ token_auth,
+//                imageUrl1,
+//                imageUrl2,
+//                uploadingEvent.getDevice_them_su_kien(),
+//                uploadingEvent.getIp_them_su_kien(),
+//                id_user,
+//                uploadingEvent.getTen_nam(),
+//                uploadingEvent.getTen_nu());
+//        call.enqueue(new Callback<Object>() {
+//            @Override
+//            public void onResponse(Call<Object> call, retrofit2.Response<Object> response) {
+//                if (response.isSuccessful() && response.body() != null) {
+//                    Log.d("Anh_check", "Name: " + response.body());
+//
+//                    MyOwnDialogFragment myOwnDialogFragment = new MyOwnDialogFragment("Success!",
+//                            "Couple Pairing Successfully",
+//                            R.drawable.register_success, new MyOwnDialogFragment.MyOwnDialogListener() {
+//                        @Override
+//                        public void onConfirm() {
+//                            // Nav to home fragment
+////                            mainActivity.navController.navigate(R.id.fragment_home);
+//                            Intent intent = new Intent(getActivity(), MainActivity.class);
+//                            startActivity(intent);
+//                        }
+//                    });
+//                    myOwnDialogFragment.show(getActivity().getSupportFragmentManager(), "pairing_dialog");
+//                    // Stop timer when finish merging
+//                    stopTimer();
+//                }else {
+//                    Log.d("Anh_check", "onResponse: "+ response.errorBody().toString());
+//                }
+//                resetDetect();
+//
+//                // Create some implicit events
+//                CreateImplicitEventImpl.getInstance().generateImplicitEvent(
+//                        requireContext(),
+//                        uploadingEvent
+//                );
+//            }
+//
+//            @Override
+//            public void onFailure(Call<Object> call, Throwable t) {
+//                Log.d("Anh_check", "Name: " + t.getMessage());
+////                resetDetect();
+////                if (!isCheckSetImageFemale || !isCheckSetImageMale) {
+////                    myDialog = getDialog();
+////                    myDialog.setTitle("internet connection error");
+////                    myDialog.setContent("Make sure internet connection and try again!");
+////                    myDialog.setContentButton("OK");
+////                    myDialog.show();
+////                }
+////                stopTimer();
+//            }
+//        });
     }
 
     private void getTimeIncreaseAndShow(long stop, long start) {
@@ -397,7 +523,6 @@ public class PairingFragment extends Fragment {
         };
         handler.post(runnable);
     }
-
     public void stopTimer() {
         if (handler != null && runnable != null) {
             handler.removeCallbacks(runnable);
@@ -407,7 +532,6 @@ public class PairingFragment extends Fragment {
             mainActivity.femaleImage = null;
         }
     }
-
     private void navToHomeFragment() {
         NavHostFragment.findNavController(PairingFragment.this).navigate(R.id.action_pairingFragment_to_homeFragment);
     }
@@ -418,7 +542,6 @@ public class PairingFragment extends Fragment {
         if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
             startOpenStorage();
         } else {
-            // If not granted, request permission
             ActivityCompat.requestPermissions(requireActivity(), new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, REQUEST_CODE_PERMISSIONS_STORAGE);
         }
     }
@@ -454,10 +577,38 @@ public class PairingFragment extends Fragment {
     private void startOpenStorage() {
         closeDialog();
         isNameFilled = false;
-        Intent pickIntent = new Intent(Intent.ACTION_GET_CONTENT, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        pickIntent.setType("image/* video/*");
-        startActivityForResult(pickIntent, IMAGE_PICKER_SELECT);
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        launcherVideo.launch(intent);
     }
+
+    ActivityResultLauncher<Intent> launcherVideo = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == RESULT_OK) {
+                    Intent data = result.getData();
+                    if (data != null) {
+                        selectedImageUri = data.getData();
+                        bottomSheetDialog.dismiss();
+                        postImageFile(selectedImageUri);
+                    }
+                }
+            }
+    );
+
+    private void loadImage(String link_img) {
+        if(checkCLickImage==1){
+            Glide.with(this)
+                    .load(link_img)
+                    .into(fragmentPairingBinding.shapeAbleImageViewMale);
+            checkCLickImage =0;
+        } else if (checkCLickImage==2) {
+            Glide.with(this)
+                    .load(link_img)
+                    .into(fragmentPairingBinding.shapeAbleImageViewFemale);
+            checkCLickImage =0;
+        }
+    }
+
 
     private void startCamera() throws FileNotFoundException {
         closeDialog();
@@ -531,61 +682,107 @@ public class PairingFragment extends Fragment {
 
             }
         }
-        if (resultCode == RESULT_OK && requestCode == IMAGE_PICKER_SELECT) {
-            try {
-                Uri selectedMediaUri = data.getData();
-                Bitmap bitmap;
-//                getData(selectedMediaUri);
+//        if (resultCode == RESULT_OK && requestCode == IMAGE_PICKER_SELECT) {
+//            try {
+//                Uri selectedMediaUri = data.getData();
+//                Bitmap bitmap;
+////                getData(selectedMediaUri);
+//
+//                bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), selectedMediaUri);
+////                if (selectedMediaUri.toString().contains("image")) {
+//                    if (!checkClickSetImageMale) {
+//                        Log.d("check_upload_image_your_video", "onActivityResult: "+ selectedMediaUri);
+//                        postImageFile(selectedMediaUri);
+//                        detectionFace(bitmap);
+//                        Handler handler = new Handler();
+//                        handler.postDelayed(() -> {
+//                            if (resultDetech != null && Objects.equals(resultDetech, "ok")) {
+//                                try {
+//                                    imgBase64Female = Util.convertBitmapToBase64(bitmap);
+//                                    mainActivity.femaleImage = bitmap;
+//                                } catch (IOException e) {
+//                                    throw new RuntimeException(e);
+//                                }
+//                                isCheckSetImageFemale = true;
+////                                fragmentPairingBinding.cvImageFemale.setVisibility(View.VISIBLE);
+////                                fragmentPairingBinding.imgFemale.setImageBitmap(bitmap);
+//                            } else {
+//                                isCheckSetImageFemale = false;
+//                                mainActivity.femaleImage = null;
+//                            }
+//
+//                        }, 4000);
+//                    } else {
+//                        Log.d("check_upload_image_your_video", "onActivityResult: "+ selectedMediaUri);
+//                        detectionFace(bitmap);
+//                        Handler handler = new Handler();
+//                        handler.postDelayed(() -> {
+//                            if (resultDetech != null && Objects.equals(resultDetech, "ok")) {
+//                                try {
+//                                    imgBase64Male = Util.convertBitmapToBase64(bitmap);
+//                                    mainActivity.maleImage = bitmap;
+//                                } catch (IOException e) {
+//                                    throw new RuntimeException(e);
+//                                }
+////                                imgMalePath = uriToFilePath(selectedMediaUri);
+//
+//                                isCheckSetImageMale = true;
+////                                fragmentPairingBinding.cvImageMale.setVisibility(View.VISIBLE);
+////                                fragmentPairingBinding.imgMale.setImageBitmap(bitmap);
+//                            } else {
+//                                isCheckSetImageMale = false;
+//                                mainActivity.maleImage = null;
+//                            }
+//                        }, 4000);
+//                    }
+////                }
+//            } catch (Exception e) {
+//            }
+//        }
+    }
 
-                bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), selectedMediaUri);
-//                bitmap = rotaImageHadlee(selectedMediaUri);
-                if (selectedMediaUri.toString().contains("image")) {
-                    if (!checkClickSetImageMale) {
-                        detectionFace(bitmap);
-                        Handler handler = new Handler();
-                        handler.postDelayed(() -> {
-                            if (resultDetech != null && Objects.equals(resultDetech, "ok")) {
-                                try {
-                                    imgBase64Female = Util.convertBitmapToBase64(bitmap);
-                                    mainActivity.femaleImage = bitmap;
-                                } catch (IOException e) {
-                                    throw new RuntimeException(e);
-                                }
-                                isCheckSetImageFemale = true;
-//                                fragmentPairingBinding.cvImageFemale.setVisibility(View.VISIBLE);
-//                                fragmentPairingBinding.imgFemale.setImageBitmap(bitmap);
-                            } else {
-                                isCheckSetImageFemale = false;
-                                mainActivity.femaleImage = null;
-                            }
-
-                        }, 4000);
-                    } else {
-                        detectionFace(bitmap);
-                        Handler handler = new Handler();
-                        handler.postDelayed(() -> {
-                            if (resultDetech != null && Objects.equals(resultDetech, "ok")) {
-                                try {
-                                    imgBase64Male = Util.convertBitmapToBase64(bitmap);
-                                    mainActivity.maleImage = bitmap;
-                                } catch (IOException e) {
-                                    throw new RuntimeException(e);
-                                }
-//                                imgMalePath = uriToFilePath(selectedMediaUri);
-
-                                isCheckSetImageMale = true;
-//                                fragmentPairingBinding.cvImageMale.setVisibility(View.VISIBLE);
-//                                fragmentPairingBinding.imgMale.setImageBitmap(bitmap);
-                            } else {
-                                isCheckSetImageMale = false;
-                                mainActivity.maleImage = null;
-                            }
-                        }, 4000);
+    private void postImageFile(Uri selectedMediaUri) {
+        String filePath = getRealPathFromURI(requireContext(), selectedMediaUri);
+        File imageFile = new File(filePath);
+        RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), imageFile);
+        MultipartBody.Part imagePart = MultipartBody.Part.createFormData("src_img", imageFile.getName(), requestBody);
+        ApiService apiService = RetrofitClient.getInstance(Server.DOMAIN4).getRetrofit().create(ApiService.class);
+        call_image_upload = apiService.uploadImage(id_user, "src_nam", imagePart);
+        call_image_upload.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                if (response.isSuccessful()) {
+//                    uriResponse = response.body();
+                    if(checkCLickImage == 1){
+                        selectedImageMale = response.body();
+                        loadImage(selectedImageUri.toString());
+                    }else{
+                        selectedImageFemale = response.body();
+                        loadImage(selectedImageUri.toString());
                     }
+                    Log.d("check_upload_image_your_video", "onResponse: " + selectedImageFemale+ selectedImageFemale);
                 }
-            } catch (Exception e) {
             }
-        }
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+//                Log.d("check_upload_image_your_video", "onFailure: " + t.getMessage());
+//                dialogErrorBinding.tvError.setText(t.getMessage());
+//                dialog_image.dismiss();
+//                dialog_error.show();
+//                dialog_error.setOnCancelListener(new DialogInterface.OnCancelListener() {
+//                    @Override
+//                    public void onCancel(DialogInterface dialog) {
+//                        call_template_video.cancel();
+//                    }
+//                });
+//                dialogErrorBinding.buttonStop.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        call_template_video.cancel();
+//                    }
+//                });
+            }
+        });
     }
 
 //    private void getData(Uri selectedMediaUri) {

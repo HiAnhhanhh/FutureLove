@@ -65,6 +65,9 @@ public class VideoSwapHomeFragment extends Fragment {
         fragmentVideoSwapHomeBinding.backBtn.setOnClickListener(v -> {
             requireActivity().onBackPressed();
         });
+        fragmentVideoSwapHomeBinding.textView2.setOnClickListener(v -> {
+            NavHostFragment.findNavController(VideoSwapHomeFragment.this).navigate(R.id.showMoreHighlightsFragment);
+        });
     }
     private void navigateToListVideoFragment() {
         NavHostFragment.findNavController(VideoSwapHomeFragment.this).navigate(R.id.action_videoSwapHomeFragment_to_listVideoFragment);

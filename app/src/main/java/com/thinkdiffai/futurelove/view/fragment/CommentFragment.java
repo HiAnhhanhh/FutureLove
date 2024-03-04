@@ -113,9 +113,7 @@ public class CommentFragment extends Fragment {
         if (!kProgressHUD.isShowing() && isLoadingMore) {
             kProgressHUD.show();
         }
-//        if (currentPage == 1) {
-//            commentsForAdapter.clear();
-//        }
+
         ApiService apiService = RetrofitClient.getInstance(Server.DOMAIN2).getRetrofit().create(ApiService.class);
         Call<CommentList> call = apiService.getListCommentNew(0,id_user);
         call.enqueue(new Callback<CommentList>() {
@@ -125,8 +123,6 @@ public class CommentFragment extends Fragment {
                 if (response.isSuccessful() && response.body() != null) {
                     CommentList _commentList = response.body();
                     commentsForAdapter = _commentList.getComment();
-//                    numberOfElements = _commentList.getSophantu();
-//                    pageNumber = _commentList.getSotrang();
                     Log.d("check_newComment", "onResponse: thành công  " );
                     if (!commentsForAdapter.isEmpty()) {
                         commentAdapter.setData(commentsForAdapter);
@@ -138,19 +134,16 @@ public class CommentFragment extends Fragment {
                     kProgressHUD.dismiss();
                 }
             }
-
             @Override
             public void onFailure(@NonNull Call<CommentList> call, @NonNull Throwable t) {
                 isLoading = false;
                 if (kProgressHUD.isShowing()) {
                     kProgressHUD.dismiss();
-
                 }
                 Log.e("MainActivityLog", t.getMessage());
             }
         });
     }
-
 //    private void goToListVideoFragment() {
 //        NavHostFragment.findNavController(CommentFragment.this).navigate(R.id.action_commentFragment_to_listVideoFragment);
 //    }

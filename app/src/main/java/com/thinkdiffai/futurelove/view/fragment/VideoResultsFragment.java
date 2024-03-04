@@ -116,12 +116,11 @@ public class VideoResultsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Log.d("check_download", "onClick: "+ link_vid_swap);
-                Downloader.downloadVideo(requireActivity(),link_vid_swap,"mp4");
+                Downloader.downloadVideo(requireActivity(),link_vid_swap,"video_swap_future_love");
+                Toast.makeText(requireContext(), "Downloaded successfully", Toast.LENGTH_SHORT).show();
             }
         });
-
     }
-
     private void initView() {
     }
 
